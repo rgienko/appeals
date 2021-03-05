@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="9236bb17-aa7d-4a90-ab87-12445cea923c" name="appealsWeb" url="http://waws-prod-dm1-023.ftp.azurewebsites.windows.net">
+        <fileTransfer rootFolder="/site/wwwroot" accessType="FTPS" host="waws-prod-dm1-023.ftp.azurewebsites.windows.net" port="21">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" passiveMode="true" shareSSLContext="true" />
+          </advancedOptions>
+        </fileTransfer>
+      </webServer>
+    </option>
+  </component>
+</project>
