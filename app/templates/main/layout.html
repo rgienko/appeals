@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- CSS only -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
+    <!-- JavaScript Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
+    {% load static %}
+
+    <link rel="stylesheet" {% static 'site.css' %}>
+
+    <meta charset="UTF-8">
+
+    <style>
+        .nav-link {
+            color: aliceblue;
+        }
+
+    </style>
+    <title>Strategic Appeal Master</title>
+</head>
+<body>
+    <!--
+    <nav class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow d-print-none">
+        <a class="navbar-brand col-md-3 col-lg-2 mr-0 px-3" href="#">Strategic Reimbursement Group</a>
+        <button class="navbar-toggler position-absolute d-md-none collapsed" type="button" data-toggle="collapse" data-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <ul class="navbar-nav px-3">
+            <li class="nav-item text-nowrap">
+                <a class="nav-link" href="#"></a>
+            </li>
+        </ul>
+    </nav>
+    -->
+
+    <div class="container-fluid">
+          <div class="row min-vh-100">
+                <nav id="sidebarMenu" class="my-bg-dark col-md-2 d-md-block sidebar collapse" style="background-color: #404552">
+                    <div class="col-sm border-bottom">
+                        <h4 class="navbar-brand text-light px-3 pt-3">
+                            Welcome, Randall
+                        </h4>
+                    </div>
+                    <div class="sidebar-sticky mt-4">
+                        <div class="search-bar">
+                            <form method='POST' action="">
+                                {% csrf_token %}
+                                <input class="form-control" type="text" placeholder="Search Case" aria-label="Search" name="search">
+                            </form>
+                        </div>
+                        <ul class="nav flex-column mt-4">
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'home' %}">
+                                    Dashboard
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a id="medpar" class="nav-link" href="{% url 'due-master' %}">
+                                    Due Dates
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'new-appeal' %}">
+                                    New Appeal
+                                </a>
+                            </li>
+                        </ul>
+
+
+                        <h5 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-3 mb-1 text-muted">
+                            <span>Master Tables:</span>
+                        </h5>
+
+                        <ul class="nav flex-column">
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'issue-master' %}">
+                                    Issue Master
+                                </a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'provider-master' %}">
+                                    Provider Master
+                                </a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'parent-master' %}">
+                                    Parent Master
+                                </a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link" href="{%  url 'staff-master' %}">
+                                    Staff Master
+                                </a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link" href="{%  url 'mac-master' %}">
+                                    MAC Master
+                                </a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link" href="{%  url 'prrb-master' %}">
+                                    PRRB Master
+                                </a>
+                            </li>
+
+                        </ul>
+
+                        <h5 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-3 mb-1 text-muted">
+                            <span>Tools</span>
+                        </h5>
+
+                        <ul class="nav flex-column">
+                            <li class="nav-item">
+                                <a class="nav-link" data-bs-toggle="modal" href="#make_dir_modal">
+                                    Directory Builder
+                                </a>
+                            </li>
+                        </ul>
+
+                        <ul class="nav flex-column">
+                            <li class="nav-item">
+                                <a class="nav-link" href="">
+                                    New Issue
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a id="medpar" class="nav-link" href="{% url 'new-provider' %}">
+                                    Register Provider
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'new-parent' %}">
+                                    Register System
+                                </a>
+                            </li>
+                        </ul>
+
+                  </div>
+                </nav>
+                <main role="main" class="col-md-10 ml-sm-auto col-lg-10 px-md-4 bg-light">
+                    {% block content %}
+
+
+                    {% endblock %}
+
+                    <div class="modal fade mx-5" id="make_dir_modal" tabindex="-1" role="dialog">
+
+                        <div class="modal-dialog modal-xl" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title">Create Appeal Directory</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <form class="" action="" method="post">
+                                        {% csrf_token %}
+
+                                        {% for hidden_field in form.hidden_fields %}
+                                            {{ hidden_field }}
+                                        {% endfor %}
+
+                                        {% for field in form.visible_fields %}
+                                            <div class="form-group">
+                                              <ul class="list-group">
+                                                  <li class="list-group-item p-0 border-0">
+                                                      <ul class="list-group list-group-horizontal-sm">
+                                                          <li class="list-group-item w-25">{{ field.label_tag }}</li>
+                                                          <li class="list-group-item w-75">{{ field }}</li>
+                                                      </ul>
+                                                  </li>
+                                              </ul>
+                                            </div>
+                                        {% endfor %}
+                                        <input type="submit" name="make_dir_button" class="btn btn-primary"/>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </main>
+          </div>
+    </div>
+</body>
+</html>

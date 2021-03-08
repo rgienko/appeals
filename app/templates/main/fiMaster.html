@@ -1,0 +1,52 @@
+{% extends "main/layout.html" %}
+
+{% block content %}
+{% load humanize %}
+
+<div class="container-fluid">
+    <div class="row mt-5 mb-0">
+        <h5 class="font-weight-bold text-uppercase ml-5 pt-1">
+            MAC Master
+            <a class="mx-1" data-toggle="tooltip" data-placement="bottom" title="New Mac" href="{% url 'new-mac' %}"><i class="bi bi-plus-square" style="font-size:24px;"></i></a>
+        </h5>
+    </div>
+    <hr class="mt-0"/>
+    <div class="album row">
+        {% regroup all_fis by fiName as all_macs_list %}
+        {% for fiName in all_macs_list %}
+
+            <div class="card">
+                <div class="card-header bg-transparent p-2 pb-0">
+                    <h4>{{ fiName.grouper }}</h4>
+                </div>
+
+                <div class="card-body">
+                    <div class="row">
+                        {% for mac in fiName.list %}
+                            <div class="col-md-3">
+                                <div class="card p-3">
+                                    {{ mac.fiFirstName }} {{ mac.fiLastName }} - {{ mac.fiJurisdiction }} <br>
+                                    {{ mac.fiTitle }} <br>
+                                    {{ mac.fiEmail }} <br>
+                                    {{ mac.fiStreet }}<br>
+                                    {{ mac.fiStreetTwo }}<br>
+                                    {{ mac.fiCity }}, {{ mac.stateID }}
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+
+                </div>
+                <div class="card-footer text-end bg-transparent">
+                    <a class="btn btn-primary w-25" data-toggle="tooltip" data-placement="top" title="Edit Parent" href="">
+                        Edit
+                    </a>
+                </div>
+            </div>
+        {% endfor %}
+
+    </div>
+</div>
+
+
+{% endblock %}

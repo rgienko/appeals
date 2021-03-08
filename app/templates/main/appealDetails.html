@@ -1,0 +1,326 @@
+{% extends 'main/layout.html' %}
+
+{% block content %}
+    {% load humanize %}
+    <div class="container-fluid border mt-4">
+        <div class="row mt-2">
+            <div class="col-md-6">
+                <div class="p-2 shadow rounded">
+                    <h5 class="fw-bold text-uppercase pl-1">
+                        Case Details - CN: {{ caseObj.caseNumber }} <a class="" title="Edit Case" href=""><i class="fas fa-pen-square"></i></a>
+                    </h5>
+                    <ul class="list-group border-0">
+                        <li class="list-group-item p-1 border-0">
+                            <ul class="list-group list-group-horizontal-sm p-0 border-0">
+                                <li class="list-group-item p-0 border-0 w-25 text-dark fw-bold">Representative:</li>
+                                <li class="list-group-item p-0 border-0 w-50">{{ caseObj.staffID }}</li>
+                            </ul>
+                        </li>
+
+                        <li class="list-group-item p-1 border-0">
+                            <ul class="list-group list-group-horizontal-sm p-0 border-0">
+                                <li class="list-group-item p-0 border-0 w-25 text-dark fw-bold">Intermediary:</li>
+                                <li class="list-group-item p-0 border-0 w-75">{{ caseObj.fiID }}</li>
+                            </ul>
+                        </li>
+
+                        <li class="list-group-item p-1 border-0">
+                            <ul class="list-group list-group-horizontal-sm p-0 border-0">
+                                <li class="list-group-item p-0 border-0 w-25 text-dark fw-bold">PRRB Rep:</li>
+                                <li class="list-group-item p-0 border-0 w-75">{{ caseObj.prrbContactID }}</li>
+                            </ul>
+                        </li>
+
+                        <li class="list-group-item p-1 border-0">
+                            <ul class="list-group list-group-horizontal-sm p-0 border-0">
+                                <li class="list-group-item p-0 border-0 w-25 text-dark fw-bold">Case Status:</li>
+                                <li class="list-group-item p-0 border-0 w-75">{{ caseObj.statusID }}</li>
+                            </ul>
+                        </li>
+
+                        <li class="list-group-item p-1 border-0">
+                            <ul class="list-group list-group-horizontal-sm p-0 border-0">
+                                <li class="list-group-item p-0 border-0 w-25 text-dark fw-bold">Case Name:</li>
+                                {% if caseObj.appealStructure == 'Individual' %}
+                                    <li class="list-group-item p-0 border-0 w-75">{{ provInfo.providerID }} - {{ provInfo.get_prov_name|title }} ({{ caseDetermination.determinationFiscalYear|date:'m/d/Y' }})</li>
+                                {% else %}
+                                    <li class="list-group-item p-0 border-0 w-75">{{ caseObj.appealName }}</li>
+                                {% endif %}
+                            </ul>
+                        </li>
+
+                        <li class="list-group-item p-1 border-0">
+                            <ul class="list-group list-group-horizontal-sm p-0 border-0">
+                                <li class="list-group-item p-0 border-0 w-25 text-dark fw-bold">Case Structure:</li>
+                                <li class="list-group-item p-0 border-0 w-75">{{ caseObj.appealStructure }}</li>
+                            </ul>
+                        </li>
+
+                        <li class="list-group-item p-1 border-0">
+                            <ul class="list-group list-group-horizontal-sm p-0 border-0">
+                                <li class="list-group-item p-0 border-0 w-25 text-dark fw-bold">Request Date:</li>
+                                <li class="list-group-item p-0 border-0 w-75">{{ caseObj.appealCreateDate|date:'m/d/Y' }}</li>
+                            </ul>
+                        </li>
+
+                        <li class="list-group-item p-1 border-0">
+                            <ul class="list-group list-group-horizontal-sm p-0 border-0">
+                                <li class="list-group-item p-0 border-0 w-25 text-dark fw-bold">Acknowledged:</li>
+                                {% if caseObj.appealAckDate is None %}
+                                    <li class="list-group-item p-0 border-0 w-75"><a data-bs-toggle="modal" data-bs-target="#ack_modal" href="" class="">Acknowledge</a></li>
+                                {% else %}
+                                    <li class="list-group-item p-0 border-0 w-75">{{ caseObj.appealAckDate|date:'m/d/Y' }}</li>
+                                {% endif %}
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="shadow rounded">
+                    <ul class="nav nav-tabs" id="myTab" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link active text-dark" id="due-tab" data-bs-toggle="tab" href="#due" role="tab" aria-controls="due" aria-selected="false">
+                                <h6 class="font-weight-bold pl-1">Due Dates</h6></a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" id="actions-tab" data-bs-toggle="tab" href="#actions" role="tab" aria-controls="provider" aria-selected="true">
+                                <h6 class="font-weight-bold pl-1">Actions</h6></a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" id="provider-tab" data-bs-toggle="tab" href="#provider" role="tab" aria-controls="provider" aria-selected="true">
+                                <h6 class="font-weight-bold pl-1">Provider Info</h6></a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" id="deter-tab" data-bs-toggle="tab" href="#deter" role="tab" aria-controls="deter" aria-selected="false">
+                                <h6 class="font-weight-bold pl-1">Determination</h6></a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" id="notes-tab" data-bs-toggle="tab" href="#notes" role="tab" aria-controls="notes" aria-selected="false">
+                                <h6 class="font-weight-bold pl-1">Case Notes</h6></a>
+                        </li>
+                    </ul>
+
+                    <div class="tab-content" id="myTabContent">
+                        <div class="tab-pane fade" id="actions" role="tabpanel" aria-labelledby="actions-tab">
+                            <div class="mt-3 p-2"> <!--Provider Information-->
+                                <div class="card overflow-auto" style="min-height:220px; max-height:220px;">
+                                    <a type="button" class="m-2 btn btn-primary w-25" href="{% url 'form-g' caseObj.caseNumber %}">Schedule G</a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="tab-pane fade" id="provider" role="tabpanel" aria-labelledby="provider-tab">
+                            <div class="mt-3 p-2"> <!--Provider Information-->
+                                <div class="card overflow-auto" style="min-height:220px; max-height:220px;">
+                                    <table class="table table-bordered table-sm">
+                                        <thead class="thead-light">
+                                            <tr>
+                                                <th scope="col" class="text-center">Provider Name</th>
+                                                <th scope="col" class="text-center">Parent</th>
+                                                <th scope="col" class="text-center">FYE</th>
+                                                <th scope="col" class="text-center">State
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                          {% for provider in provider_information %}
+                                              <tr class="p-0">
+                                                  <td class="p-1">{{ provider.get_provider_name|title }}</td>
+                                                  <td class="text-center pt-1">{{ provider.get_provider_parent_id|title }}</td>
+                                                  <td class="text-center pt-1" style="width:100px;">{{ provider.get_provider_fye }}</td>
+                                                  <td class="text-center pt-1" style="width:60px;">{{ provider.get_provider_state }}</td>
+                                              </tr>
+                                          {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="tab-pane fade show active" id="due" role="tabpanel" aria-labelledby="due-tab"> <!-- Critical Due Dates-->
+                            <div class=" mt-3 p-2" style="">
+                                <div class="card overflow-auto" style="min-height:220px; max-height:220px;">
+                                    <table class="table table-bordered table-sm table-hover">
+                                        <thead class="thead-light">
+                                            <tr>
+                                                <th class="text-center" scope="col">Action</th>
+                                                <th class="text-center" scope="col">Critical Date</th>
+                                                <th class="text-center" scope="col">Progress</th>
+                                            </tr>
+                                        </thead>
+                                            {% for date in caseDueDates %}
+                                                <tr>
+                                                    <td>{{ date.get_action_note }}</td>
+                                                    <td class="text-center">{{ date.dueDate|date:'m/d/Y' }}</td>
+                                                    {% if date.progress == 'Not Started' %}
+                                                        <td class="text-center bg-warning" style="width: 175px;"><a class="text-dark" href=""><i class="far fa-circle"></i> {{ date.progress }}</a></td>
+                                                    {% elif date.progress == 'In Progress' %}
+                                                        <td class="text-center bg-primary text-white" style="width: 175px;"><a class="text-white" href=""><i class="fas fa-spinner"></i> {{ date.progress }}</a></td>
+                                                    {% elif date.progress == 'Completed' %}
+                                                        <td class="text-center bg-success text-white" style="width: 175px;"><a class="text-white" href=""><i class="far fa-check-circle"></i> {{ date.progress }}</a></td>
+                                                    {% else %}
+                                                        <td></td>
+                                                    {% endif %}
+                                                </tr>
+                                            {% endfor %}
+                                    </table>
+                                    <a class="btn btn-primary" href="{% url 'add-due' caseObj.caseNumber %}"> Review / Add Critical Due Dates</a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="tab-pane fade" id="deter" role="tabpanel" aria-labelledby="deter-tab">
+                            <div class=" mt-3 p-2" style="">
+                                <div class="card overflow-auto" style="min-height:220px; max-height:220px;">
+                                    <table class="table table-bordered table-sm table-hover">
+                                        <thead class="thead-light">
+                                            <tr>
+                                                <th scope="col" class="text-center">Type:</th>
+                                                <th scope="col" class="text-center">Date:</th>
+                                                <th scope="col" class="text-center">Year:</th>
+                                                <th scope="col" class="text-center">Info:</th>
+                                            </tr>
+                                        </thead>
+                                            <tr>
+                                                <td class="text-center">{{ caseDetermination.determinationID }}</td>
+                                                <td class="text-center">{{ caseDetermination.determinationDate|date:'m/d/Y' }}</td>
+                                                {% if caseObj.appealStructure == 'Indivudal' %}
+                                                    <td class="text-center">{{ caseDetermination.determinationFiscalYear|date:'m/d/Y' }}</td>
+                                                {% else %}
+                                                    <td class="text-center">{{ caseDetermination.determinationFiscalYear|date:'Y' }}</td>
+                                                {% endif %}
+                                                <td class="text-center">{{ caseDetermination.determinationInfo }}</td>
+                                            </tr>
+                                    </table>
+                                    <a class="btn btn-outline-primary" href="{% url 'new-deter' caseObj.caseNumber %}"> Add Determination Info</a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="tab-pane fade" id="notes" role="tabpanel" aria-labelledby="notes-tab"> <!-- Critical Due Dates-->
+                            <div class=" mt-3 p-2" style="">
+                                <div class="card overflow-auto" style="min-height:220px; max-height:220px;">
+                                    <form method="POST">
+                                        {% csrf_token %}
+                                        <textarea class="form-control bg-white text-dark" id="save_notes_button" name="save_notes_button" style="min-height: 180px;max-height: 180px">{{ caseObj.appealNotes }}</textarea>
+                                        <input type="submit" class="btn btn-primary w-100" value="Save" />
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mt-5">
+            <div class="col">
+                <h5 class="font-weight-bold text-uppercase pl-1">
+                        {% if caseObj.appealStructure == 'Individual' %}
+                            Case Issues <a class="" data-toggle="tooltip" data-placement="bottom" title="Add Issue" href="{% url 'add-issue' caseObj.caseNumber %}">
+                            <i class="bi bi-plus-square" style="font-size:22px;"></i></a>
+                        {% else %}
+                            Group Providers <a class="" data-toggle="tooltip" data-placement="bottom" title="Add Issue" href="{% url 'add-prov' caseObj.caseNumber %}"><i class="bi bi-plus-square" style="font-size:22px;"></i></a>
+                        {% endif %}
+                    </h5>
+                <div class="card shadow">
+                    <table class="table table-striped table-sm table-hover table-bordered">
+                        <thead class="thead-light text-center">
+                            <tr>
+                                <th scope="col">Provider</th>
+                                <th scope="col">NPR Date</th>
+                                <th scope="col">Issue Name</th>
+                                <th scope="col">Audit Adjustments</th>
+                                <th scope="col">Impact</th>
+                                <th scope="col">To</th>
+                                <th scope="col">To Date</th>
+                                <th scope="col">From</th>
+                                <th scope="col">Actions</th>
+                            </tr>
+                        </thead>
+                            {% for issue in caseIssues %}
+                                <tr>
+                                    <td class="text-center" style="width:85px;">{{ issue.providerID }}</td>
+                                    {% if caseObj.appealStructure == 'Individual' %}
+                                        <td class="text-center" style="width:100px;">{{ caseDetermination.determinationDate|date:'m/d/Y' }}</td>
+                                    {% else %}
+                                        <td class="text-center" style="width:100px;">{{ issue.get_deter_date|date:'m/d/Y' }}</td>
+                                    {% endif %}
+                                    <td>{{ issue.issueID }}</td>
+                                    <td class="text-left px-2">{{ issue.provMasterAuditAdjs }}</td>
+                                    <td class="text-left px-2">$ {{ issue.provMasterImpact|intcomma }}</td>
+                                    {% if issue.provMasterToCase is None or issue.provMasterToCase == 'NULL' %}
+                                        <td style="width:100px;"></td>
+                                    {% else %}
+                                        <td class="text-center" style="width:100px;">
+                                            <a href="{% url 'appeal-details' issue.provMasterToCase %}">
+                                                {{ issue.provMasterToCase }}
+                                            </a>
+                                        </td>
+                                    {% endif %}
+
+                                    {% if issue.provMasterTransferDate is None %}
+                                        <td style="width:100px;"></td>
+                                    {% else %}
+                                        <td class="text-center" style="width:100px;">
+                                            {{ issue.provMasterTransferDate|date:'m/d/Y' }}
+                                        </td>
+                                    {% endif %}
+                                    {% if issue.provMasterFromCase is None %}
+                                        <td class="text-center" style="width:100px;"></td>
+                                    {% else %}
+                                        <td class="text-center" style="width:100px;">
+                                            <a href="{% url 'appeal-details' issue.provMasterFromCase %}">
+                                                {{ issue.provMasterFromCase }}
+                                            </a>
+                                        </td>
+                                    {% endif %}
+                                    <td class="p-0 m-0 text-center" style="width:150px;">
+                                          <a class="btn btn-primary m-0" href="{% url 'transfer-issue' issue.provMasterID %}"><i class="bi bi-arrow-left-right"></i></a>
+                                          <a class="btn btn-primary m-0" href=""><i class="bi bi-pencil-square"></i></a>
+                                          <a class="btn btn-danger m-0 del" data-id = "{{ issue.provMasterID }}" data-bs-toggle="modal" data-target="#del_modal" href=""><i class="bi bi-trash color-white text-light"></i></a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal" id="ack_modal" tabindex="-1" role="dialog">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Acknowledge Case</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                          <span aria-hidden="true"></span>
+                        </button>
+                    </div>
+                    <div class="modal-body input-group date" id="datetimepicker1" data-target-input="nearest">
+                        <form class="" action="" method="post">
+                            {% csrf_token %}
+                            {% for hidden_field in ack_form.hidden_fields %}
+                                {{ hidden_field }}
+                            {% endfor %}
+
+                            {% for field in ack_form.visible_fields %}
+                                    <ul class="list-group p-0">
+                                        <li class="list-group-item p-0">
+                                            <ul class="list-group list-group-horizontal p-0">
+                                                <li class="list-group-item p-0 pt-3 px-3 w-50">{{ field.label_tag }}</li>
+                                                <li class="list-group-item ">{{ field }}</li>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                            {% endfor %}
+
+                            <input type="submit" name="ack_button" value="Acknowledge" class="btn btn-primary mt-3"/>
+                        </form>
+                    </div>
+                </div>
+            </div>
+    </div>
+{% endblock %}

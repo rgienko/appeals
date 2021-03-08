@@ -1,0 +1,35 @@
+{% extends "main/layout.html" %}
+
+{% block content %}
+{% load humanize %}
+
+<div class="container-fluid">
+    <div class="row mt-5 mb-0">
+        <h5 class="font-weight-bold text-uppercase ml-5 pt-1">
+            Provider Master
+            <a class="mx-1" data-toggle="tooltip" data-placement="bottom" title="New Provider" href="{% url 'new-provider' %}"><i class="bi bi-plus-square" style="font-size:24px;"></i></a>
+        </h5>
+    </div>
+    <hr class="mt-0"/>
+    <div class="row">
+        <table class="table table-bordered">
+            <tr class="table-header">
+                <th scope="col" class="text-center px-0">Provider #</th>
+                <th scope="col" class="text-center">Provider Name</th>
+                <th scope="col" class="text-center">Parent / System</th>
+                <th scope="col" class="text-center">Edit</th>
+            </tr>
+            {% for provider in all_providers %}
+            <tr>
+                <td class="text-center px-0"><a href="">{{ provider.providerID }}</a></td>
+                <td>{{ provider.providerName|title }}</td>
+                <td>{{ provider.getParentName }}</td>
+                <td class="text-center"><a href="{% url 'update-provider' provider.providerID %}">Edit</a></td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+</div>
+
+
+{% endblock %}

@@ -1,0 +1,41 @@
+{% extends "main/layout.html" %}
+
+{% block content %}
+{% load humanize %}
+
+<div class="container-fluid">
+    <div class="row mt-5 mb-0">
+        <h5 class="font-weight-bold text-uppercase ml-5 pt-1">
+            Staff Master
+            <a class="mx-1" data-toggle="tooltip" data-placement="bottom" title="New Staff" href="{% url 'new-staff' %}"><i class="bi bi-plus-square" style="font-size:24px;"></i></a>
+        </h5>
+    </div>
+    <hr class="mt-0"/>
+    <div class="row">
+        <table class="table table-bordered">
+            <tr class="table-header">
+                <th scope="col" class="text-center">User Name:</th>
+                <th scope="col" class="text-center">First Name:</th>
+                <th scope="col" class="text-center">Last Name:</th>
+                <th scope="col" class="text-center">Title:</th>
+                <th scope="col" class="text-center">Email:</th>
+
+            </tr>
+            {% for staff in all_staff %}
+            <tr>
+                <td class="text-center" style="width:75px"><a href="">{{staff.staffFirstName }}.{{ staff.staffLastName }}</a></td>
+                <td>{{ staff.staffFirstName }}</td>
+                <td>{{ staff.staffLastName }}</td>
+                <td>{{ staff.titleAbbreviation }}</td>
+                <td>{{ staff.staffEmail }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+        {% for parent in all_parents %}
+
+        {% endfor %}
+    </div>
+</div>
+
+
+{% endblock %}

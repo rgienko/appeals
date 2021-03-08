@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- CSS only -->
+
+    {% load static %}
+
+    <link rel="stylesheet" {% static 'site.css' %}>
+
+    <meta charset="UTF-8">
+
+    <title>Schedule G</title>
+
+    <style>
+        @page {
+            size: letter landscape;
+            margin-left: 2cm;
+
+            @frame header_frame {           /* Static Frame */
+                -pdf-frame-content: header_content;
+            }
+            @frame content_frame {          /* Content Frame */
+                left: 50pt; width: 512pt; top: 90pt; height: 632pt;
+            }
+            @frame footer_frame {           /* Another static Frame */
+                -pdf-frame-content: footer_content;
+            }
+        }
+
+        .border {
+            border: black 1px solid;
+        }
+
+        .text-center {
+            text-align:center!important
+        }
+
+        .container-fluid {
+            width:1000px;
+            padding-right:15px;
+            padding-left:15px;
+            margin-right:auto;
+            margin-left:auto
+        }
+
+        .row {
+            display: flex;
+        }
+
+        .col {
+            flex:1;
+        }
+
+        .col:first-child {
+            margin-right: 20px;
+        }
+
+        .list-group {
+            padding-left:0;
+            margin-bottom:0;
+        }
+
+        .list-group-item {
+            position:relative;
+            display:block;
+            padding:1px;
+            background-color:#fff;
+            list-style-type: none;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <div id="header_content" class="row" style="width: 1366px;">
+
+
+            <h6 class="text-center" style="margin-top: 8px;">Model Form G - Schedule of Providers in Group</h6>
+            <div class="col">
+                <ul class="list-group">
+                    <li class="list-group-item" style="padding: 0px;"><span style="padding: 0px;">Case N.:</span></li>
+                    <li class="list-group-item" style="padding: 0px;"><span style="padding: 0px;">Group Name:</span></li>
+                    <li class="list-group-item" style="padding: 0px;"><span style="padding: 0px;">Group Representative:</span></li>
+                    <li class="list-group-item" style="padding: 0px;"><span style="padding: 0px;">Lead Intermediary:</span></li>
+                    <li class="list-group-item" style="padding: 0px;"><span>Issue:</span></li>
+                </ul>
+            </div>
+            <div class="col">
+                <ul class="list-group">
+                    <li class="list-group-item" style="padding: 0;"><span>Page <pdf:pagenumber></pdf:pagenumber> of <pdf:pagecount></pdf:pagecount> </span></li>
+                    <li class="list-group-item" style="padding: 0;"><span>Date Prepared:</span></li>
+                </ul>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <div class="table-responsive table-bordered" style="border: 1px solid black">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th class="text-center" style="font-size: 10px;border: 1px solid black;">#</th>
+                                <th class="text-center" style="font-size: 10px;border: 1px solid black;width: 15rem">Provider Name / Location<br>(city, county, state)</th>
+                                <th class="text-center" style="font-size: 10px;border: 1px solid black;">FYE</th>
+                                <th class="text-center" style="font-size: 10px;border: 1px solid black;padding-right: 0;padding-left: 0;">A<br>Date of Final <br>Determination</th>
+                                <th class="text-center" style="font-size: 10px;border: 1px solid black;padding-right: 0;padding-left: 0;">B<br>Date of<br>Hearing<br>Request /<br>Add Issue<br>Request</th>
+                                <th class="text-center" style="font-size: 10px;border: 1px solid black;padding-right: 0;padding-left: 0;">C<br>No. of<br>Days</th>
+                                <th class="text-center" style="font-size: 10px;border: 1px solid black;word-wrap: break-word; width: 5px">D<br>Audit<br>Adj. No.</th>
+                                <th class="text-center" style="font-size: 10px;border: 1px solid black;padding-right: 0;padding-left: 0;">E<br>Amount in<br>Controversy</th>
+                                <th class="text-center" style="font-size: 10px;border: 1px solid black;padding-right: 0;padding-left: 0;">F<br>Prior Case<br>No(s).</th>
+                                <th class="text-center" style="font-size: 10px;border: 1px solid black;padding-right: 0;padding-left: 0;">G<br>Date of<br>Direct Add /<br>Transfer(s)<br>to Group</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr style="height: 85px;border: 1px solid black;">
+                                <td style="text-align: center;border: 1px solid black;">1</td>
+                                <td style="border: 1px solid black">Loretto Hospital / Chicago, Cook, IL</td>
+                                <td class="text-center" style="border: 1px solid black;">12/31/2021</td>
+                                <td class="text-center" style="border: 1px solid black;padding-right: 0;padding-left: 0;">10/01/2021</td>
+                                <td class="text-center" style="border: 1px solid black;padding-right: 0;padding-left: 0;">08/17/2021</td>
+                                <td class="text-center" style="border: 1px solid black;padding-right: 0;padding-left: 0;">05/22/2021</td>
+                                <td class="text-center" style="border: 1px solid black; word-wrap: break-word; width: 5px">133,154,354,516,564,564,133,154,354,516,564,564</td>
+                                <td class="text-center" style="border: 1px solid black;padding-right: 0;padding-left: 0;">$1,000,000</td>
+                                <td class="text-center" style="border: 1px solid black;padding-right: 0;padding-left: 0;">19-2222</td>
+                                <td class="text-center" style="border: 1px solid black;padding-right: 0;padding-left: 0;">04/22/2021</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

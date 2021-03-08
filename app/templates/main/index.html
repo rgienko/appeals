@@ -1,0 +1,62 @@
+{% extends 'main/layout.html' %}
+
+{% block content %}
+    <style>
+    .card {
+        background-color: #5294e2;
+    }
+    </style>
+
+
+    <div class="container mt-2">
+        <div class="row mt-2">
+                <div class="card shadow bg-light">
+                    <h5 class="mt-2 pt-1" style="color:#383c4a">Upcoming Appeal Deadlines:</h5>
+                    <table class="table table-hover table-bordered mt-3">
+                        <thead class="thead-light">
+                            <tr>
+                                <th scope="col" class="text-center">Case</th>
+                                <th scope="col" class="text-center">Structure</th>
+                                <th scope="col" class="text-center">Case Name</th>
+                                <th scope="col" class="text-center">Item Due</th>
+                                <th scope="col" class="text-center">Due Date</th>
+                            </tr>
+                        </thead>
+                            {% for date in allDueDates %}
+                            <tr>
+                                <td class="text-center"><a href="{% url 'appeal-details' date.caseNumber %}">{{ date.caseNumber }}</a></td>
+                                <td class="text-center">{{ date.get_case_structure }}</td>
+                                {% if date.get_case_structure == 'Individual' %}
+                                    <td class="text-center">{{ date.get_provider|title }}</td>
+                                {% else %}
+                                    <td class="text-center">{{ date.get_appeal_name }}</td>
+                                {% endif %}
+                                <td class="text-center">{{ date.get_action_note }}</td>
+                                <td class="text-center">{{ date.dueDate|date:'m/d/Y'}}</td>
+                            </tr>
+                            {% endfor %}
+                    </table>
+                </div>
+
+                <div class="card shadow bg-light mt-lg-5">
+                    <h5 class="mt-2 pt-1" style="color:#383c4a">NPR Filing Deadlines:</h5>
+                    <table class="table table-hover table-bordered mt-3">
+                        <thead class="thead-light">
+                            <tr>
+                                <th scope="col" class="text-center">Provider #</th>
+                                <th scope="col" class="text-center">Name</th>
+                                <th scope="col" class="text-center">NPR Date</th>
+                                <th scope="col" class="text-center">Due Date</th>
+                            </tr>
+                        </thead>
+                            <tr>
+                                <td class="text-center"><a href="">52-0035</a></td>
+                                <td class="text-center">Aurora Sheboygan Memorial Medical Center</td>
+                                <td class="text-center">01/01/2021</td>
+                                <td class="text-center">06/01/2021</td>
+                            </tr>
+                    </table>
+                </div>
+        </div>
+    </div>
+{% endblock %}

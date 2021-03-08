@@ -1,0 +1,32 @@
+{% extends 'main/layout.html' %}
+
+{% block content %}
+
+    <div class="container w-50 border shadow mt-lg-5">
+    <h4 class="mt-4">New Parent</h4>
+    <div class="card my-4">
+        <form method="post">
+            {% csrf_token %}
+            {% for hidden_field in form.hidden_fields %}
+                {{ hidden_field }}
+            {% endfor %}
+
+            {% for field in form.visible_fields %}
+            <ul class="list-group p-0">
+                <li class="list-group-item p-0 border-0">
+                    <ul class="list-group list-group-horizontal-sm p-0 mt-4">
+                        <li class="list-group-item w-25 font-weight-bold">{{ field.label_tag }}</li>
+                        <li class="list-group-item w-75">{{ field }}</li>
+                    </ul>
+                </li>
+            </ul>
+            {% endfor %}
+            <div class="d-grid gap-2 d-md-flex justify-content-md-end my-2">
+                <input type="submit" class="btn btn-primary w-25" value="Submit" />
+            </div>
+        </form>
+
+    </div>
+
+
+{% endblock %}

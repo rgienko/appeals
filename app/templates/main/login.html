@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- CSS only -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
+    <!-- JavaScript Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
+    {% load static %}
+
+    <link rel="stylesheet" {% static 'site.css' %}>
+
+    <meta charset="UTF-8">
+
+    <style>
+        .login-dark form {
+            max-width: 320px;
+            width: 90%;
+            background-color: #1e2833;
+            padding: 0 40px 40px 40px;
+            border-radius: 4px;
+            transform: translate(-50%, -50%);
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            color: #fff;
+            box-shadow: 3px 3px 4px rgba(0,0,0,0.2);
+          }
+
+          .login-dark .illustration {
+            text-align: center;
+            padding: 0 0 20px;
+            font-size: 100px;
+            color: #2980ef;
+          }
+
+          .login-dark form .form-control {
+            background: none;
+            border: none;
+            border-bottom: 1px solid #434a52;
+            border-radius: 0;
+            box-shadow: none;
+            outline: none;
+            color: inherit;
+          }
+
+          .login-dark form .btn-primary {
+            background: #214a80;
+            border: none;
+            border-radius: 4px;
+            padding: 11px;
+            box-shadow: none;
+            margin-top: 26px;
+            text-shadow: none;
+            outline: none;
+          }
+
+          .login-dark form .btn-primary:hover, .login-dark form .btn-primary:active {
+            background: #214a80;
+            outline: none;
+          }
+
+          .login-dark form .forgot {
+            display: block;
+            text-align: center;
+            font-size: 12px;
+            color: #6f7a85;
+            opacity: 0.9;
+            text-decoration: none;
+          }
+
+          .login-dark form .forgot:hover, .login-dark form .forgot:active {
+            opacity: 1;
+            text-decoration: none;
+          }
+
+          .login-dark form .btn-primary:active {
+            transform: translateY(1px);
+          }
+    </style>
+
+    <title>Strategic Appeal Master</title>
+</head>
+<body style="background-color: #404552">
+    <div class="login-dark border" >
+        <div class="">
+            <form method='POST' action="">
+                {% csrf_token %}
+                <div class="illustration"><i class="bi bi-lock" style="font-size: 104px;"></i></div>
+                <div class="form-group"><input class="form-control" type="user" name="username" placeholder="Username"></div>
+                <div class="form-group"><input class="form-control" type="password" name="password" placeholder="Password"></div>
+                <div class="form-group"><button class="btn btn-primary btn-block" type="submit">Log In</button></div>
+                <a class="forgot" href="#">Forgot your email or password?</a>
+            </form>
+        </div>
+    </div>
+</body>
+</html>
