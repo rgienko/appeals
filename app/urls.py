@@ -5,7 +5,7 @@ from app import views
 
 urlpatterns = [
     # path(r'', views.login, name='login'),
-    path(r'', views.sign_in, name='login'),
+    path(r'', views.login, name='login'),
     path(r'main/', views.home, name='home'),
     path(r'<pk>/details', views.appealDetailsView, name='appeal-details'),
     path(r'<pk>/details/add-issue', views.addIssueView, name='add-issue'),

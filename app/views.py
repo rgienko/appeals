@@ -2,6 +2,7 @@ import os
 import random
 import shutil
 
+import win32com.client
 from django.contrib import auth, messages
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
@@ -36,7 +37,6 @@ global groupTotalImpact
 
 # Create your views here.
 
-
 def login(request):
     if request.method == 'POST':
         username = request.POST.get('username')
@@ -52,6 +52,7 @@ def login(request):
     })
 
 
+@login_required
 def home(request):
     allDueDates = CriticalDatesMaster.objects.all().order_by('dueDate')[:10]
 
@@ -188,6 +189,7 @@ class NewProviderView(CreateView):
         )
 
 
+@login_required
 def providerNameUpdateView(request, pk):
     provider_object = get_object_or_404(TblProviderNameMaster, pk=pk)
     if request.method == 'POST':
@@ -211,6 +213,7 @@ def providerNameUpdateView(request, pk):
     )
 
 
+@login_required
 def providerMasterView(request):
     all_providers = TblProviderNameMaster.objects.all()
     return render(
@@ -244,6 +247,7 @@ class NewSystemView(CreateView):
         )
 
 
+@login_required
 def parentMasterView(request):
     all_parents = TblParentMaster.objects.all().order_by('parentID')
 
@@ -256,6 +260,7 @@ def parentMasterView(request):
     )
 
 
+@login_required
 def parentUpdateView(request, pk):
     parent_obj = get_object_or_404(TblParentMaster, pk=pk)
 
@@ -279,6 +284,7 @@ def parentUpdateView(request, pk):
     )
 
 
+@login_required
 def issueMasterView(request):
     all_issues = TblIssueMaster.objects.order_by('issueSRGID')
 
@@ -311,6 +317,7 @@ class NewIssueView(CreateView):
         )
 
 
+@login_required
 def staffMasterView(request):
     all_staff = TblStaffMaster.objects.all()
 
@@ -343,6 +350,7 @@ class NewStaffView(CreateView):
         )
 
 
+@login_required
 def fiMasterView(request):
     all_fis = TblFIMaster.objects.all()
 
@@ -377,6 +385,7 @@ class NewFIView(CreateView):
         )
 
 
+@login_required
 def prrbMasterView(request):
     all_prrbs = TblPRRBContactMaster.objects.all()
 
@@ -438,6 +447,31 @@ class NewAppealMasterView(CreateView):
         )
 
 
+@login_required
+def updateCaseStatus(request, pk):
+    caseInstance = get_object_or_404(TblAppealMaster, pk=pk)
+
+    if request.method == 'POST':
+        form = UpdateCaseStatusForm(request.POST)
+
+        if form.is_valid():
+            caseInstance.statusID = form.new_status
+            caseInstance.save()
+
+            return redirect('appeal-details', caseInstance.caseNumber)
+    else:
+        form = UpdateCaseStatusForm()
+
+    return render(
+        request,
+        'create/create_form.html',
+        {
+            'form': form
+        }
+    )
+
+
+@login_required
 class NewCaseDeterminationView(CreateView):
     model = TblCaseDeterminationMaster
     form_class = CaseDeterminationMasterForm
@@ -462,6 +496,7 @@ class NewCaseDeterminationView(CreateView):
         )
 
 
+@login_required
 def addDeterminationView(request, pk):
     case_instance = get_object_or_404(TblAppealMaster, pk=pk)
     caseNum = case_instance.caseNumber
@@ -485,6 +520,7 @@ def addDeterminationView(request, pk):
                   })
 
 
+@login_required
 def appealDetailsView(request, pk):
     caseObj = get_object_or_404(TblAppealMaster, pk=pk)
     caseIssues = TblProviderMaster.objects.filter(caseNumber=pk)
@@ -514,6 +550,15 @@ def appealDetailsView(request, pk):
 
         return redirect('appeal-details', caseObj.caseNumber)
 
+    elif request.method == 'POST' and 'case_status_button' in request.POST:
+        update_status_form = UpdateCaseStatusForm(request.POST)
+
+        if update_status_form.is_valid():
+            caseObj.statusID = update_status_form.cleaned_data['new_status']
+            caseObj.save()
+
+            return redirect('appeal-details', caseObj.caseNumber)
+
     elif request.method == 'POST':
         search_case = request.POST.get('search')
         return redirect('appeal-details', search_case)
@@ -521,6 +566,7 @@ def appealDetailsView(request, pk):
     else:
         proposed_ack_date = datetime.date.today()
         ack_form = AcknowledgeCaseForm(initial={'ack_date': proposed_ack_date})
+        update_status_form = UpdateCaseStatusForm()
 
     return render(request,
                   'main/appealDetails.html',
@@ -531,9 +577,11 @@ def appealDetailsView(request, pk):
                       'provInfo': provInfo,
                       'caseDueDates': caseDueDates,
                       'ack_form': ack_form,
+                      'update_status_form': update_status_form
                   })
 
 
+@login_required
 def addProviderToGroup(request, pk):
     case_instance = get_object_or_404(TblAppealMaster, pk=pk)
     if request.method == 'POST':
@@ -565,6 +613,7 @@ def addProviderToGroup(request, pk):
                   })
 
 
+@login_required
 def addIssueView(request, pk):
     case_instance = get_object_or_404(TblAppealMaster, pk=pk)
     cur_case = case_instance.caseNumber
@@ -595,6 +644,7 @@ def addIssueView(request, pk):
                   })
 
 
+@login_required
 def addCriticalDueView(request, pk):
     case_instance = get_object_or_404(TblAppealMaster, pk=pk)
     cur_case = case_instance.caseNumber
@@ -628,6 +678,20 @@ def addCriticalDueView(request, pk):
             duration = 30
             location = 'N/A'
 
+            outlook = win32com.client.Dispatch("Outlook.Application")
+            appt = outlook.CreateItem(1)  # AppointmentItem
+            appt.Start = start_time  # yyyy-MM-dd hh:mm
+            appt.Subject = subject
+            appt.Duration = duration  # In minutes (60 Minutes)
+            appt.Location = location
+            appt.Body = action.description
+            appt.MeetingStatus = 1
+
+            appt.Recipients.Add("appeals@srgroupllc.com")  # Don't end ; as delimiter
+
+            appt.Save()
+            appt.Send()
+
             return redirect(r'appeal-details', cur_case)
     else:
         form = CriticalDatesMasterCreateForm(initial={'caseNumber': cur_case})
@@ -639,6 +703,7 @@ def addCriticalDueView(request, pk):
                   })
 
 
+@login_required
 def transferIssueView(request, pk):
     issue_trans = get_object_or_404(TblProviderMaster, pk=pk)
     # poss_groups = TblAppealMaster.objects.filter(appealName__contains=issue_trans.fiscal_year).filter(
@@ -685,6 +750,7 @@ def transferIssueView(request, pk):
                   })
 
 
+@login_required
 def searchCriticalDueDates(request):
     dueDates_list = CriticalDatesMaster.objects.all()
     dueDates_filter = CriticalDateFilter(request.GET, queryset=dueDates_list)
@@ -692,6 +758,7 @@ def searchCriticalDueDates(request):
     return render(request, 'main/criticalDatesMaster.html', {'filter': dueDates_filter})
 
 
+@login_required
 def createFormG(request, pk):
     caseObj = get_object_or_404(TblAppealMaster, pk=pk)
 

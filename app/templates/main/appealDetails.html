@@ -109,6 +109,7 @@
                             <div class="mt-3 p-2"> <!--Provider Information-->
                                 <div class="card overflow-auto" style="min-height:220px; max-height:220px;">
                                     <a type="button" class="m-2 btn btn-primary w-25" href="{% url 'form-g' caseObj.caseNumber %}">Schedule G</a>
+                                    <a type="button" class="m-2 btn btn-primary w-25" data-bs-toggle="modal" data-bs-target="#case_status_modal" href="">Update Case Status</a>
                                 </div>
                             </div>
                         </div>
@@ -156,11 +157,11 @@
                                                     <td>{{ date.get_action_note }}</td>
                                                     <td class="text-center">{{ date.dueDate|date:'m/d/Y' }}</td>
                                                     {% if date.progress == 'Not Started' %}
-                                                        <td class="text-center bg-warning" style="width: 175px;"><a class="text-dark" href=""><i class="far fa-circle"></i> {{ date.progress }}</a></td>
+                                                        <td class="text-center bg-warning" style="width: 175px;"><a class="text-dark" data-bs-toggle="modal" data-bs-target="#due_date_progress_modal" href=""><i class="far fa-circle"></i> {{ date.progress }}</a></td>
                                                     {% elif date.progress == 'In Progress' %}
-                                                        <td class="text-center bg-primary text-white" style="width: 175px;"><a class="text-white" href=""><i class="fas fa-spinner"></i> {{ date.progress }}</a></td>
+                                                        <td class="text-center bg-primary text-white" style="width: 175px;"><a class="text-white" data-bs-toggle="modal" data-bs-target="#due_date_progress_modal" href=""><i class="fas fa-spinner"></i> {{ date.progress }}</a></td>
                                                     {% elif date.progress == 'Completed' %}
-                                                        <td class="text-center bg-success text-white" style="width: 175px;"><a class="text-white" href=""><i class="far fa-check-circle"></i> {{ date.progress }}</a></td>
+                                                        <td class="text-center bg-success text-white" style="width: 175px;"><a class="text-white" data-bs-toggle="modal" data-bs-target="#due_date_progress_modal" href=""><i class="far fa-check-circle"></i> {{ date.progress }}</a></td>
                                                     {% else %}
                                                         <td></td>
                                                     {% endif %}
@@ -322,5 +323,62 @@
                     </div>
                 </div>
             </div>
+        </div>
+
+        <div class="modal" id="case_status_modal" tabindex="-1" role="dialog">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Update Case Status</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                          <span aria-hidden="true"></span>
+                        </button>
+                    </div>
+                    <div class="modal-body input-group" id="" data-target-input="">
+                        <form class="" action="" method="post">
+                            {% csrf_token %}
+                            {% for hidden_field in update_status_form.hidden_fields %}
+                                {{ hidden_field }}
+                            {% endfor %}
+
+                            {% for field in update_status_form.visible_fields %}
+                                <label class="form-control border-0">{{ field.label_tag }}</label>
+                                <span class="form-control border-0">{{ field }}</span>
+                            {% endfor %}
+
+                            <input type="submit" name="case_status_button" value="Update Case Status" class="btn btn-primary mt-3"/>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+         <div class="modal" id="due_date_progress_modal" tabindex="-1" role="dialog">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Update Due Date Progress</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                          <span aria-hidden="true"></span>
+                        </button>
+                    </div>
+                    <div class="modal-body input-group" id="" data-target-input="">
+                        <form class="" action="" method="post">
+                            {% csrf_token %}
+                            {% for hidden_field in update_due_date_progress_form.hidden_fields %}
+                                {{ hidden_field }}
+                            {% endfor %}
+
+                            {% for field in update_due_date_progress_form.visible_fields %}
+                                <label class="form-control border-0">{{ field.label_tag }}</label>
+                                <span class="form-control border-0">{{ field }}</span>
+                            {% endfor %}
+
+                            <input type="submit" name="update_due_date_progress_button" value="Update Progress" class="btn btn-primary mt-3"/>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 {% endblock %}

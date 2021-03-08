@@ -252,7 +252,7 @@ class CaseDeterminationMasterForm(forms.ModelForm):
         }
 
         widgets = {
-            'determinationInfo': forms.TextInput(attrs={'size':50})
+            'determinationInfo': forms.TextInput(attrs={'size': 50})
         }
 
 
@@ -322,8 +322,10 @@ class CreateDirectoryForm(forms.Form):
     ]
     ctype = forms.ChoiceField(label='Case Type:', choices=types)
     parent = forms.ModelChoiceField(label='Parent:', queryset=TblParentMaster.objects.only('parentID'))
-    prov = forms.ModelChoiceField(label='Provider:', queryset=TblProviderNameMaster.objects.only('providerID'), required=False)
-    issue = forms.ModelChoiceField(label='Issue:', queryset=TblIssueMaster.objects.only('issueAbbreviation'), required=False)
+    prov = forms.ModelChoiceField(label='Provider:', queryset=TblProviderNameMaster.objects.only('providerID'),
+                                  required=False)
+    issue = forms.ModelChoiceField(label='Issue:', queryset=TblIssueMaster.objects.only('issueAbbreviation'),
+                                   required=False)
     fy = forms.IntegerField(label='Fiscal Year:')
     isFFY = forms.BooleanField(label='FFY:', required=False)
     case = forms.CharField(label='Case Number:', max_length=7)
@@ -339,4 +341,21 @@ class AcknowledgeCaseForm(forms.Form):
         if data < datetime.date.today():
             raise ValidationError(_('Invalid Date - Date is in the past'))
 
+        return data
+
+
+class UpdateCaseStatusForm(forms.Form):
+    new_status = forms.ModelChoiceField(label='Select New Status:', queryset=TblStatusMaster.objects.only('statusName'))
+
+    def clean_new_status(self):
+        data = self.cleaned_data['new_status']
+
+        return data
+
+
+class UpdateDueDateProgressForm(forms.Form):
+    new_progress = forms.ModelChoiceField(label='Update Progress:', queryset=CriticalDatesMaster.objects.only('progress'))
+
+    def clean_new_progress(self):
+        data = self.cleaned_data['new_progress']
         return data
