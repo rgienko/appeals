@@ -12,14 +12,9 @@
             {% endfor %}
 
             {% for field in form.visible_fields %}
-            <ul class="list-group p-0">
-                <li class="list-group-item p-0 border-0">
-                    <ul class="list-group list-group-horizontal-sm p-0 mt-4">
-                        <li class="list-group-item w-25 font-weight-bold">{{ field.label_tag }}</li>
-                        <li class="list-group-item w-75">{{ field }}</li>
-                    </ul>
-                </li>
-            </ul>
+                <label class="form-control border-0">{{ field.label_tag }}</label>
+                <span class="form-control border-0">{{ field }}</span>
+
             {% endfor %}
             <div class="d-grid gap-2 d-md-flex justify-content-md-end my-2">
                 <input type="submit" class="btn btn-primary w-25" value="Submit" />

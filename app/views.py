@@ -498,20 +498,7 @@ def appealDetailsView(request, pk):
     caseObj = get_object_or_404(TblAppealMaster, pk=pk)
     caseIssues = TblProviderMaster.objects.filter(caseNumber=pk)
     provInfo = caseIssues.first()
-
-    provs = []
-
-    for prov in caseIssues:
-        provs.append(prov.provMasterFromCase)
-
-    try:
-        caseDueDates = CriticalDatesMaster.objects.filter(caseNumber=pk)
-        caseDetermination = TblCaseDeterminationMaster.objects.get(caseNumber=pk)
-    except ObjectDoesNotExist:
-        caseDetermination = None
-        caseDueDates = None
-    finally:
-        pass
+    caseDueDates = CriticalDatesMaster.objects.filter(caseNumber=pk)
 
     if request.method == 'POST' and 'ack_button' in request.POST:
         ack_form = AcknowledgeCaseForm(request.POST)
@@ -550,7 +537,6 @@ def appealDetailsView(request, pk):
                   'main/appealDetails.html',
                   {
                       'caseObj': caseObj,
-                      'caseDetermination': caseDetermination,
                       'caseIssues': caseIssues,
                       'provInfo': provInfo,
                       'caseDueDates': caseDueDates,
@@ -627,19 +613,11 @@ def addCriticalDueView(request, pk):
     case_instance = get_object_or_404(TblAppealMaster, pk=pk)
     cur_case = case_instance.caseNumber
     case_due_dates = CriticalDatesMaster.objects.filter(caseNumber=cur_case)
+    case_issues = TblProviderMaster.objects.filter(caseNumber=cur_case).first()
 
     if request.method == 'POST':
         form = CriticalDatesMasterCreateForm(request.POST)
-
-        try:
-            case_fy = TblCaseDeterminationMaster.objects.get(
-                caseNumber=cur_case).determinationFiscalYear
-        except ObjectDoesNotExist:
-            from_case = TblProviderMaster.objects.filter(caseNumber=cur_case).first()
-            case_fy = TblCaseDeterminationMaster.objects.get(
-                caseNumber=from_case.provMasterFromCase).determinationFiscalYear
-        finally:
-            pass
+        case_fy = case_issues.provMasterFiscalYear
 
         if form.is_valid():
             new_due_date = form.save(commit=False)
