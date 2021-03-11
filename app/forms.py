@@ -235,6 +235,7 @@ class CaseDeterminationMasterForm(forms.ModelForm):
 
         fields = [
             'caseNumber',
+            'providerNumber',
             'determinationID',
             'determinationDate',
             'determinationDateSubs',
@@ -244,6 +245,7 @@ class CaseDeterminationMasterForm(forms.ModelForm):
 
         labels = {
             'caseNumber': _('Case Number:'),
+            'providerNumber': _('Provider Number:'),
             'determinationID': _('Determination Type:'),
             'determinationDate': _('Determination Date:'),
             'determinationDateSubs': _('Determination Date Subs:'),
@@ -263,6 +265,9 @@ class ProviderMasterCreateForm(forms.ModelForm):
         fields = [
             'caseNumber',
             'providerID',
+            'provMasterDeterminationType',
+            'provMasterDeterminationDate',
+            'provMasterFiscalYear',
             'issueID',
             'provMasterAuditAdjs',
             'provMasterImpact',
@@ -272,6 +277,9 @@ class ProviderMasterCreateForm(forms.ModelForm):
         labels = {
             'caseNumber': _('Case Number:'),
             'providerID': _('Provider Number:'),
+            'provMasterDeterminationType': _('Determination Type:'),
+            'provMasterDeterminationDate': _('Determination Date:'),
+            'provMasterFiscalYear': _('Fiscal Year:'),
             'issueID': _('Issue:'),
             'provMasterAuditAdjs': _('Audit Adjustments:'),
             'provMasterImpact': _('Amount:'),
@@ -354,7 +362,12 @@ class UpdateCaseStatusForm(forms.Form):
 
 
 class UpdateDueDateProgressForm(forms.Form):
-    new_progress = forms.ModelChoiceField(label='Update Progress:', queryset=CriticalDatesMaster.objects.only('progress'))
+    progress_choices = [
+        ('Not Started', 'Not Started'),
+        ('In Progress', 'In Progress'),
+        ('Completed', 'Completed')
+    ]
+    new_progress = forms.ChoiceField(label='Update Progress:', choices=progress_choices)
 
     def clean_new_progress(self):
         data = self.cleaned_data['new_progress']

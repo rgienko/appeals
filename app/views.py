@@ -285,6 +285,28 @@ def parentUpdateView(request, pk):
 
 
 @login_required
+def providerMasterUpdateView(request, pk):
+    providerMaster_obj = get_object_or_404(TblProviderMaster, pk=pk)
+
+    if request.method == 'POST':
+        form = ProviderMasterCreateForm(request.POST, instance=providerMaster_obj)
+
+        if form.is_valid():
+            providerMaster_obj = form.save(commit=False)
+            providerMaster_obj.save()
+
+            return redirect('appeal-details', providerMaster_obj.caseNumber)
+
+    else:
+        form = ProviderMasterCreateForm(instance=providerMaster_obj)
+
+    return render(request, 'create/create_form.html',
+                  {
+                      'form': form
+                  })
+
+
+@login_required
 def issueMasterView(request):
     all_issues = TblIssueMaster.objects.order_by('issueSRGID')
 
@@ -431,9 +453,9 @@ class NewAppealMasterView(CreateView):
         structure = new_appeal.appealStructure
         new_appeal.save()
         if structure == 'Individual':
-            return redirect('new-deter', caseNum)
+            return redirect('add-issue', caseNum)
         else:
-            return redirect('appeal-details', caseNum)
+            return redirect('add-issue', caseNum)
 
     def get(self, request, *args, **kwargs):
         form = self.form_class(request.POST)
@@ -472,66 +494,22 @@ def updateCaseStatus(request, pk):
 
 
 @login_required
-class NewCaseDeterminationView(CreateView):
-    model = TblCaseDeterminationMaster
-    form_class = CaseDeterminationMasterForm
-    template_name = 'create/create_form.html'
-    context_object_name = 'new_determination'
-
-    def form_valid(self, form):
-        new_determination = form.save(commit=False)
-        caseNum = new_determination.caseNumber
-        new_determination.save()
-        return redirect('new-deter', caseNum)
-
-    def get(self, request, *args, **kwargs):
-        form = self.form_class(request.POST)
-        return render(
-            request,
-            self.template_name,
-            {
-                'form': form,
-                'formName': 'Appeal Determination Info'
-            }
-        )
-
-
-@login_required
-def addDeterminationView(request, pk):
-    case_instance = get_object_or_404(TblAppealMaster, pk=pk)
-    caseNum = case_instance.caseNumber
-    if request.method == 'POST':
-        form = CaseDeterminationMasterForm(request.POST)
-
-        if form.is_valid():
-            new_deter = form.save(commit=False)
-            new_deter.save()
-
-            return redirect('add-issue', caseNum)
-
-    else:
-        form = CaseDeterminationMasterForm(initial={'caseNumber': caseNum})
-
-    return render(request, 'create/create_form.html',
-                  {
-                      'form': form,
-                      'formName': 'Appeal Determination Info'
-
-                  })
-
-
-@login_required
 def appealDetailsView(request, pk):
     caseObj = get_object_or_404(TblAppealMaster, pk=pk)
     caseIssues = TblProviderMaster.objects.filter(caseNumber=pk)
     provInfo = caseIssues.first()
 
+    provs = []
+
+    for prov in caseIssues:
+        provs.append(prov.provMasterFromCase)
+
     try:
         caseDueDates = CriticalDatesMaster.objects.filter(caseNumber=pk)
-        caseDetermination = TblCaseDeterminationMaster.objects.get(
-            caseNumber=pk)
+        caseDetermination = TblCaseDeterminationMaster.objects.get(caseNumber=pk)
     except ObjectDoesNotExist:
         caseDetermination = None
+        caseDueDates = None
     finally:
         pass
 
@@ -653,17 +631,19 @@ def addCriticalDueView(request, pk):
     if request.method == 'POST':
         form = CriticalDatesMasterCreateForm(request.POST)
 
+        try:
+            case_fy = TblCaseDeterminationMaster.objects.get(
+                caseNumber=cur_case).determinationFiscalYear
+        except ObjectDoesNotExist:
+            from_case = TblProviderMaster.objects.filter(caseNumber=cur_case).first()
+            case_fy = TblCaseDeterminationMaster.objects.get(
+                caseNumber=from_case.provMasterFromCase).determinationFiscalYear
+        finally:
+            pass
+
         if form.is_valid():
             new_due_date = form.save(commit=False)
             new_due_date.save()
-
-            try:
-                case_fy = TblCaseDeterminationMaster.objects.get(
-                    caseNumber=cur_case).determinationFiscalYear
-            except ObjectDoesNotExist:
-                pass
-            finally:
-                pass
 
             action = TblActionMaster.objects.get(pk=new_due_date.actionID)
             subject = '{0}~{1}~{2}'.format(
@@ -756,6 +736,33 @@ def searchCriticalDueDates(request):
     dueDates_filter = CriticalDateFilter(request.GET, queryset=dueDates_list)
 
     return render(request, 'main/criticalDatesMaster.html', {'filter': dueDates_filter})
+
+
+@login_required
+def updateDueDateProgress(request, pk):
+    dueDate_obj = get_object_or_404(CriticalDatesMaster, pk=pk)
+    provMasterObj = TblProviderMaster.objects.filter(caseNumber=dueDate_obj.caseNumber)
+
+    if request.method == 'POST':
+        form = UpdateDueDateProgressForm(request.POST)
+
+        if form.is_valid():
+            dueDate_obj.progress = request.POST.get('new_progress')
+            dueDate_obj.save()
+
+            return redirect('appeal-details', dueDate_obj.caseNumber)
+    else:
+        form = UpdateDueDateProgressForm()
+
+    return render(
+        request,
+        'create/due_date_edit.html',
+        {
+            'form': form,
+            'dueDate_obj': dueDate_obj,
+            'provMasterObj': provMasterObj
+        }
+    )
 
 
 @login_required
@@ -952,39 +959,34 @@ def createFormG(request, pk):
         columnDataProviderNumber = Paragraph('<para align=center>' + str(prov.providerID) + '</para>',
                                              styles["Normal"])
 
-        provName = TblProviderNameMaster.objects.get(
-            providerID=prov.providerID)
-        columnDataProviderInfo = Paragraph(
-            '<para align=center>' + str(provName.providerName) + '<br/> (Chicago, Cook, IL)</para>', styles["Normal"])
+        provName = TblProviderNameMaster.objects.get(providerID=prov.providerID)
+        columnDataProviderInfo = Paragraph('<para align=center>' + str(provName.providerName) + '<br/>' + str(provName.providerCity) +
+            str(provName.providerCounty) + str(provName.stateID) + '</para>', styles["Normal"])
 
         provFYE = TblCaseDeterminationMaster.objects.get(caseNumber=caseNum)
         # print(provFYE.determinationFiscalYear.strftime("%m/%d/%Y"))
         columnDataFYE = Paragraph('<para align=center>' + str(provFYE.determinationFiscalYear.strftime("%m/%d/%Y")) +
                                   '</para>', styles["Normal"])
 
-        columnDataMAC = Paragraph(
-            '<para align=center>' + str(caseObj.fiID) + '</para>', styles["Normal"])
+        columnDataMAC = Paragraph('<para align=center>' + str(caseObj.fiID) + '</para>', styles["Normal"])
 
-        deterDate = TblCaseDeterminationMaster.objects.get(
-            caseNumber=prov.provMasterFromCase)
-        columnDataA = Paragraph('<para align=center>' + str(deterDate.determinationDate.strftime("%m/%d/%Y")) +
+        columnDataA = Paragraph('<para align=center>' + str(prov.provMasterDeterminationDate.strftime("%m/%d/%Y")) +
                                 '</para>', styles["Normal"])
 
-        hrqDate = TblAppealMaster.objects.get(
-            caseNumber=prov.provMasterFromCase)
+        hrqDate = TblAppealMaster.objects.get(caseNumber=prov.provMasterFromCase)
         columnDataB = Paragraph('<para align=center>' + str(hrqDate.appealCreateDate.strftime("%m/%d/%Y")) + '</para>',
                                 styles["Normal"])
-        columnDataC = Paragraph(
-            '<para align=center>' + str(180) + '</para>', styles["Normal"])
-        columnDataD = Paragraph(
-            '<para align=center>' + str(prov.provMasterAuditAdjs) + '</para>', styles["Normal"])
+
+        no_of_days = prov.get_no_days()
+        print(str(no_of_days))
+        columnDataC = Paragraph('<para align=center>' + str(no_of_days) + '</para>', styles["Normal"])
+        columnDataD = Paragraph('<para align=center>' + str(prov.provMasterAuditAdjs) + '</para>', styles["Normal"])
 
         locale.setlocale(locale.LC_ALL, '')
         columnDataE = Paragraph('<para align=center>' + str(locale.currency(prov.provMasterImpact, grouping=True)) +
                                 '</para>', styles["Normal"])
 
-        columnDataF = Paragraph(
-            '<para align=center>' + str(prov.provMasterFromCase) + '</para>', styles["Normal"])
+        columnDataF = Paragraph('<para align=center>' + str(prov.provMasterFromCase) + '</para>', styles["Normal"])
         columnDataG = Paragraph(
             '<para align=center>' + str(prov.provMasterTransferDate.strftime("%m/%d/%Y")) + '</para>', styles["Normal"])
 
@@ -1086,3 +1088,50 @@ class PageNumCanvas(canvas.Canvas):
 #    write_to_file.close()
 #    # return HttpResponse(result.err)
 #    return render(request, 'main/formG.html')
+
+
+# class NewCaseDeterminationView(CreateView):
+#    model = TblCaseDeterminationMaster
+#    form_class = CaseDeterminationMasterForm
+#    template_name = 'create/create_form.html'
+#    context_object_name = 'new_determination'
+
+#    def form_valid(self, form):
+#        new_determination = form.save(commit=False)
+#        caseNum = new_determination.caseNumber
+#        new_determination.save()
+#        return redirect('new-deter', caseNum)
+
+#   def get(self, request, *args, **kwargs):
+#       form = self.form_class(request.POST)
+#       return render(
+#           request,
+#           self.template_name,
+#           {
+#               'form': form,
+#               'formName': 'Appeal Determination Info'
+#           }
+#       )
+
+
+# def addDeterminationView(request, pk, prov):
+#    case_instance = get_object_or_404(TblAppealMaster, pk=pk)
+#    caseNum = case_instance.caseNumber
+#    if request.method == 'POST':
+#        form = CaseDeterminationMasterForm(request.POST)
+
+#        if form.is_valid():
+#            new_deter = form.save(commit=False)
+#            new_deter.save()
+
+#           return redirect('appeal-details', caseNum)
+
+#    else:
+#        form = CaseDeterminationMasterForm(initial={'caseNumber': caseNum, 'providerNumber': prov})
+
+#    return render(request, 'create/create_form.html',
+#                  {
+#                      'form': form,
+#                      'formName': 'Appeal Determination Info'
+
+#                  })

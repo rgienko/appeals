@@ -305,6 +305,8 @@ class TblCaseDeterminationMaster(models.Model):
         db_column='caseDeterminationID', primary_key=True)
     caseNumber = models.ForeignKey(
         'TblAppealMaster', on_delete=models.CASCADE, db_column='caseNumber', blank=True, null=True)
+    providerNumber = models.ForeignKey('TblProviderNameMaster', db_column='providerID',
+                                       on_delete=models.CASCADE, blank=True, null=True)
     determinationID = models.ForeignKey(
         'TblDeterminationType', on_delete=models.CASCADE, db_column='determinationID', blank=True, null=True)
     determinationDate = models.DateField(
@@ -327,6 +329,14 @@ class TblProviderMaster(models.Model):
         'TblAppealMaster', on_delete=models.CASCADE, db_column='caseNumber', blank=True, null=True)
     providerID = models.ForeignKey(
         'TblProviderNameMaster', on_delete=models.CASCADE, db_column='providerID', blank=True, null=True)
+    provMasterDeterminationDate = models.DateField(blank=True, null=True)
+    determinationTypes = {
+        ('FR', 'FR'),
+        ('NPR', 'NPR'),
+        ('RNPR', 'RNPR')
+    }
+    provMasterDeterminationType = models.CharField(max_length=4, choices=determinationTypes, blank=True, null=True)
+    provMasterFiscalYear = models.DateField(blank=True, null=True)
     issueID = models.ForeignKey(
         'TblIssueMaster', on_delete=models.CASCADE, db_column='issueID', blank=True, null=True)
     provMasterAuditAdjs = models.CharField(
@@ -350,7 +360,7 @@ class TblProviderMaster(models.Model):
 
     def get_deter_date(self):
         ddate = TblCaseDeterminationMaster.objects.get(
-            caseNumber=self.provMasterFromCase)
+            providerNumber=self.providerID)
         return ddate.determinationDate
 
     def get_fye(self):
@@ -368,6 +378,11 @@ class TblProviderMaster(models.Model):
         hrqDate = TblAppealMaster.objects.get(
             caseNumber=self.provMasterFromCase)
         return str(hrqDate.appealCreateDate)
+
+    def get_no_days(self):
+        hrqDate = TblAppealMaster.objects.get(caseNumber=self.provMasterFromCase)
+        delta = hrqDate.appealCreateDate - self.provMasterDeterminationDate
+        return delta.days
 
 
 class TblActionMaster(models.Model):
