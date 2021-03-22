@@ -1,6 +1,8 @@
 import os
 import random
 import shutil
+from datetime import timedelta
+import json
 
 import win32com.client
 from django.contrib import auth, messages
@@ -25,6 +27,9 @@ from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Image, Tabl
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 from reportlab.lib.units import inch, cm, mm
 
+from app.auth_helper import *
+from app.graph_helper import *
+
 import locale
 
 global title
@@ -44,7 +49,7 @@ def login(request):
         user = auth.authenticate(username=username, password=password)
         if user is not None:
             auth.login(request, user)
-            return redirect('home')
+            return redirect('main')
     else:
         messages.error(request, 'Error, wrong username / password')
     return render(request, 'main/login.html', {
@@ -52,8 +57,57 @@ def login(request):
     })
 
 
-@login_required
+def initialize_context(request):
+    context = {}
+
+    error = request.session.pop('flash_error', None)
+
+    if error is not None:
+        context['errors'] = []
+        context['errors'].append(error)
+
+    context['user'] = request.session.get('user', {'is_authenticated': False})
+
+    return context
+
+
 def home(request):
+    context = initialize_context(request)
+    return render(request, 'main/click.html', context)
+
+
+def sign_in(request):
+    # Get the sign-in flow
+    flow = get_sign_in_flow()
+    # Save the expected flow so we can use it in the callback
+    try:
+        request.session['auth_flow'] = flow
+    except Exception as e:
+        print(e)
+    # Redirect to the Azure sign-in page
+    return HttpResponseRedirect(flow['auth_uri'])
+
+
+def callback(request):
+    # Make the token request
+    result = get_token_from_code(request)
+
+    # Get the user's profile
+    user = get_user(result['access_token'])
+
+    # Store user
+    store_user(request, user)
+    return HttpResponseRedirect(reverse('main'))
+
+
+def sign_out(request):
+    # Clear out the user and token
+    remove_user_and_token(request)
+
+    return HttpResponseRedirect(reverse('home'))
+
+
+def main(request):
     allDueDates = CriticalDatesMaster.objects.all().order_by('dueDate')[:10]
 
     if request.user.is_authenticated:
@@ -189,7 +243,6 @@ class NewProviderView(CreateView):
         )
 
 
-@login_required
 def providerNameUpdateView(request, pk):
     provider_object = get_object_or_404(TblProviderNameMaster, pk=pk)
     if request.method == 'POST':
@@ -213,7 +266,6 @@ def providerNameUpdateView(request, pk):
     )
 
 
-@login_required
 def providerMasterView(request):
     all_providers = TblProviderNameMaster.objects.all()
     return render(
@@ -247,7 +299,6 @@ class NewSystemView(CreateView):
         )
 
 
-@login_required
 def parentMasterView(request):
     all_parents = TblParentMaster.objects.all().order_by('parentID')
 
@@ -260,7 +311,6 @@ def parentMasterView(request):
     )
 
 
-@login_required
 def parentUpdateView(request, pk):
     parent_obj = get_object_or_404(TblParentMaster, pk=pk)
 
@@ -284,7 +334,6 @@ def parentUpdateView(request, pk):
     )
 
 
-@login_required
 def providerMasterUpdateView(request, pk):
     providerMaster_obj = get_object_or_404(TblProviderMaster, pk=pk)
 
@@ -306,7 +355,6 @@ def providerMasterUpdateView(request, pk):
                   })
 
 
-@login_required
 def issueMasterView(request):
     all_issues = TblIssueMaster.objects.order_by('issueSRGID')
 
@@ -339,7 +387,6 @@ class NewIssueView(CreateView):
         )
 
 
-@login_required
 def staffMasterView(request):
     all_staff = TblStaffMaster.objects.all()
 
@@ -372,7 +419,6 @@ class NewStaffView(CreateView):
         )
 
 
-@login_required
 def fiMasterView(request):
     all_fis = TblFIMaster.objects.all()
 
@@ -407,7 +453,6 @@ class NewFIView(CreateView):
         )
 
 
-@login_required
 def prrbMasterView(request):
     all_prrbs = TblPRRBContactMaster.objects.all()
 
@@ -469,7 +514,6 @@ class NewAppealMasterView(CreateView):
         )
 
 
-@login_required
 def updateCaseStatus(request, pk):
     caseInstance = get_object_or_404(TblAppealMaster, pk=pk)
 
@@ -493,10 +537,9 @@ def updateCaseStatus(request, pk):
     )
 
 
-@login_required
 def appealDetailsView(request, pk):
     caseObj = get_object_or_404(TblAppealMaster, pk=pk)
-    caseIssues = TblProviderMaster.objects.filter(caseNumber=pk)
+    caseIssues = TblProviderMaster.objects.filter(caseNumber=pk).order_by('providerID')
     provInfo = caseIssues.first()
     caseDueDates = CriticalDatesMaster.objects.filter(caseNumber=pk)
 
@@ -545,7 +588,6 @@ def appealDetailsView(request, pk):
                   })
 
 
-@login_required
 def addProviderToGroup(request, pk):
     case_instance = get_object_or_404(TblAppealMaster, pk=pk)
     if request.method == 'POST':
@@ -577,7 +619,6 @@ def addProviderToGroup(request, pk):
                   })
 
 
-@login_required
 def addIssueView(request, pk):
     case_instance = get_object_or_404(TblAppealMaster, pk=pk)
     cur_case = case_instance.caseNumber
@@ -608,8 +649,10 @@ def addIssueView(request, pk):
                   })
 
 
-@login_required
 def addCriticalDueView(request, pk):
+    context = initialize_context(request)
+    user = context['user']
+
     case_instance = get_object_or_404(TblAppealMaster, pk=pk)
     cur_case = case_instance.caseNumber
     case_due_dates = CriticalDatesMaster.objects.filter(caseNumber=cur_case)
@@ -623,9 +666,19 @@ def addCriticalDueView(request, pk):
             new_due_date = form.save(commit=False)
             new_due_date.save()
 
+            # Create the due date
+            token = get_token(request)
+
             action = TblActionMaster.objects.get(pk=new_due_date.actionID)
-            subject = '{0}~{1}~{2}'.format(
-                new_due_date.actionID, cur_case, str(case_fy.year))
+
+            # Create the subject
+            if case_issues.provMasterDeterminationType == 'FR':
+                subject = '{0}~{1}~FFY{2}'.format(
+                    new_due_date.actionID, cur_case, str(case_fy.year))
+            else:
+                subject = '{0}~{1}~FY{2}'.format(
+                    new_due_date.actionID, cur_case, str(case_fy.year))
+
             due_date = new_due_date.dueDate
             start_year = due_date.year
             start_month = due_date.month
@@ -633,23 +686,20 @@ def addCriticalDueView(request, pk):
 
             start_time = datetime.datetime(start_year, start_month, start_day,
                                            random.randint(1, 12), random.randint(0, 59), 0)
-            duration = 30
-            location = 'N/A'
+            end_time = start_time + timedelta(minutes=30)
 
-            outlook = win32com.client.Dispatch("Outlook.Application")
-            appt = outlook.CreateItem(1)  # AppointmentItem
-            appt.Start = start_time  # yyyy-MM-dd hh:mm
-            appt.Subject = subject
-            appt.Duration = duration  # In minutes (60 Minutes)
-            appt.Location = location
-            appt.Body = action.description
-            appt.MeetingStatus = 1
+            body = action.description
 
-            appt.Recipients.Add("appeals@srgroupllc.com")  # Don't end ; as delimiter
+            lead_time = action.lead_time * 10080
 
-            appt.Save()
-            appt.Send()
-
+            create_event(
+                token,
+                subject,
+                start_time,
+                end_time,
+                lead_time,
+                body
+            )
             return redirect(r'appeal-details', cur_case)
     else:
         form = CriticalDatesMasterCreateForm(initial={'caseNumber': cur_case})
@@ -661,7 +711,6 @@ def addCriticalDueView(request, pk):
                   })
 
 
-@login_required
 def transferIssueView(request, pk):
     issue_trans = get_object_or_404(TblProviderMaster, pk=pk)
     # poss_groups = TblAppealMaster.objects.filter(appealName__contains=issue_trans.fiscal_year).filter(
@@ -708,7 +757,6 @@ def transferIssueView(request, pk):
                   })
 
 
-@login_required
 def searchCriticalDueDates(request):
     dueDates_list = CriticalDatesMaster.objects.all()
     dueDates_filter = CriticalDateFilter(request.GET, queryset=dueDates_list)
@@ -716,7 +764,6 @@ def searchCriticalDueDates(request):
     return render(request, 'main/criticalDatesMaster.html', {'filter': dueDates_filter})
 
 
-@login_required
 def updateDueDateProgress(request, pk):
     dueDate_obj = get_object_or_404(CriticalDatesMaster, pk=pk)
     provMasterObj = TblProviderMaster.objects.filter(caseNumber=dueDate_obj.caseNumber)
@@ -743,7 +790,6 @@ def updateDueDateProgress(request, pk):
     )
 
 
-@login_required
 def createFormG(request, pk):
     caseObj = get_object_or_404(TblAppealMaster, pk=pk)
 
@@ -938,7 +984,8 @@ def createFormG(request, pk):
                                              styles["Normal"])
 
         provName = TblProviderNameMaster.objects.get(providerID=prov.providerID)
-        columnDataProviderInfo = Paragraph('<para align=center>' + str(provName.providerName) + '<br/>' + str(provName.providerCity) +
+        columnDataProviderInfo = Paragraph(
+            '<para align=center>' + str(provName.providerName) + '<br/>' + str(provName.providerCity) +
             str(provName.providerCounty) + str(provName.stateID) + '</para>', styles["Normal"])
 
         provFYE = TblCaseDeterminationMaster.objects.get(caseNumber=caseNum)
