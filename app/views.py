@@ -108,6 +108,8 @@ def sign_out(request):
 
 
 def main(request):
+    context = initialize_context(request)
+
     allDueDates = CriticalDatesMaster.objects.all().order_by('dueDate')[:10]
 
     if request.user.is_authenticated:
@@ -212,13 +214,10 @@ def main(request):
     else:
         make_dir_form = CreateDirectoryForm()
 
-    return render(request,
-                  'main/index.html',
-                  {
-                      'form': make_dir_form,
-                      'current_user': current_user,
-                      'allDueDates': allDueDates
-                  })
+    context['form'] = make_dir_form
+    context['allDueDates'] = allDueDates
+
+    return render(request, 'main/index.html', context)
 
 
 class NewProviderView(CreateView):
@@ -230,20 +229,18 @@ class NewProviderView(CreateView):
     def form_valid(self, form):
         new_provider = form.save(commit=False)
         new_provider.save()
-        return redirect('provider-master')
+        return redirect('main')
 
     def get(self, request, *args, **kwargs):
+        context = initialize_context(request)
         form = self.form_class(request.POST)
-        return render(
-            request,
-            self.template_name,
-            {
-                'form': form
-            }
-        )
+        context['form'] = form
+        context['formName'] = 'Add Provider'
+        return render(request, self.template_name, context)
 
 
 def providerNameUpdateView(request, pk):
+    context = initialize_context(request)
     provider_object = get_object_or_404(TblProviderNameMaster, pk=pk)
     if request.method == 'POST':
         form = ProviderNameMasterCreateForm(
@@ -253,28 +250,20 @@ def providerNameUpdateView(request, pk):
             provider_object = form.save(commit=False)
             provider_object.save()
 
-            return redirect('provider-master')
+            return redirect('main')
     else:
         form = ProviderNameMasterCreateForm(instance=provider_object)
 
-    return render(
-        request,
-        'create/prov_create_form.html',
-        {
-            'form': form
-        }
-    )
+    context['form'] = form
+    context['formName'] = 'Update Provider'
+    return render(request, 'create/prov_create_form.html', context)
 
 
 def providerMasterView(request):
+    context = initialize_context(request)
     all_providers = TblProviderNameMaster.objects.all()
-    return render(
-        request,
-        'main/providerMaster.html',
-        {
-            'all_providers': all_providers
-        }
-    )
+    context['all_providers'] = all_providers
+    return render(request, 'main/providerMaster.html', context)
 
 
 class NewSystemView(CreateView):
@@ -289,29 +278,22 @@ class NewSystemView(CreateView):
         return redirect('parent-master')
 
     def get(self, request, *args, **kwargs):
+        context = initialize_context(request)
         form = self.form_class(request.POST)
-        return render(
-            request,
-            self.template_name,
-            {
-                'form': form
-            }
-        )
+        context['form'] = form
+        context['formName'] = 'New System'
+        return render(request, self.template_name, context)
 
 
 def parentMasterView(request):
+    context = initialize_context(request)
     all_parents = TblParentMaster.objects.all().order_by('parentID')
-
-    return render(
-        request,
-        'main/parentMaster.html',
-        {
-            'all_parents': all_parents
-        }
-    )
+    context['all_parents'] = all_parents
+    return render(request, 'main/parentMaster.html', context)
 
 
 def parentUpdateView(request, pk):
+    context = initialize_context(request)
     parent_obj = get_object_or_404(TblParentMaster, pk=pk)
 
     if request.method == 'POST':
@@ -325,13 +307,9 @@ def parentUpdateView(request, pk):
     else:
         form = ParentMasterCreateForm(instance=parent_obj)
 
-    return render(
-        request,
-        'create/parent_create_form.html',
-        {
-            'form': form
-        }
-    )
+    context['form'] = form
+    context['formName'] = 'Update System'
+    return render(request, 'create/parent_create_form.html', context)
 
 
 def providerMasterUpdateView(request, pk):
@@ -503,15 +481,11 @@ class NewAppealMasterView(CreateView):
             return redirect('add-issue', caseNum)
 
     def get(self, request, *args, **kwargs):
+        context = initialize_context(request)
         form = self.form_class(request.POST)
-        return render(
-            request,
-            self.template_name,
-            {
-                'form': form,
-                'formName': 'Create New Appeal'
-            }
-        )
+        context['form'] = form
+        context['formName'] = 'Create New Appeal'
+        return render(request, self.template_name, context)
 
 
 def updateCaseStatus(request, pk):
@@ -538,6 +512,7 @@ def updateCaseStatus(request, pk):
 
 
 def appealDetailsView(request, pk):
+    context = initialize_context(request)
     caseObj = get_object_or_404(TblAppealMaster, pk=pk)
     caseIssues = TblProviderMaster.objects.filter(caseNumber=pk).order_by('providerID')
     provInfo = caseIssues.first()
@@ -576,16 +551,14 @@ def appealDetailsView(request, pk):
         ack_form = AcknowledgeCaseForm(initial={'ack_date': proposed_ack_date})
         update_status_form = UpdateCaseStatusForm()
 
-    return render(request,
-                  'main/appealDetails.html',
-                  {
-                      'caseObj': caseObj,
-                      'caseIssues': caseIssues,
-                      'provInfo': provInfo,
-                      'caseDueDates': caseDueDates,
-                      'ack_form': ack_form,
-                      'update_status_form': update_status_form
-                  })
+    context['caseObj'] = caseObj
+    context['caseIssues'] = caseIssues
+    context['provInfo'] = provInfo
+    context['caseDueDates'] = caseDueDates
+    context['ack_form'] = ack_form
+    context['update_status_form'] = update_status_form
+
+    return render(request, 'main/appealDetails.html', context)
 
 
 def addProviderToGroup(request, pk):
@@ -704,11 +677,11 @@ def addCriticalDueView(request, pk):
     else:
         form = CriticalDatesMasterCreateForm(initial={'caseNumber': cur_case})
 
-    return render(request, 'create/create_form.html',
-                  {
-                      'form': form,
-                      'case_due_dates': case_due_dates
-                  })
+    context['formName'] = 'Add Critical Due Date'
+    context['form'] = form
+    context['case_due_dates'] = case_due_dates
+
+    return render(request, 'create/create_form.html', context)
 
 
 def transferIssueView(request, pk):

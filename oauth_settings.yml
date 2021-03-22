@@ -1,8 +1,9 @@
-app_id: "89e19608-864f-4141-be98-dec699d7cac2"
-app_secret: "xd73.9yCKyao~-16yeccML7824z.F3PgZ3"
+app_id: "7e790527-9721-4fbc-8c99-2c9754449464"
+app_secret: "KskR_A-uB_6Gz~.Q4nqp.h0_SB2M9Il2Eq"
 redirect: "http://localhost:8000/callback"
 scopes:
   - user.read
   - mailboxsettings.read
   - calendars.readwrite
-authority: "https://login.microsoftonline.com/common"
+authority: "https://login.microsoftonline.com/679b330a-1ac4-4b97-9edd-58e465d3dadf"
+token_url: 'https://login.microsoftonline.com/679b330a-1ac4-4b97-9edd-58e465d3dadf/oauth2/v2.0/token'

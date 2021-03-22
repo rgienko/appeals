@@ -41,7 +41,12 @@
                 <nav id="sidebarMenu" class="my-bg-dark col-md-2 d-md-block sidebar collapse" style="background-color: #404552">
                     <div class="col-sm border-bottom">
                         <h4 class="navbar-brand text-light px-3 pt-3">
-                            Welcome, Randall
+                            {% if user.is_authenticated %}
+                                Welcome, {{ user.name }} <br>
+                                <span class="text-muted fs-6">{{ user.email }} <br>
+                                    <a class="text-light text-decoration-none" href="{% url 'signout' %}">Sign Out</a></span>
+                            {% else %}
+                            {% endif %}
                         </h4>
                     </div>
                     <div class="sidebar-sticky mt-4">
