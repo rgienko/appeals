@@ -158,6 +158,13 @@ class FIMasterCreateForm(forms.ModelForm):
             'fiZip': _('Zip Code:')
         }
 
+        widgets = {
+            'fiName': forms.TextInput(attrs={'size': 50}),
+            'fiTitle':  forms.TextInput(attrs={'size': 50}),
+            'fiEmail':  forms.TextInput(attrs={'size': 50}),
+            'fiAppealsEmail':  forms.TextInput(attrs={'size': 50})
+        }
+
 
 class PRRBContactMasterCreateForm(forms.ModelForm):
     class Meta:

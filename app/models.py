@@ -121,6 +121,7 @@ class TblProviderNameMaster(models.Model):
         db_column='providerCity', max_length=50, blank=True, null=True)
     providerCounty = models.CharField(
         db_column='providerCounty', max_length=50, blank=True, null=True)
+    providerIsClient = models.BooleanField()
     stateID = models.ForeignKey(
         'TblStateMaster', on_delete=models.CASCADE, db_column='stateID', blank=True, null=True)
     parentID = models.ForeignKey('TblParentMaster', on_delete=models.CASCADE, db_column='parentID', blank=True,

@@ -262,7 +262,8 @@ def providerNameUpdateView(request, pk):
 def providerMasterView(request):
     context = initialize_context(request)
     all_providers = TblProviderNameMaster.objects.all()
-    context['all_providers'] = all_providers
+    all_clients = TblProviderNameMaster.objects.filter(providerIsClient=1).order_by('providerID')
+    context['all_providers'] = all_clients
     return render(request, 'main/providerMaster.html', context)
 
 
@@ -398,14 +399,11 @@ class NewStaffView(CreateView):
 
 
 def fiMasterView(request):
-    all_fis = TblFIMaster.objects.all()
+    context = initialize_context(request)
+    all_fis = TblFIMaster.objects.all().order_by('fiName')
 
-    return render(request,
-                  'main/fiMaster.html',
-                  {
-                      'all_fis': all_fis
-                  }
-                  )
+    context['all_fis'] = all_fis
+    return render(request, 'main/fiMaster.html', context)
 
 
 class NewFIView(CreateView):
@@ -420,15 +418,35 @@ class NewFIView(CreateView):
         return redirect('mac-master')
 
     def get(self, request, *args, **kwargs):
+        context = initialize_context(request)
         form = self.form_class(request.POST)
-        return render(
-            request,
-            self.template_name,
-            {
-                'form': form,
-                'formName': 'MAC'
-            }
-        )
+
+        context['form'] = form
+        context['formName'] = 'Add MAC'
+        return render(request, self.template_name, context)
+
+
+def editFI(request, pk):
+    context = initialize_context(request)
+
+    fiInstance = get_object_or_404(TblFIMaster, pk=pk)
+
+    if request.method == 'POST':
+        form = FIMasterCreateForm(request.POST, instance=fiInstance)
+
+        if form.is_valid():
+            fiInstance = form.save(commit=False)
+            fiInstance.save()
+
+            return redirect('mac-master')
+    else:
+        form = FIMasterCreateForm(instance=fiInstance)
+
+    context['form'] = form
+    context['formName'] = 'Update MAC Form'
+    context['fiInstance'] = fiInstance
+
+    return render(request, 'create/create_form.html', context)
 
 
 def prrbMasterView(request):

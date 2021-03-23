@@ -30,6 +30,7 @@ urlpatterns = [
     path(r'staff-master/', views.staffMasterView, name='staff-master'),
     path(r'new/staff/', views.NewStaffView.as_view(), name='new-staff'),
     path(r'mac-master/', views.fiMasterView, name='mac-master'),
+    path(r'mac-master/<pk>/edit', views.editFI, name='edit-mac'),
     path(r'new/mac/', views.NewFIView.as_view(), name='new-mac'),
     path(r'prrb-master/', views.prrbMasterView, name='prrb-master'),
     path(r'new/prrb/', views. NewPRRBContactView.as_view(), name='new-prrb'),

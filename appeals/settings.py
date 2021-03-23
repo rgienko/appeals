@@ -82,10 +82,10 @@ WSGI_APPLICATION = 'appeals.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'sql_server.pyodbc',
-        'NAME': 'appealMaster',
+        'NAME': 'appealMasterv2',
         'USER': 'randall.gienko',
         'PASSWORD': 'R@nd@ll22',
-        'HOST': 'rgwebpros-sqlserver.database.windows.net',
+        'HOST': 'srgsqlserver.database.windows.net',
         'PORT': '',
         'OPTIONS': {
             'driver': 'ODBC Driver 17 for SQL Server',
