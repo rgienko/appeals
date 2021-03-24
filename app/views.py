@@ -1,6 +1,7 @@
 import os
 import random
 import shutil
+from io import BytesIO, StringIO
 from datetime import timedelta
 import json
 
@@ -8,6 +9,7 @@ import win32com.client
 from django.contrib import auth, messages
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
+from django.core.files.base import ContentFile
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, redirect, get_object_or_404
 from django.template.loader import render_to_string
@@ -23,7 +25,7 @@ from django.db.models import Sum
 
 from reportlab.lib.enums import TA_JUSTIFY, TA_CENTER
 from reportlab.lib.pagesizes import letter, landscape, A4
-from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Image, Table, TableStyle
+from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Image, Table, TableStyle, PageBreak
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 from reportlab.lib.units import inch, cm, mm
 
@@ -335,13 +337,38 @@ def providerMasterUpdateView(request, pk):
 
 
 def issueMasterView(request):
+    context = initialize_context(request)
     all_issues = TblIssueMaster.objects.order_by('issueSRGID')
+    context['all_issues'] = all_issues
+    return render(request, 'main/issueMaster.html', context)
 
-    return render(request,
-                  'main/issueMaster.html',
-                  {
-                      'all_issues': all_issues
-                  })
+
+def issueDetailView(request, pk):
+    context = initialize_context(request)
+    issue = TblIssueMaster.objects.get(pk=pk)
+
+    context['issue'] = issue
+    return render(request, 'main/issueDetail.html', context)
+
+
+def issueEditView(request, pk):
+    context = initialize_context(request)
+    issueInstance = get_object_or_404(TblIssueMaster, pk=pk)
+
+    if request.method == 'POST':
+        form = IssueMasterCreateForm(request.POST, instance=issueInstance)
+
+        if form.is_valid():
+            issueInstance = form.save(commit=False)
+            issueInstance.save()
+
+            return redirect('issue-master')
+    else:
+        form = IssueMasterCreateForm(instance=issueInstance)
+
+    context['form'] = form
+    context['formName'] = 'Edit Issue Form'
+    return render(request, 'create/create_form.html', context)
 
 
 class NewIssueView(CreateView):
@@ -781,12 +808,9 @@ def updateDueDateProgress(request, pk):
     )
 
 
-def createFormG(request, pk):
+# Begin Creation of Form G
+def createFormGCoverLetter(request, pk):
     caseObj = get_object_or_404(TblAppealMaster, pk=pk)
-
-    doc = SimpleDocTemplate("C:\\Users\\randall.gienko\\Desktop\\scheduleGCoverLetter.pdf", pagesize=letter,
-                            rightMargin=72, leftMargin=72,
-                            topMargin=0, bottomMargin=18)
 
     Story = []
     logo = "S:\\11_SRI Templates\\SRI_Letterhead - 2018 12 18.png"
@@ -852,45 +876,73 @@ def createFormG(request, pk):
         ptext = '<font size="12">%s</font>' % part.strip()
         Story.append(Paragraph(ptext, styles["Normal"]))
 
+    buffer = BytesIO()
+    doc = SimpleDocTemplate(buffer, pagesize=letter, rightMargin=72, leftMargin=72, topMargin=0, bottomMargin=18)
     doc.build(Story)
+    pdf_value = buffer.getvalue()
+    buffer.close()
 
-    # Build Schedule G Issue Statement Page
+    response = HttpResponse(content_type='application/pdf')
+    response['Content-Disposition'] = 'attachment; filename="formGCoverLetter.pdf"'
+
+    response.write(pdf_value)
+    return response
+
+
+def createFormGIssueState(request, pk):
+    caseObj = get_object_or_404(TblAppealMaster, pk=pk)
+    caseName = caseObj.appealName
+    caseNum = caseObj.caseNumber
+
+    styles = getSampleStyleSheet()
+    styles.add(ParagraphStyle(name='Justify', alignment=TA_JUSTIFY))
+
     issueStatementDoc = []
-    issueStatement = SimpleDocTemplate("C:\\Users\\randall.gienko\\Desktop\\scheduleGroupIssueStatement.pdf",
-                                       pagesize=letter,
-                                       rightMargin=72, leftMargin=72,
-                                       topMargin=72, bottomMargin=18)
+
     ptext = '<font size="12"><b>%s</b></font>' % caseName
     issueStatementDoc.append(Paragraph(ptext, styles["Normal"]))
     issueStatementDoc.append(Spacer(1, 24))
 
     ptext = '<font size="12"><b>Statement of Issue:</b></font>'
     issueStatementDoc.append(Paragraph(ptext, styles["Normal"]))
+    issueStatementDoc.append(Spacer(1, 12))
 
-    providerMaster = TblProviderMaster.objects.filter(
-        caseNumber=caseNum).first()
+    providerMaster = TblProviderMaster.objects.filter(caseNumber=caseNum).first()
     issueID = providerMaster.issueID
 
-    issueInfo = TblIssueMaster.objects.get(
-        issueSRGID=str(issueID).split('-')[0])
+    issueInfo = TblIssueMaster.objects.get(issueSRGID=str(issueID).split('-')[0])
 
     ptext = '<font size="12"><b>%s</b></font>' % issueInfo.issueName
     issueStatementDoc.append(Paragraph(ptext, styles["Normal"]))
     issueStatementDoc.append(Spacer(1, 12))
 
     groupIssueStatement = issueInfo.issueLongDescription
-    ptext = '<font size="12">%s</font>' % groupIssueStatement
-    issueStatementDoc.append(Paragraph(ptext, styles["Normal"]))
+    ptext = Paragraph('<para justifyBreaks=True>' + groupIssueStatement + '</para>', styles["Normal"])
+    issueStatementDoc.append(ptext)
+
+    buffer = BytesIO()
+    issueStatement = SimpleDocTemplate(buffer, pagesize=letter, rightMargin=72,
+                                       leftMargin=72, topMargin=72, bottomMargin=18)
 
     issueStatement.build(issueStatementDoc)
+    pdf_value = buffer.getvalue()
+    buffer.close()
 
-    # Build Schedule G Table of Contents
+    response = HttpResponse(content_type='application/pdf')
+    response['Content-Disposition'] = 'attachment; filename="formGIssueStatement.pdf"'
+
+    response.write(pdf_value)
+    return response
+
+
+def createFormGToc(request, pk):
+    caseObj = get_object_or_404(TblAppealMaster, pk=pk)
+    caseName = caseObj.appealName
+    caseNum = caseObj.caseNumber
+    styles = getSampleStyleSheet()
+    styles.add(ParagraphStyle(name='Justify', alignment=TA_JUSTIFY))
 
     tocStory = []
-
-    toc = SimpleDocTemplate("C:\\Users\\randall.gienko\\Desktop\\scheduleGTOC.pdf", pagesize=letter,
-                            rightMargin=72, leftMargin=72,
-                            topMargin=72, bottomMargin=18)
 
     ptext = '<font size="14">Summary of Schedules and Exhibits</font>'
     tocStory.append(Paragraph(ptext, styles["Normal"]))
@@ -906,13 +958,71 @@ def createFormG(request, pk):
         tocStory.append(Paragraph(ptext, styles["Normal"]))
         tocStory.append(Spacer(1, 12))
 
+    buffer = BytesIO()
+    toc = SimpleDocTemplate(buffer, pagesize=letter, rightMargin=72, leftMargin=72, topMargin=72, bottomMargin=18)
     toc.build(tocStory)
+    pdf_value = buffer.getvalue()
+    buffer.close()
 
+    response = HttpResponse(content_type='application/pdf')
+    response['Content-Disposition'] = 'attachment; filename="formGTOC.pdf"'
+
+    response.write(pdf_value)
+    return response
+
+
+def createFormGExhibits(request, pk):
+    caseObj = get_object_or_404(TblAppealMaster, pk=pk)
+    caseNum = caseObj.caseNumber
+    caseProviders = TblProviderMaster.objects.filter(caseNumber=caseNum)
+    styles = getSampleStyleSheet()
+    styles.add(ParagraphStyle(name='Justify', alignment=TA_JUSTIFY))
+
+    exhibitsStory = []
+
+    exhibitItems = ['Tab A - Final Determinations', 'Tab B - Date of Hearings / Hearing Requests',
+                    'Tab C - Number of Days', 'Tab D - Audit Adjustments & Protested Amounts',
+                    'Tab E - Impact Calculations / Estimates', 'Tab F - Original Appeal Letters',
+                    'Tab G - Additions & Transfers', 'Tab H - Representation Letter']
+
+    for count, prov in enumerate(caseProviders, start=1):
+        ptext = Paragraph('<para align=center>' + str(count) + ' - ' + str(prov.providerID) + '</para>',
+                          styles["Normal"])
+        exhibitsStory.append(ptext)
+        exhibitsStory.append(Spacer(1, 12))
+        proveName = prov.get_prov_name()
+        ptext = Paragraph('<para align=center>' + str(proveName) + '</para>', styles["Normal"])
+        exhibitsStory.append(ptext)
+        exhibitsStory.append(PageBreak())
+
+        for exhibit in exhibitItems:
+            ptext = Paragraph('<para align=center>%s</para>' % exhibit.strip(), styles["Normal"])
+            exhibitsStory.append(ptext)
+            exhibitsStory.append(PageBreak())
+
+    buffer = BytesIO()
+    exhibits = SimpleDocTemplate(buffer, pagesize=letter, rightMargin=72, leftMargin=72, topMargin=72, bottomMargin=18)
+    exhibits.build(exhibitsStory)
+    pdf_value = buffer.getvalue()
+    buffer.close()
+
+    response = HttpResponse(content_type='application/pdf')
+    response['Content-Disposition'] = 'attachment; filename="formGTExhibits.pdf"'
+
+    response.write(pdf_value)
+    return response
+
+
+def createFormG(request, pk):
     # Build Form G Schedule of Providers
-
-    formGDoc = SimpleDocTemplate("C:\\Users\\randall.gienko\\Desktop\\scheduleG.pdf", pagesize=[A4[1], A4[0]],
-                                 leftMargin=0, rightMargin=0,
-                                 topMargin=105, bottomMargin=40)
+    caseObj = get_object_or_404(TblAppealMaster, pk=pk)
+    caseName = caseObj.appealName
+    caseNum = caseObj.caseNumber
+    providerMaster = TblProviderMaster.objects.filter(caseNumber=caseNum).first()
+    issueID = providerMaster.issueID
+    issueInfo = TblIssueMaster.objects.get(issueSRGID=str(issueID).split('-')[0])
+    styles = getSampleStyleSheet()
+    styles.add(ParagraphStyle(name='Justify', alignment=TA_JUSTIFY))
 
     elements = []
     styles = getSampleStyleSheet()
@@ -979,9 +1089,7 @@ def createFormG(request, pk):
             '<para align=center>' + str(provName.providerName) + '<br/>' + str(provName.providerCity) +
             str(provName.providerCounty) + str(provName.stateID) + '</para>', styles["Normal"])
 
-        provFYE = TblCaseDeterminationMaster.objects.get(caseNumber=caseNum)
-        # print(provFYE.determinationFiscalYear.strftime("%m/%d/%Y"))
-        columnDataFYE = Paragraph('<para align=center>' + str(provFYE.determinationFiscalYear.strftime("%m/%d/%Y")) +
+        columnDataFYE = Paragraph('<para align=center>' + str(prov.provMasterFiscalYear.strftime("%m/%d/%Y")) +
                                   '</para>', styles["Normal"])
 
         columnDataMAC = Paragraph('<para align=center>' + str(caseObj.fiID) + '</para>', styles["Normal"])
@@ -1022,10 +1130,22 @@ def createFormG(request, pk):
 
     elements.append(tR)
 
-    formGDoc.build(elements, onFirstPage=PageNumCanvas,
-                   onLaterPages=PageNumCanvas, canvasmaker=PageNumCanvas)
+    buffer = BytesIO()
+    formGDoc = SimpleDocTemplate(buffer, pagesize=[A4[1], A4[0]], leftMargin=0, rightMargin=0, topMargin=105,
+                                 bottomMargin=40)
 
-    return redirect(r'appeal-details', caseObj.caseNumber)
+    formGDoc.build(elements, onFirstPage=PageNumCanvas, onLaterPages=PageNumCanvas, canvasmaker=PageNumCanvas)
+
+    pdf_value = buffer.getvalue()
+    buffer.close()
+
+    response = HttpResponse(content_type='application/pdf')
+    response['Content-Disposition'] = 'attachment; filename="formGScheduleG.pdf"'
+
+    response.write(pdf_value)
+
+    # return redirect(r'appeal-details', caseObj.caseNumber)
+    return response
 
 
 class PageNumCanvas(canvas.Canvas):

@@ -103,7 +103,7 @@
                         <div class="tab-pane fade" id="actions" role="tabpanel" aria-labelledby="actions-tab">
                             <div class="mt-3 p-2"> <!--Provider Information-->
                                 <div class="card overflow-auto" style="min-height:220px; max-height:220px;">
-                                    <a type="button" class="m-2 btn btn-primary w-25" href="{% url 'form-g' caseObj.caseNumber %}">Schedule G</a>
+                                    <a type="button" class="m-2 btn btn-primary w-25" data-bs-toggle="modal" data-bs-target="#schedule_g_modal" href="">Schedule G</a>
                                     <a type="button" class="m-2 btn btn-primary w-25" data-bs-toggle="modal" data-bs-target="#case_status_modal" href="">Update Case Status</a>
                                 </div>
                             </div>
@@ -327,25 +327,60 @@
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title">Update Case Status</h5>
+                        <h5 class="modal-title">Generate Form G Docs</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
                           <span aria-hidden="true"></span>
                         </button>
                     </div>
-                    <div class="modal-body input-group" id="" data-target-input="">
-                        <form class="" action="" method="post">
-                            {% csrf_token %}
-                            {% for hidden_field in update_status_form.hidden_fields %}
-                                {{ hidden_field }}
-                            {% endfor %}
-
-                            {% for field in update_status_form.visible_fields %}
-                                <label class="form-control border-0">{{ field.label_tag }}</label>
-                                <span class="form-control border-0">{{ field }}</span>
-                            {% endfor %}
-
-                            <input type="submit" name="schedule_g_button" value="Update Case Status" class="btn btn-primary mt-3"/>
-                        </form>
+                    <div class="modal-body" id="" data-target-input="">
+                        <table class="table table-bordered table-sm table-hover">
+                            <thead class="thead-light">
+                                <tr>
+                                    <th class="text-center" scope="col">Document</th>
+                                    <th class="text-center" scope="col">Action</th>
+                                </tr>
+                            </thead>
+                                <tr>
+                                    <td class="text-center">Cover Letter</td>
+                                    <td class="text-center">
+                                        <a class="btn btn-primary" href="{% url 'form-g-cover-letter' caseObj.caseNumber %}">
+                                            Generate
+                                        </a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="text-center">Issue Statement</td>
+                                    <td class="text-center">
+                                        <a class="btn btn-primary" href="{% url 'form-g-issue-state' caseObj.caseNumber %}">
+                                            Generate
+                                        </a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="text-center">Table of Contents</td>
+                                    <td class="text-center">
+                                        <a class="btn btn-primary" href="{% url 'form-g-toc' caseObj.caseNumber %}">
+                                            Generate
+                                        </a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="text-center">Exhibits</td>
+                                    <td class="text-center">
+                                        <a class="btn btn-primary" href="{% url 'form-g-exhibits' caseObj.caseNumber %}">
+                                            Generate
+                                        </a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="text-center">Schedule G</td>
+                                    <td class="text-center">
+                                        <a class="btn btn-primary" href="{% url 'form-g' caseObj.caseNumber %}">
+                                            Generate
+                                        </a>
+                                    </td>
+                                </tr>
+                        </table>
                     </div>
                 </div>
             </div>

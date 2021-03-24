@@ -5,10 +5,10 @@
 
 <div class="container-fluid">
     <div class="row mt-5 mb-0">
-        <h5 class="font-weight-bold text-uppercase ml-5 pt-1">
-            Issue Master
-            <a class="mx-1" data-toggle="tooltip" data-placement="bottom" title="New Issue" href="{% url 'new-issue' %}"><i class="bi bi-plus-square" style="font-size:24px;"></i></a>
-        </h5>
+        <h4 class="font-weight-bold ml-5 pt-1">
+            Issue Detail
+            <a class="mx-1" data-toggle="tooltip" data-placement="bottom" title="Edit Issue" href="{% url 'edit-issue' issue.issueID %}"><i class="bi bi-pencil-square" style="font-size:24px;"></i></a>
+        </h4>
     </div>
     <hr class="mt-0"/>
     <div class="row">
@@ -18,16 +18,23 @@
                 <th scope="col" class="text-center">Issue Name:</th>
                 <th scope="col" class="text-center">Issue Description:</th>
             </tr>
-            {% for issue in all_issues %}
             <tr>
                 <td class="text-center px-0" style="width:75px">
-                    <a type="button" class="" href="{% url 'issue-detail' issue.issueID %}">{{ issue.issueSRGID }}</a>
+                    <a type="button" class="" href="">{{ issue.issueSRGID }}</a>
                 </td>
                 <td style="width:350px">{{ issue.issueName }}</td>
                 <td>{{ issue.issueShortDescription }}</td>
             </tr>
-            {% endfor %}
         </table>
+    </div>
+    <div class="row mt-4">
+        <div>
+            <h4>Issue Long Description</h4>
+            <hr class="mt-0"/>
+            <p>
+                {{ issue.issueLongDescription|linebreaksbr }}
+            </p>
+        </div>
     </div>
 </div>
 
