@@ -1,5 +1,5 @@
 import datetime
-
+from datetime import timedelta
 from django.db import models
 import uuid
 
@@ -395,6 +395,21 @@ class TblActionMaster(models.Model):
 
     def __str__(self):
         return self.actionID
+
+
+class NPRDueDatesMaster(models.Model):
+    nprID = models.AutoField(db_column='provMasterID', primary_key=True)
+    parentID = models.ForeignKey('TblParentMaster', on_delete=models.CASCADE, max_length=50, blank=True, null=True)
+    providerID = models.ForeignKey('TblProviderNameMaster', on_delete=models.CASCADE, blank=True, null=True)
+    nprFY = models.IntegerField()
+    nprDate = models.DateField()
+
+    def get_prov_name(self):
+        return self.providerID.providerName
+
+    def calc_deadline(self):
+        due_date = self.nprDate + timedelta(days=180)
+        return due_date
 
 
 class CriticalDatesMaster(models.Model):

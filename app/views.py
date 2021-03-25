@@ -113,111 +113,58 @@ def main(request):
     context = initialize_context(request)
 
     allDueDates = CriticalDatesMaster.objects.all().order_by('dueDate')[:10]
+    nprDueDates = NPRDueDatesMaster.objects.all().order_by('nprDate')[:10]
 
-    if request.user.is_authenticated:
-        current_user = request.user.first_name
-    else:
-        current_user = ""
-    if request.method == 'POST' and 'make_dir_button' not in request.POST:
+    if request.method == 'POST' and 'add_npr_due_button' not in request.POST:
         search_case = request.POST.get('search')
         return redirect('appeal-details', search_case)
 
-    if request.method == 'POST' and 'make_dir_button' in request.POST:
-        make_dir_form = CreateDirectoryForm(request.POST)
+    elif request.method == 'POST' and 'add_npr_due_button' in request.POST:
+        form = NPRDueDatesMasterCreateForm(request.POST)
 
-        if make_dir_form.is_valid():
-            ctype = request.POST.get('ctype')
-            parent = request.POST.get('parent')
-            prov = request.POST.get('prov')
-            issue = request.POST.get('issue')
-            isFFY = request.POST.get('isFFY')
-            fy = request.POST.get('fy')
-            case = request.POST.get('case')
+        if form.is_valid():
+            new_npr_due_date = form.save(commit=False)
+            new_npr_due_date.save()
 
-            if isFFY == 'on':
-                if ctype == 'INDIVIDUAL':
-                    # Goal: S:\3-AP\1-DOCS\INDIVIDUAL\IND~01-0001~2016~XX-XXXX
-                    new_path = 'S:\\3-AP\\1-DOCS\\{0}\\{1}~{2}~FFY{3}~{4}'.format(
-                        ctype, parent, prov, fy, case)
-                else:
-                    issue_abb = TblIssueMaster.objects.get(pk=issue)
-                    if parent == 'IND':
-                        new_path = 'S:\\3-AP\\1-DOCS\\{0}\\OPT~FFY{1}~{2}~{3}~{4}'.format(ctype, fy, case,
-                                                                                          issue_abb.issueSRGID,
-                                                                                          issue_abb.issueAbbreviation)
-                    else:
-                        new_path = 'S:\\3-AP\\1-DOCS\\{0}\\{1}~FFY{2}~{3}~{4}~{5}'.format(ctype, parent, fy, case,
-                                                                                          issue_abb.issueSRGID,
-                                                                                          issue_abb.issueAbbreviation)
-            else:
-                if ctype == 'INDIVIDUAL':
-                    # Goal: S:\3-AP\1-DOCS\INDIVIDUAL\IND~01-0001~2016~XX-XXXX
-                    new_path = 'S:\\3-AP\\1-DOCS\\{0}\\{1}~{2}~{3}~{4}'.format(
-                        ctype, parent, prov, fy, case)
-                else:
-                    issue_abb = TblIssueMaster.objects.get(pk=issue)
-                    if parent == 'IND':
-                        new_path = 'S:\\3-AP\\1-DOCS\\{0}\\OPT~{1}~{2}~{3}~{4}'.format(ctype, fy, case,
-                                                                                       issue_abb.issueSRGID,
-                                                                                       issue_abb.issueAbbreviation)
-                    else:
-                        new_path = 'S:\\3-AP\\1-DOCS\\{0}\\{1}~{2}~{3}~{4}~{5}'.format(ctype, parent, fy, case,
-                                                                                       issue_abb.issueSRGID,
-                                                                                       issue_abb.issueAbbreviation)
+            # Create the data for outlook event
+            token = get_token(request)
 
-            try:
-                os.mkdir(new_path)
-                os.mkdir(new_path + "\\1-FILING")
-                os.mkdir(new_path + "\\1-FILING\\1-FINAL")
-                os.mkdir(new_path + "\\1-FILING\\1-FINAL\\1-PRRB")
-                os.mkdir(new_path + "\\1-FILING\\1-FINAL\\2-MAC")
-                os.mkdir(new_path + "\\1-FILING\\2-DOCS")
-                os.mkdir(new_path + "\\1-FILING\\2-DOCS\\1-FILED ISSUES")
-                os.mkdir(new_path + "\\1-FILING\\2-DOCS\\1-FILED ISSUES\\Impacts")
-                os.mkdir(
-                    new_path + "\\1-FILING\\2-DOCS\\1-FILED ISSUES\\Issue Statements")
-                os.mkdir(
-                    new_path + "\\1-FILING\\2-DOCS\\1-FILED ISSUES\\NPR Package")
-                os.mkdir(new_path + "\\2-CORRESPONDENCE")
-                os.mkdir(new_path + "\\3-JURISDICTIONAL")
-                os.mkdir(new_path + "\\3-JURISDICTIONAL\\1-PROVS")
-                os.mkdir(new_path + "\\4-PRELIM-PP")
-                os.mkdir(new_path + "\\4-PRELIM-PP\\1-PROV")
-                os.mkdir(new_path + "\\4-PRELIM-PP\\1-PROV\\1-FINAL")
-                os.mkdir(new_path + "\\4-PRELIM-PP\\1-PROV\\1-FINAL\\1-PRRB")
-                os.mkdir(new_path + "\\4-PRELIM-PP\\1-PROV\\1-FINAL\\2-MAC")
-                os.mkdir(new_path + "\\4-PRELIM-PP\\1-PROV\\2-DOCS")
-                os.mkdir(new_path + "\\4-PRELIM-PP\\2-MAC")
-                os.mkdir(new_path + "\\5-FINAL-PP")
-                os.mkdir(new_path + "\\5-FINAL-PP\\1-PROV")
-                os.mkdir(new_path + "\\5-FINAL-PP\\1-PROV\\1-FINAL")
-                os.mkdir(new_path + "\\5-FINAL-PP\\1-PROV\\1-FINAL\\1-PRRB")
-                os.mkdir(new_path + "\\5-FINAL-PP\\1-PROV\\1-FINAL\\2-MAC")
-                os.mkdir(new_path + "\\5-FINAL-PP\\1-PROV\\2-DOCS")
-                os.mkdir(new_path + "\\5-FINAL-PP\\2-MAC")
-                os.mkdir(new_path + "\\6-TRANSFERS")
-                os.mkdir(new_path + "\\6-TRANSFERS\\1-FORM")
-                os.mkdir(new_path + "\\6-TRANSFERS\\2-EXIST")
-                os.mkdir(new_path + "\\7-CLOSURE")
-                os.mkdir(new_path + "\\8-MISCELLANEOUS")
-                os.mkdir(new_path + "\\99-PRINTS")
-                os.mkdir(new_path + "\\99-PRINTS\\1-FRM-A")
-                os.mkdir(new_path + "\\99-PRINTS\\1-FRM-B")
-                os.mkdir(new_path + "\\99-PRINTS\\1-FRM-G")
+            # Create the subject
+            parent = new_npr_due_date.parentID
+            parent = TblParentMaster.objects.get(parentFullName=parent)
+            subject = '{0}~{1}~FY{2}~HRQ'.format(parent.parentID,
+                                                 new_npr_due_date.providerID,
+                                                 str(new_npr_due_date.nprFY))
 
-                for file in os.listdir("S:\\3-AP\\3~APPEALS TEMPLATES\\Issue Statements\\DIRECTORY"):
-                    newPath = shutil.copy("S:\\3-AP\\3~APPEALS TEMPLATES\\Issue Statements\\DIRECTORY\\" + file,
-                                          new_path + "\\1-FILING\\2-DOCS\\1-FILED ISSUES\\Issue Statements")
+            npr_date = new_npr_due_date.nprDate
+            due_date = npr_date + timedelta(days=180)
+            start_year = due_date.year
+            start_month = due_date.month
+            start_day = due_date.day
 
-                make_dir_form = CreateDirectoryForm()
-            except:
-                pass
+            start_time = datetime.datetime(start_year, start_month, start_day,
+                                           random.randint(1, 12), random.randint(0, 59), 0)
+            end_time = start_time + timedelta(minutes=30)
 
+            body = 'Request for Hearing DUe'
+
+            lead_time = 4 * 10080
+
+            create_event(
+                token,
+                subject,
+                start_time,
+                end_time,
+                lead_time,
+                body
+            )
+            return redirect(r'main')
     else:
-        make_dir_form = CreateDirectoryForm()
+        form = NPRDueDatesMasterCreateForm()
 
-    context['form'] = make_dir_form
+    context['form'] = form
     context['allDueDates'] = allDueDates
+    context['nprDueDates'] = nprDueDates
 
     return render(request, 'main/index.html', context)
 

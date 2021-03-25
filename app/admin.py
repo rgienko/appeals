@@ -3,6 +3,14 @@ from .models import *
 
 
 # Register your models here.
+@admin.register(TblProviderMaster)
+class TblProviderMasterAdmin(admin.ModelAdmin):
+    list_display = ('provMasterID', 'caseNumber', 'providerID',
+                    'provMasterDeterminationDate', 'provMasterDeterminationType'
+                    , 'provMasterFiscalYear', 'issueID', 'provMasterAuditAdjs', 'provMasterImpact'
+                    , 'provMasterToCase', 'provMasterTransferDate', 'provMasterFromCase', 'provMasterNote')
+
+
 @admin.register(TblParentMaster)
 class TblParentMasterAdmin(admin.ModelAdmin):
     list_display = ('parentID', 'parentFullName', 'parentAddress',
@@ -49,5 +57,3 @@ class TblDeterminationAdmin(admin.ModelAdmin):
 @admin.register(TblActionMaster)
 class TblActionMasterAdmin(admin.ModelAdmin):
     list_display = ('actionID', 'note', 'description', 'lead_time', 'type')
-
-

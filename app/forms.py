@@ -317,6 +317,25 @@ class CriticalDatesMasterCreateForm(forms.ModelForm):
         }
 
 
+class NPRDueDatesMasterCreateForm(forms.ModelForm):
+    class Meta:
+        model = NPRDueDatesMaster
+
+        fields = [
+            'parentID',
+            'providerID',
+            'nprFY',
+            'nprDate'
+        ]
+
+        labels = {
+            'parentID': _('Parent:'),
+            'providerID': _('Provider #:'),
+            'nprFY': _('Fiscal Year:'),
+            'nprDate': _('NPR Date:')
+        }
+
+
 class TransferIssueForm(forms.Form):
     to_case = forms.ModelChoiceField(label='To Case:',
                                      queryset=TblAppealMaster.objects.exclude(appealStructure__exact='Individual').only(

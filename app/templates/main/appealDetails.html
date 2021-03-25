@@ -41,7 +41,7 @@
                             <ul class="list-group list-group-horizontal-sm p-0 border-0">
                                 <li class="list-group-item p-0 border-0 w-25 text-dark fw-bold">Case Name:</li>
                                 {% if caseObj.appealStructure == 'Individual' %}
-                                    <li class="list-group-item p-0 border-0 w-75">{{ provInfo.providerID }} - {{ provInfo.get_prov_name|title }} ({{ caseDetermination.determinationFiscalYear|date:'m/d/Y' }})</li>
+                                    <li class="list-group-item p-0 border-0 w-75">{{ provInfo.providerID }} - {{ provInfo.get_prov_name|title }} ({{ provInfo.provMasterFiscalYear|date:'m/d/Y' }})</li>
                                 {% else %}
                                     <li class="list-group-item p-0 border-0 w-75">{{ caseObj.appealName }}</li>
                                 {% endif %}
@@ -240,7 +240,7 @@
                                             {{ issue.provMasterTransferDate|date:'m/d/Y' }}
                                         </td>
                                     {% endif %}
-                                    {% if issue.provMasterFromCase is None %}
+                                    {% if issue.provMasterFromCase is None or issue.provMasterFromCase == 'NULL' %}
                                         <td class="text-center" style="width:85px;"></td>
                                     {% else %}
                                         <td class="text-center" style="width:85px;">
