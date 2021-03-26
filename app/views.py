@@ -263,6 +263,7 @@ def parentUpdateView(request, pk):
 
 
 def providerMasterUpdateView(request, pk):
+    context = initialize_context(request)
     providerMaster_obj = get_object_or_404(TblProviderMaster, pk=pk)
 
     if request.method == 'POST':
@@ -277,10 +278,9 @@ def providerMasterUpdateView(request, pk):
     else:
         form = ProviderMasterCreateForm(instance=providerMaster_obj)
 
-    return render(request, 'create/create_form.html',
-                  {
-                      'form': form
-                  })
+    context['form'] = form
+    context['formName'] = 'Edit Case Provider'
+    return render(request, 'create/create_form.html', context)
 
 
 def issueMasterView(request):
@@ -1033,8 +1033,8 @@ def createFormG(request, pk):
 
         provName = TblProviderNameMaster.objects.get(providerID=prov.providerID)
         columnDataProviderInfo = Paragraph(
-            '<para align=center>' + str(provName.providerName) + '<br/>' + str(provName.providerCity) +
-            str(provName.providerCounty) + str(provName.stateID) + '</para>', styles["Normal"])
+            '<para align=center>' + str(provName.providerName.title()) + '<br/>' + str(provName.providerCity) +
+            ', ' + str(provName.providerCounty) + ', ' + str(provName.stateID) + '</para>', styles["Normal"])
 
         columnDataFYE = Paragraph('<para align=center>' + str(prov.provMasterFiscalYear.strftime("%m/%d/%Y")) +
                                   '</para>', styles["Normal"])
@@ -1049,12 +1049,13 @@ def createFormG(request, pk):
                                 styles["Normal"])
 
         no_of_days = prov.get_no_days()
-        print(str(no_of_days))
         columnDataC = Paragraph('<para align=center>' + str(no_of_days) + '</para>', styles["Normal"])
         columnDataD = Paragraph('<para align=center>' + str(prov.provMasterAuditAdjs) + '</para>', styles["Normal"])
 
         locale.setlocale(locale.LC_ALL, '')
-        columnDataE = Paragraph('<para align=center>' + str(locale.currency(prov.provMasterImpact, grouping=True)) +
+        provImpact = locale.currency(prov.provMasterImpact, grouping=True)
+        provImpactFormatted = "${0:,}".format(prov.provMasterImpact)
+        columnDataE = Paragraph('<para align=center>' + str(provImpactFormatted) +
                                 '</para>', styles["Normal"])
 
         columnDataF = Paragraph('<para align=center>' + str(prov.provMasterFromCase) + '</para>', styles["Normal"])
@@ -1066,7 +1067,8 @@ def createFormG(request, pk):
                               columnDataF, columnDataG])
 
     tR = Table(scheduleGData, repeatRows=1, colWidths=[1 * cm, 2 * cm, 4.5 * cm, 2.5 * cm, 2.5 * cm, 3 * cm,
-                                                       3 * cm, 1.5 * cm, 2 * cm, 2.5 * cm, 2 * cm, 2.5 * cm])
+                                                       3 * cm, 1.5 * cm, 2 * cm, 2.5 * cm, 2 * cm, 2.5 * cm],
+               rowHeights=1.05 * inch)
 
     tR.hAlign = 'CENTER'
 
@@ -1079,7 +1081,7 @@ def createFormG(request, pk):
 
     buffer = BytesIO()
     formGDoc = SimpleDocTemplate(buffer, pagesize=[A4[1], A4[0]], leftMargin=0, rightMargin=0, topMargin=105,
-                                 bottomMargin=40)
+                                 bottomMargin=5)
 
     formGDoc.build(elements, onFirstPage=PageNumCanvas, onLaterPages=PageNumCanvas, canvasmaker=PageNumCanvas)
 
@@ -1153,8 +1155,8 @@ class PageNumCanvas(canvas.Canvas):
         self.drawString(.5 * cm, 17.33 * cm, case_issue)
         self.line(.57 * inch, 17.27 * cm, 10 * inch, 17.27 * cm)
 
-        self.drawString(15.5 * cm, 2 * cm, groupTotalImpact)
-        self.line(8.9 * inch, 1.94 * cm, 9.75 * inch, 1.94 * cm)
+        self.drawString(15.5 * cm, .5 * cm, groupTotalImpact)
+        self.line(8.9 * inch, .4 * cm, 9.75 * inch, .4 * cm)
 
         self.drawString(23 * cm, 19.33 * cm, page)
         self.line(9.4 * inch, 19.27 * cm, 9.9 * inch, 19.27 * cm)

@@ -89,7 +89,7 @@ class TblStateMaster(models.Model):
         ordering = ['stateID']
 
     def __str__(self):
-        return '{0}-{1}'.format(self.stateID, self.stateName)
+        return self.stateID
 
 
 class TblParentMaster(models.Model):
@@ -135,6 +135,9 @@ class TblProviderNameMaster(models.Model):
 
     def getParentName(self):
         return self.parentID.parentFullName
+
+    def properProvName(self):
+        return self.providerName.title()
 
 
 class TblProviderContactMaster(models.Model):
