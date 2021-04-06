@@ -3,7 +3,7 @@
 {% block content %}
 {% load humanize %}
 <div class="container-fluid w-75 mt-5">
-    <h5 class="font-weight-bold text-uppercase pl-1 pt-1">Transfer Issue</h5>
+    <h4 class="font-weight-bold pl-1 pt-1">Transfer Issue</h4>
     <hr class="mt-0"/>
 
     <table class="table table table-hover table-bordered">
@@ -36,7 +36,7 @@
     <div class="row">
         <div class="col-4">
             <div class="card">
-                <h5 class="font-weight-bold text-uppercase pl-1 pt-1">Transfer Form</h5>
+                <h5 class="font-weight-bold px-2 pt-1">Transfer Form</h5>
                 <form class="" action="" method="post">
                     {% csrf_token %}
                     {% for hidden_field in form.hidden_fields %}
@@ -54,15 +54,15 @@
                             </ul>
                     {% endfor %}
 
-                    <input type="submit" name="ack_button" value="Transfer Issue" class="btn btn-primary mt-3 m-2"/>
+                    <input type="submit" name="trans_button" value="Transfer Issue" class="btn btn-primary mt-3 m-2"/>
                 </form>
             </div>
         </div>
         <div class="col">
             <div class="card">
-                <h5 class="font-weight-bold text-uppercase pl-1 pt-1">Possible Groups</h5>
+                <h5 class="font-weight-bold px-2 pt-1">Possible Groups</h5>
                 <table class="table table-sm table-hover table-bordered">
-                    <thead class="thead-light text-center">
+                    <thead class="text-center">
                         <tr>
                             <th scope="col">Case #</th>
                             <th scope="col">Case Name</th>
@@ -71,9 +71,9 @@
                     </thead>
                     {% for group in poss_groups %}
                         <tr>
-                            <td class="text-center" style="width: 80px">{{ group.case_number }}</td>
-                            <td>{{ group.appeal_name }}</td>
-                            <td class="text-center" style="width: 80px">{{ group.structure }}</td>
+                            <td class="text-center" style="width: 80px">{{ group.caseNumber }}</td>
+                            <td>{{ group.appealName }}</td>
+                            <td class="text-center" style="width: 80px">{{ group.appealStructure }}</td>
                         </tr>
                     {% endfor %}
                 </table>

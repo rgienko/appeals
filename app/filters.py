@@ -7,4 +7,10 @@ class CriticalDateFilter(django_filters.FilterSet):
 
     class Meta:
         model = CriticalDatesMaster
-        fields = ['caseNumber', 'actionID', 'progress',]
+        fields = ['caseNumber', 'actionID', 'progress', ]
+
+
+class CriticalDateFilterTwo(django_filters.FilterSet):
+    class Meta:
+        model = TblAppealMaster
+        fields = ['appealStructure', 'statusID']

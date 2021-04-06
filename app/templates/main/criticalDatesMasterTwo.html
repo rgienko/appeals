@@ -1,0 +1,59 @@
+{% extends "main/layout.html" %}
+
+{% block content %}
+{% load humanize %}
+<div class="container-fluid mt-5">
+    <h5 class="font-weight-bold text-uppercase pl-1 pt-1">Critical Due Dates</h5>
+    <hr class="mt-0"/>
+    <form method="get">
+        <div class="container">
+            <h5>Filter</h5>
+            <div class="row">
+                {% for field in filter.form.visible_fields %}
+                    <div class="col-sm-4 border my-2">
+                        {{ field.label_tag }} <br>
+                        {{ field }}
+                </div>
+                {% endfor %}
+            </div>
+        <button type="submit" class="mt-2 btn btn-primary w-25">Filter Due Dates</button>
+        </div>
+    </form>
+
+
+    <hr class="mt-3"/>
+
+    <table class="table table table-hover table-bordered">
+        <thead class="thead-light text-center">
+            <tr>
+                <th scope="col">Case Number</th>
+                <th scope="col">Case Name
+                <th scope="col">Action</th>
+                <th scope="col">Due Date</th>
+                <th scope="col">Progress</th>
+            </tr>
+        </thead>
+            {% for criticalDate in filter.qs %}
+                {% for due in criticalDate.criticaldatesmaster_set.all %}
+                        <tr>
+                            <td class="text-center" style="width: 100px">{{ due.caseNumber }}</td>
+                            <td class="">{{ criticalDate.appealName }}</td>
+                            <td>{{ due.get_action_note}}</td>
+                            <td class="text-center" style="width: 75px">{{ due.dueDate|date:'m/d/Y' }}</td>
+                            {% if due.progress == 'Not Started' %}
+                                <td class="text-center bg-warning" style="width: 150px;"><a class="text-dark" href=""><i class="far fa-circle"></i> {{ due.progress }}</a></td>
+                            {% elif due.progress == 'In Progress' %}
+                                <td class="text-center bg-primary text-white" style="width: 150px;"><a class="text-white" href=""><i class="fas fa-spinner"></i> {{ due.progress }}</a></td>
+                            {% elif due.progress == 'Completed' %}
+                                <td class="text-center bg-success text-white" style="width: 150px;"><a class="text-white" href=""><i class="far fa-check-circle"></i> {{ due.progress }}</a></td>
+                            {% else %}
+                                <td class="text-center bg-info" style="width: 175px;"><a class="text-dark" href="{% url 'update-due-progress' due.id %}">{{ due.progress }}</a></td>
+                            {% endif %}
+                        </tr>
+                {% endfor %}
+            {% endfor %}
+    </table>
+</div>
+
+
+{% endblock %}

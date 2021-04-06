@@ -1,38 +1,25 @@
-import os
+import locale
 import random
-import shutil
-from io import BytesIO, StringIO
-from datetime import timedelta
-import json
+from io import BytesIO
 
-import win32com.client
 from django.contrib import auth, messages
-from django.contrib.auth.decorators import login_required
-from django.core.exceptions import ObjectDoesNotExist
-from django.core.files.base import ContentFile
+from django.db.models import Sum
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, redirect, get_object_or_404
-from django.template.loader import render_to_string
 from django.urls import reverse
 from django.views.generic import CreateView
 from reportlab.lib import colors
-from reportlab.pdfgen import canvas
-from xhtml2pdf import pisa
-from app.forms import *
-from .filters import CriticalDateFilter
-
-from django.db.models import Sum
-
-from reportlab.lib.enums import TA_JUSTIFY, TA_CENTER
-from reportlab.lib.pagesizes import letter, landscape, A4
-from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Image, Table, TableStyle, PageBreak
+from reportlab.lib.enums import TA_JUSTIFY
+from reportlab.lib.pagesizes import letter, A4
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
-from reportlab.lib.units import inch, cm, mm
+from reportlab.lib.units import inch, cm
+from reportlab.pdfgen import canvas
+from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Image, Table, TableStyle, PageBreak
 
 from app.auth_helper import *
+from app.forms import *
 from app.graph_helper import *
-
-import locale
+from .filters import *
 
 global title
 global cnum
@@ -507,8 +494,12 @@ def appealDetailsView(request, pk):
     context = initialize_context(request)
     caseObj = get_object_or_404(TblAppealMaster, pk=pk)
     caseIssues = TblProviderMaster.objects.filter(caseNumber=pk).order_by('providerID')
-    provInfo = caseIssues.first()
-    caseDueDates = CriticalDatesMaster.objects.filter(caseNumber=pk)
+    caseDueDates = CriticalDatesMaster.objects.filter(caseNumber=pk).order_by('dueDate')
+
+    if caseObj.appealStructure == 'Individual':
+        provInfo = caseIssues.first()
+    else:
+        provInfo = caseIssues
 
     if request.method == 'POST' and 'ack_button' in request.POST:
         ack_form = AcknowledgeCaseForm(request.POST)
@@ -603,9 +594,11 @@ def addIssueView(request, pk):
         if case_issue_count > 0 and case_instance.appealStructure == 'Individual':
             form = ProviderMasterCreateForm(initial={'caseNumber': cur_case,
                                                      'providerID': case_issues.first().providerID,
+                                                     'provMasterDateStamp': datetime.datetime.today()
                                                      })
         else:
-            form = ProviderMasterCreateForm(initial={'caseNumber': cur_case})
+            form = ProviderMasterCreateForm(initial={'caseNumber': cur_case,
+                                                     'provMasterDateStamp': datetime.datetime.today()})
 
     return render(request, 'create/create_form.html',
                   {
@@ -616,7 +609,6 @@ def addIssueView(request, pk):
 
 def addCriticalDueView(request, pk):
     context = initialize_context(request)
-    user = context['user']
 
     case_instance = get_object_or_404(TblAppealMaster, pk=pk)
     cur_case = case_instance.caseNumber
@@ -677,14 +669,17 @@ def addCriticalDueView(request, pk):
 
 
 def transferIssueView(request, pk):
-    issue_trans = get_object_or_404(TblProviderMaster, pk=pk)
-    # poss_groups = TblAppealMaster.objects.filter(appealName__contains=issue_trans.fiscal_year).filter(
-    #    appeal_name__contains=issue_trans.issue_id.issue).exclude(structure__exact='Individual')
-    caseDeterObc = TblCaseDeterminationMaster.objects.get(
-        caseNumber=issue_trans.caseNumber)
+    context = initialize_context(request)
 
-    caseFiscalYear = caseDeterObc.determinationFiscalYear.year
-    caseDeterType = caseDeterObc.caseDeterminationID
+    issue_trans = get_object_or_404(TblProviderMaster, pk=pk)
+    # caseDeterObc = TblCaseDeterminationMaster.objects.get(
+    #    caseNumber=issue_trans.caseNumber)
+
+    caseFiscalYear = issue_trans.provMasterFiscalYear.year
+    caseDeterType = issue_trans.provMasterDeterminationType
+
+    poss_groups = TblAppealMaster.objects.filter(appealName__contains=caseFiscalYear).filter(
+        appealName__contains=issue_trans.issueID.issueName).exclude(appealStructure__exact='Individual')
 
     if request.method == 'POST':
         form = TransferIssueForm(request.POST)
@@ -699,13 +694,17 @@ def transferIssueView(request, pk):
             new_group_prov = TblProviderMaster(caseNumber=app_instance,
                                                providerID=issue_trans.providerID,
                                                issueID=issue_trans.issueID,
+                                               provMasterDeterminationDate=issue_trans.provMasterDeterminationDate,
+                                               provMasterDeterminationType=issue_trans.provMasterDeterminationType,
+                                               provMasterFiscalYear=issue_trans.provMasterFiscalYear,
                                                provMasterImpact=issue_trans.provMasterImpact,
                                                provMasterAuditAdjs=issue_trans.provMasterAuditAdjs,
+                                               provMasterWasAdded=0,
                                                provMasterToCase='NULL',
                                                provMasterTransferDate=issue_trans.provMasterTransferDate,
-                                               provMasterFromCase=str(
-                                                   issue_trans.caseNumber),
-                                               provMasterNote=issue_trans.provMasterNote)
+                                               provMasterFromCase=str(issue_trans.caseNumber),
+                                               provMasterNote=issue_trans.provMasterNote,
+                                               provMasterDateStamp=datetime.date.today())
             new_group_prov.save(force_insert=True)
 
             return redirect('appeal-details', issue_trans.caseNumber)
@@ -713,13 +712,14 @@ def transferIssueView(request, pk):
         propose_trans_date = datetime.date.today()
         form = TransferIssueForm(initial={'to_date': propose_trans_date})
 
-    return render(request, 'main/transferIssue.html',
-                  {
-                      'issue_trans': issue_trans,
-                      'caseFiscalYear': caseFiscalYear,
-                      'caseDeterType': caseDeterType,
-                      'form': form
-                  })
+    context['issue_trans'] = issue_trans
+    context['caseFiscalYear'] = caseFiscalYear
+    context['caseDeterType'] = caseDeterType
+    context['form'] = form
+    context['formName'] = 'Transfer Issue Form'
+    context['poss_groups'] = poss_groups
+
+    return render(request, 'main/transferIssue.html', context)
 
 
 def searchCriticalDueDates(request):
@@ -729,7 +729,18 @@ def searchCriticalDueDates(request):
     return render(request, 'main/criticalDatesMaster.html', {'filter': dueDates_filter})
 
 
+def searchCriticalDueDatesTwo(request):
+    context = initialize_context(request)
+    dueDates_list = TblAppealMaster.objects.all().order_by('criticaldatesmaster__dueDate')
+    dueDates_filter = CriticalDateFilterTwo(request.GET, queryset=dueDates_list)
+
+    context['filter'] = dueDates_filter
+
+    return render(request, 'main/criticalDatesMasterTwo.html', context)
+
+
 def updateDueDateProgress(request, pk):
+    context = initialize_context(request)
     dueDate_obj = get_object_or_404(CriticalDatesMaster, pk=pk)
     provMasterObj = TblProviderMaster.objects.filter(caseNumber=dueDate_obj.caseNumber)
 
@@ -744,15 +755,10 @@ def updateDueDateProgress(request, pk):
     else:
         form = UpdateDueDateProgressForm()
 
-    return render(
-        request,
-        'create/due_date_edit.html',
-        {
-            'form': form,
-            'dueDate_obj': dueDate_obj,
-            'provMasterObj': provMasterObj
-        }
-    )
+    context['dueDate_obj'] = dueDate_obj
+    context['form'] = form
+    context['provMasterObj'] = provMasterObj
+    return render(request, 'create/due_date_edit.html', context)
 
 
 # Begin Creation of Form G
@@ -884,8 +890,6 @@ def createFormGIssueState(request, pk):
 
 def createFormGToc(request, pk):
     caseObj = get_object_or_404(TblAppealMaster, pk=pk)
-    caseName = caseObj.appealName
-    caseNum = caseObj.caseNumber
     styles = getSampleStyleSheet()
     styles.add(ParagraphStyle(name='Justify', alignment=TA_JUSTIFY))
 
@@ -973,7 +977,6 @@ def createFormG(request, pk):
 
     elements = []
     styles = getSampleStyleSheet()
-    styleN = styles["BodyText"]
 
     global title
     global cnum
@@ -1053,7 +1056,6 @@ def createFormG(request, pk):
         columnDataD = Paragraph('<para align=center>' + str(prov.provMasterAuditAdjs) + '</para>', styles["Normal"])
 
         locale.setlocale(locale.LC_ALL, '')
-        provImpact = locale.currency(prov.provMasterImpact, grouping=True)
         provImpactFormatted = "${0:,}".format(prov.provMasterImpact)
         columnDataE = Paragraph('<para align=center>' + str(provImpactFormatted) +
                                 '</para>', styles["Normal"])

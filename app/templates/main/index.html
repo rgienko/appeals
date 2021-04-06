@@ -20,6 +20,7 @@
                                 <th scope="col" class="text-center">Case Name</th>
                                 <th scope="col" class="text-center">Item Due</th>
                                 <th scope="col" class="text-center">Due Date</th>
+                                <th scope="col" class="text-center">Progress</th>
                             </tr>
                         </thead>
                             {% for date in allDueDates %}
@@ -27,12 +28,21 @@
                                 <td class="text-center"><a href="{% url 'appeal-details' date.caseNumber %}">{{ date.caseNumber }}</a></td>
                                 <td class="text-center">{{ date.get_case_structure }}</td>
                                 {% if date.get_case_structure == 'Individual' %}
-                                    <td class="text-center">{{ date.get_provider|title }}</td>
+                                    <td class="">{{ date.get_provider|title }}</td>
                                 {% else %}
-                                    <td class="text-center">{{ date.get_appeal_name }}</td>
+                                    <td class="">{{ date.get_appeal_name }}</td>
                                 {% endif %}
-                                <td class="text-center">{{ date.get_action_note }}</td>
+                                <td class="">{{ date.get_action_note }}</td>
                                 <td class="text-center">{{ date.dueDate|date:'m/d/Y'}}</td>
+                                {% if date.progress == 'Not Started' %}
+                                    <td class="text-center bg-warning" style="width: 150px;"><a class="text-dark" href=""><i class="far fa-circle"></i> {{ date.progress }}</a></td>
+                                {% elif date.progress == 'In Progress' %}
+                                    <td class="text-center bg-primary text-white" style="width: 150px;"><a class="text-white" href=""><i class="fas fa-spinner"></i> {{ date.progress }}</a></td>
+                                {% elif date.progress == 'Completed' %}
+                                    <td class="text-center bg-success text-white" style="width: 150px;"><a class="text-white" href=""><i class="far fa-check-circle"></i> {{ date.progress }}</a></td>
+                                {% else %}
+                                    <td class="text-center bg-info" style="width: 150px;"><a class="text-dark" href="{% url 'update-due-progress' date.id %}">{{ date.progress }}</a></td>
+                                {% endif %}
                             </tr>
                             {% endfor %}
                     </table>

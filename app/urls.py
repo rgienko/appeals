@@ -40,6 +40,7 @@ urlpatterns = [
     path(r'new/mac/', views.NewFIView.as_view(), name='new-mac'),
     path(r'prrb-master/', views.prrbMasterView, name='prrb-master'),
     path(r'new/prrb/', views. NewPRRBContactView.as_view(), name='new-prrb'),
-    path(r'^search/$', views.searchCriticalDueDates, name='due-master')
+    path(r'^search/$', views.searchCriticalDueDates, name='due-master'),
+    path(r'search-two', views.searchCriticalDueDatesTwo, name='due-master-two')
 
 ]

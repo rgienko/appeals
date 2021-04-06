@@ -345,6 +345,7 @@ class TblProviderMaster(models.Model):
         'TblIssueMaster', on_delete=models.CASCADE, db_column='issueID', blank=True, null=True)
     provMasterAuditAdjs = models.CharField(
         db_column='provMasterAuditAdjs', max_length=50, blank=True, null=True)
+    provMasterWasAdded = models.BooleanField(default=False)
     provMasterImpact = models.DecimalField(
         db_column='provMasterAmount', max_digits=19, decimal_places=0, blank=True, null=True)
     provMasterToCase = models.CharField(
@@ -355,12 +356,16 @@ class TblProviderMaster(models.Model):
         db_column='provMasterFromCase', max_length=7, blank=True, null=True)
     provMasterNote = models.CharField(
         db_column='provMasterNote', max_length=100, blank=True, null=True)
+    provMasterDateStamp = models.DateField(blank=True, null=True)
 
     class Meta:
         db_table = 'tblProviderMaster'
 
     def get_prov_name(self):
         return self.providerID.providerName
+
+    def get_parent(self):
+        return self.providerID.parentID.parentFullName
 
     def get_deter_date(self):
         ddate = TblCaseDeterminationMaster.objects.get(
@@ -425,12 +430,16 @@ class CriticalDatesMaster(models.Model):
     # action = models.TextField(blank=True, null=True)
     response = models.TextField(blank=True, null=True)
     progress_choices = [
+        ('Not Applicable', 'Not Applicable'),
         ('Not Started', 'Not Started'),
         ('In Progress', 'In Progress'),
         ('Completed', 'Completed')
     ]
     progress = models.CharField(
         max_length=20, choices=progress_choices, default='Not Started', blank=True, null=True)
+
+    class Meta:
+        ordering = ['dueDate']
 
     def __str__(self):
         return str(self.caseNumber)
@@ -473,3 +482,4 @@ class CriticalDatesMaster(models.Model):
         provName = TblProviderNameMaster.objects.get(providerID=provNum)
         provName = provName.providerName
         return '{0} - {1}'.format(provNum, provName)
+

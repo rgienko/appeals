@@ -63,17 +63,29 @@
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a id="medpar" class="nav-link" href="{% url 'due-master' %}">
-                                    Due Dates
-                                </a>
-                            </li>
-                            <li class="nav-item">
                                 <a class="nav-link" href="{% url 'new-appeal' %}">
                                     New Appeal
                                 </a>
                             </li>
                         </ul>
 
+                        <h5 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-3 mb-1 text-muted">
+                            <span>Due Dates:</span>
+                        </h5>
+
+                        <ul class="nav flex-column">
+
+                            <li class="nav-item">
+                                <a id="medpar" class="nav-link" href="{% url 'due-master' %}">
+                                    Due Dates - By Date
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'due-master-two' %}">
+                                    Due Dates - By Case
+                                </a>
+                            </li>
+                        </ul>
 
                         <h5 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-3 mb-1 text-muted">
                             <span>Master Tables:</span>

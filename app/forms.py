@@ -277,8 +277,10 @@ class ProviderMasterCreateForm(forms.ModelForm):
             'provMasterFiscalYear',
             'issueID',
             'provMasterAuditAdjs',
+            'provMasterWasAdded',
             'provMasterImpact',
-            'provMasterNote'
+            'provMasterNote',
+            'provMasterDateStamp'
         ]
 
         labels = {
@@ -289,8 +291,10 @@ class ProviderMasterCreateForm(forms.ModelForm):
             'provMasterFiscalYear': _('Fiscal Year:'),
             'issueID': _('Issue:'),
             'provMasterAuditAdjs': _('Audit Adjustments:'),
+            'provMasterWasAdded': _('Add?'),
             'provMasterImpact': _('Amount:'),
-            'provMasterNote': _('Note:')
+            'provMasterNote': _('Note:'),
+            'provMasterDateStamp': _('Date Stamp:'),
         }
 
         widgets = {
@@ -389,6 +393,7 @@ class UpdateCaseStatusForm(forms.Form):
 
 class UpdateDueDateProgressForm(forms.Form):
     progress_choices = [
+        ('Not Applicable', 'Not Applicable'),
         ('Not Started', 'Not Started'),
         ('In Progress', 'In Progress'),
         ('Completed', 'Completed')
