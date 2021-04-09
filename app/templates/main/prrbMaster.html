@@ -7,26 +7,41 @@
     <div class="row mt-5 mb-0">
         <h5 class="font-weight-bold text-uppercase ml-5 pt-1">
             PRRB Contact Master
-            <a class="mx-1" data-toggle="tooltip" data-placement="bottom" title="Add Contact" href="{% url 'new-prrb' %}"><i class="bi bi-plus-square" style="font-size:24px;"></i></a>
+            <a class="mx-1" data-toggle="tooltip" data-placement="bottom" title="Add Contact" href="{% url 'new-prrb' %}">
+                <i class="bi bi-plus-square" style="font-size:24px;"></i>
+            </a>
         </h5>
     </div>
-    <hr class="mt-0"/>
-    <div class="album row">
-        {% for prrb in all_prrbs %}
-            <div class="col-md-3">
-                <div class="card p-3">
-                    <div class="card-body">
-                        {{ prrb.prrbContactFirstName }} {{ prrb.prrbContactLastName }}<br>
-                        {{ prrb.prrbContactEmailAddress }} <br>
-                        {{ prrb.prrbContactGenEmailAddress }} <br>
-                        {{ prrb.prrbContactStreet }}<br>
-                        {{ prrb.prrbContactStreetTwo }}<br>
-                        {{ prrb.prrbContactCity }}, {{ prrb.stateID }}
-                    </div>
-                </div>
-            </div>
-        {% endfor %}
 
+    <hr class="mt-0"/>
+
+    <div class="album row">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th class="text-center" scope="col">ID</th>
+                    <th class="text-center" scope="col">Name</th>
+                    <th class="text-center" scope="col">Email</th>
+                    <th class="text-center" scope="col">General Email</th>
+                    <th class="text-center" scope="col">Address</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for prrb in all_prrbs %}
+                    <tr>
+                        <td class="text-center"><a href="{% url 'edit-prrb' prrb.prrbContactID %}">{{ prrb.prrbContactID }}</a></td>
+                        <td class="text-center">{{ prrb.prrbContactFirstName }} {{ prrb.prrbContactLastName }}</td>
+                        <td class="text-center">{{ prrb.prrbContactEmailAddress }}</td>
+                        {% if prrb.prrbContactGenEmailAddress is None %}
+                            <td></td>
+                        {% else %}
+                            <td class="text-center">{{ prrb.prrbContactGenEmailAddress }}</td>
+                        {% endif %}
+                        <td class="text-center">{{ prrb.prrbContactStreet }} {{ prrb.prrbContactStreetTwo }} {{ prrb.prrbContactCity }}, {{ prrb.stateID }}
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
     </div>
 </div>
 

@@ -39,7 +39,8 @@ urlpatterns = [
     path(r'mac-master/<pk>/edit', views.editFI, name='edit-mac'),
     path(r'new/mac/', views.NewFIView.as_view(), name='new-mac'),
     path(r'prrb-master/', views.prrbMasterView, name='prrb-master'),
-    path(r'new/prrb/', views. NewPRRBContactView.as_view(), name='new-prrb'),
+    path(r'new/prrb/', views.NewPRRBContactView.as_view(), name='new-prrb'),
+    path(r'prrb-master/<pk>/edit', views.editPRRB, name='edit-prrb'),
     path(r'^search/$', views.searchCriticalDueDates, name='due-master'),
     path(r'search-two', views.searchCriticalDueDatesTwo, name='due-master-two')
 

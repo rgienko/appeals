@@ -49,7 +49,8 @@ class ProviderNameMasterCreateForm(forms.ModelForm):
             'providerCity',
             'providerCounty',
             'stateID',
-            'parentID'
+            'parentID',
+            'providerIsClient'
         ]
 
         labels = {
@@ -59,8 +60,13 @@ class ProviderNameMasterCreateForm(forms.ModelForm):
             'providerCity': _('City'),
             'providerCounty': _('County'),
             'stateID': _('State:'),
-            'parentID': _('Parent:')
+            'parentID': _('Parent:'),
+            'providerIsClient': _('Is Client?:')
 
+        }
+
+        widgets = {
+            'providerName': forms.TextInput(attrs={'size': 45}),
         }
 
 

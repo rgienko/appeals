@@ -361,7 +361,7 @@ class NewStaffView(CreateView):
 
 def fiMasterView(request):
     context = initialize_context(request)
-    all_fis = TblFIMaster.objects.all().order_by('fiName')
+    all_fis = TblFIMaster.objects.all().order_by('fiName').exclude(fiID=14)
 
     context['all_fis'] = all_fis
     return render(request, 'main/fiMaster.html', context)
@@ -410,14 +410,35 @@ def editFI(request, pk):
     return render(request, 'create/create_form.html', context)
 
 
+def editPRRB(request, pk):
+    context = initialize_context(request)
+    prrbInstance = get_object_or_404(TblPRRBContactMaster, pk=pk)
+
+    if request.method == 'POST':
+        form = PRRBContactMasterCreateForm(request.POST, instance=prrbInstance)
+
+        if form.is_valid():
+            prrbInstance = form.save(commit=False)
+            prrbInstance.save()
+
+            return redirect('prrb-master')
+    else:
+        form = PRRBContactMasterCreateForm(instance=prrbInstance)
+
+    context['form'] = form
+    context['formName'] = 'Update PRRB Contact Form'
+    context['prrbInstance'] = prrbInstance
+
+    return render(request, 'create/create_form.html', context)
+
+
 def prrbMasterView(request):
+    context = initialize_context(request)
     all_prrbs = TblPRRBContactMaster.objects.all()
 
-    return render(request,
-                  'main/prrbMaster.html',
-                  {
-                      'all_prrbs': all_prrbs
-                  })
+    context['all_prrbs'] = all_prrbs
+
+    return render(request, 'main/prrbMaster.html', context)
 
 
 class NewPRRBContactView(CreateView):

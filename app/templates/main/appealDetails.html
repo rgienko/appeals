@@ -95,14 +95,14 @@
                                                     <td class="text-center" style="width:100px;">{{ provInfo.providerID }}</td>
                                                     <td class="p-1">{{ provInfo.get_prov_name|title }}</td>
                                                     <td class="text-center pt-1">{{ provInfo.get_parent|title }}</td>
-                                              </tr>
+                                                </tr>
                                             {% else %}
                                                 {% for provider in provInfo %}
                                                     <tr class="p-0">
                                                         <td class="text-center" style="width:100px;">{{ provider.providerID }}</td>
                                                         <td class="p-1">{{ provider.get_prov_name|title }}</td>
                                                         <td class="text-center pt-1">{{ provider.get_parent|title }}</td>
-                                                  </tr>
+                                                    </tr>
                                                 {% endfor %}
                                             {% endif %}
                                         </tbody>
