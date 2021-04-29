@@ -284,6 +284,7 @@ class ProviderMasterCreateForm(forms.ModelForm):
             'issueID',
             'provMasterAuditAdjs',
             'provMasterWasAdded',
+            'provMasterIsActive',
             'provMasterImpact',
             'provMasterNote',
             'provMasterDateStamp'
@@ -298,6 +299,7 @@ class ProviderMasterCreateForm(forms.ModelForm):
             'issueID': _('Issue:'),
             'provMasterAuditAdjs': _('Audit Adjustments:'),
             'provMasterWasAdded': _('Add?'),
+            'provMasterIsActive': _('Active?'),
             'provMasterImpact': _('Amount:'),
             'provMasterNote': _('Note:'),
             'provMasterDateStamp': _('Date Stamp:'),
@@ -310,7 +312,7 @@ class ProviderMasterCreateForm(forms.ModelForm):
 
 class CriticalDatesMasterCreateForm(forms.ModelForm):
     class Meta:
-        model = CriticalDatesMaster
+        model = TblCriticalDatesMaster
 
         fields = [
             'caseNumber',

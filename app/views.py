@@ -99,7 +99,7 @@ def sign_out(request):
 def main(request):
     context = initialize_context(request)
 
-    allDueDates = CriticalDatesMaster.objects.all().order_by('dueDate')[:10]
+    allDueDates = TblCriticalDatesMaster.objects.all().filter(progress='Not Started').order_by('dueDate')[:10]
     nprDueDates = NPRDueDatesMaster.objects.all().order_by('nprDate')[:10]
 
     if request.method == 'POST' and 'add_npr_due_button' not in request.POST:
@@ -515,7 +515,7 @@ def appealDetailsView(request, pk):
     context = initialize_context(request)
     caseObj = get_object_or_404(TblAppealMaster, pk=pk)
     caseIssues = TblProviderMaster.objects.filter(caseNumber=pk).order_by('providerID')
-    caseDueDates = CriticalDatesMaster.objects.filter(caseNumber=pk).order_by('dueDate')
+    caseDueDates = TblCriticalDatesMaster.objects.filter(caseNumber=pk).order_by('dueDate')
 
     if caseObj.appealStructure == 'Individual':
         provInfo = caseIssues.first()
@@ -633,7 +633,7 @@ def addCriticalDueView(request, pk):
 
     case_instance = get_object_or_404(TblAppealMaster, pk=pk)
     cur_case = case_instance.caseNumber
-    case_due_dates = CriticalDatesMaster.objects.filter(caseNumber=cur_case)
+    case_due_dates = TblCriticalDatesMaster.objects.filter(caseNumber=cur_case)
     case_issues = TblProviderMaster.objects.filter(caseNumber=cur_case).first()
 
     if request.method == 'POST':
@@ -721,6 +721,7 @@ def transferIssueView(request, pk):
                                                provMasterImpact=issue_trans.provMasterImpact,
                                                provMasterAuditAdjs=issue_trans.provMasterAuditAdjs,
                                                provMasterWasAdded=0,
+                                               provMasterIsActive=True,
                                                provMasterToCase='NULL',
                                                provMasterTransferDate=issue_trans.provMasterTransferDate,
                                                provMasterFromCase=str(issue_trans.caseNumber),
@@ -743,26 +744,42 @@ def transferIssueView(request, pk):
     return render(request, 'main/transferIssue.html', context)
 
 
+def withdrawFromCase(request, pk):
+    context = initialize_context(request)
+
+    provMasterInstance = get_object_or_404(TblProviderMaster, pk=pk)
+
+    if request.method == 'POST':
+        provMasterInstance.provMasterIsActive = False
+        provMasterInstance.save()
+
+        return redirect('appeal-details', provMasterInstance.caseNumber)
+
+    context['provMasterInstance'] = provMasterInstance
+
+    return render(request, 'main/withdrawFromCase.html', context)
+
+
 def searchCriticalDueDates(request):
-    dueDates_list = CriticalDatesMaster.objects.all()
+    dueDates_list = TblCriticalDatesMaster.objects.filter(progress='Not Started')
     dueDates_filter = CriticalDateFilter(request.GET, queryset=dueDates_list)
 
-    return render(request, 'main/criticalDatesMaster.html', {'filter': dueDates_filter})
+    return render(request, 'main/CriticalDatesMaster.html', {'filter': dueDates_filter})
 
 
 def searchCriticalDueDatesTwo(request):
     context = initialize_context(request)
-    dueDates_list = TblAppealMaster.objects.all().order_by('criticaldatesmaster__dueDate')
+    dueDates_list = TblAppealMaster.objects.all().order_by('TblCriticalDatesMaster__dueDate')
     dueDates_filter = CriticalDateFilterTwo(request.GET, queryset=dueDates_list)
 
     context['filter'] = dueDates_filter
 
-    return render(request, 'main/criticalDatesMasterTwo.html', context)
+    return render(request, 'main/CriticalDatesMasterTwo.html', context)
 
 
 def updateDueDateProgress(request, pk):
     context = initialize_context(request)
-    dueDate_obj = get_object_or_404(CriticalDatesMaster, pk=pk)
+    dueDate_obj = get_object_or_404(TblCriticalDatesMaster, pk=pk)
     provMasterObj = TblProviderMaster.objects.filter(caseNumber=dueDate_obj.caseNumber)
 
     if request.method == 'POST':
@@ -780,6 +797,16 @@ def updateDueDateProgress(request, pk):
     context['form'] = form
     context['provMasterObj'] = provMasterObj
     return render(request, 'create/due_date_edit.html', context)
+
+
+def providerAppealDetails(request):
+    context = initialize_context(request)
+    provMaster_list = TblProviderMaster.objects.all()
+    provMaster_filter = ProviderMasterFilter(request.GET, queryset=provMaster_list)
+
+    context['filter'] = provMaster_filter
+
+    return render(request, 'main/providerMasterFilter.html', context)
 
 
 # Begin Creation of Form G
@@ -1043,7 +1070,8 @@ def createFormG(request, pk):
                       columnHeaderD, columnHeaderE, columnHeaderF, columnHeaderG]]
 
     # Assemble rows for Form G
-    caseProviders = TblProviderMaster.objects.filter(caseNumber=caseNum)
+    caseProviders = TblProviderMaster.objects.filter(caseNumber=caseNum).order_by('provMasterTransferDate',
+                                                                                  'providerID')
     global groupTotalImpact
     groupImpact = caseProviders.aggregate(Sum('provMasterImpact'))
     groupTotalImpact = "Total Amount in Controversy for All Providers: ${0:,}".format(

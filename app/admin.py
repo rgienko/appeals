@@ -57,3 +57,8 @@ class TblDeterminationAdmin(admin.ModelAdmin):
 @admin.register(TblActionMaster)
 class TblActionMasterAdmin(admin.ModelAdmin):
     list_display = ('actionID', 'note', 'description', 'lead_time', 'type')
+
+
+@admin.register(NPRDueDatesMaster)
+class NPRDueDatesMasterAdmin(admin.ModelAdmin):
+    list_display = ('nprID', 'parentID', 'providerID', 'nprFY', 'nprDate')

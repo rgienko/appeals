@@ -9,13 +9,12 @@
         <div class="container">
             <h5>Filter</h5>
             <div class="row">
-                    {% for field in filter.form.visible_fields %}
-                        <div class="col-sm-4 border my-2">
-                            {{ field.label_tag }} <br>
-                            {{ field }}
-                    </div>
-                    {% endfor %}
-
+                {% for field in filter.form.visible_fields %}
+                    <div class="col-sm-4 border my-2">
+                        {{ field.label_tag }} <br>
+                        {{ field }}
+                </div>
+                {% endfor %}
             </div>
 
         <button type="submit" class="mt-2 btn btn-primary w-25">Filter Due Dates</button>
@@ -46,7 +45,7 @@
                 {% elif criticalDate.progress == 'Completed' %}
                     <td class="text-center bg-success text-white" style="width: 175px;"><a class="text-white" href=""><i class="far fa-check-circle"></i> {{ criticalDate.progress }}</a></td>
                 {% else %}
-                    <td></td>
+                    <td class="text-center bg-info" style="width:175px;">{{ criticalDate.progress }}</td>
                 {% endif %}
             </tr>
             {% endfor %}

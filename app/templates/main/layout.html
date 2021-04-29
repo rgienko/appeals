@@ -70,7 +70,7 @@
                         </ul>
 
                         <h5 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-3 mb-1 text-muted">
-                            <span>Due Dates:</span>
+                            <span>Reports:</span>
                         </h5>
 
                         <ul class="nav flex-column">
@@ -83,6 +83,12 @@
                             <li class="nav-item">
                                 <a class="nav-link" href="{% url 'due-master-two' %}">
                                     Due Dates - By Case
+                                </a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'prov-appeal-details' %}">
+                                    Provider Appeals
                                 </a>
                             </li>
                         </ul>
@@ -169,7 +175,6 @@
                     {% endblock %}
 
                     <div class="modal fade mx-5" id="add_npr_due_modal" tabindex="-1" role="dialog">
-
                         <div class="modal-dialog modal-xl" role="document">
                             <div class="modal-content">
                                 <div class="modal-header">

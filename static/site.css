@@ -6,3 +6,11 @@
 .nav-link {
     color: aliceblue;
 }
+
+#isItLoaded {
+    display:none;
+}
+
+#loading {
+
+}

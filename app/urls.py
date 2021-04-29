@@ -17,6 +17,7 @@ urlpatterns = [
     path(r'edit/details/due-dates/<pk>', views.updateDueDateProgress, name='update-due-progress'),
     path(r'<pk>/details/add-due-dates/', views.addCriticalDueView, name='add-due'),
     path(r'<pk>/transfer-issue/', views.transferIssueView, name='transfer-issue'),
+    path(r'<pk>/withdraw-issue/', views.withdrawFromCase, name='withdraw-from-case'),
     path(r'<pk>/ScheduleG/cover-letter/', views.createFormGCoverLetter, name='form-g-cover-letter'),
     path(r'<pk>/ScheduleG/issue-statement/', views.createFormGIssueState, name='form-g-issue-state'),
     path(r'<pk>/ScheduleG/toc/', views.createFormGToc, name='form-g-toc'),
@@ -42,6 +43,7 @@ urlpatterns = [
     path(r'new/prrb/', views.NewPRRBContactView.as_view(), name='new-prrb'),
     path(r'prrb-master/<pk>/edit', views.editPRRB, name='edit-prrb'),
     path(r'^search/$', views.searchCriticalDueDates, name='due-master'),
-    path(r'search-two', views.searchCriticalDueDatesTwo, name='due-master-two')
+    path(r'search-two', views.searchCriticalDueDatesTwo, name='due-master-two'),
+    path(r'provmaster-filter', views.providerAppealDetails, name='prov-appeal-details')
 
 ]

@@ -357,9 +357,14 @@ class TblProviderMaster(models.Model):
     provMasterNote = models.CharField(
         db_column='provMasterNote', max_length=100, blank=True, null=True)
     provMasterDateStamp = models.DateField(blank=True, null=True)
+    provMasterIsActive = models.BooleanField(default=True, blank=True, null=True)
 
     class Meta:
         db_table = 'tblProviderMaster'
+
+    def get_appeal_structure(self):
+        caseObj = TblAppealMaster.objects.get(caseNumber=self.caseNumber)
+        return caseObj.appealStructure
 
     def get_prov_name(self):
         return self.providerID.providerName
@@ -377,6 +382,9 @@ class TblProviderMaster(models.Model):
             caseNumber=self.provMasterFromCase)
         return str(fye.determinationFiscalYear)
 
+    def get_srg_id(self):
+        return self.issueID.issueSRGID
+
     def get_issue_name(self):
         return self.issueID.issueName
 
@@ -386,7 +394,7 @@ class TblProviderMaster(models.Model):
     def get_hrq_date(self):
         hrqDate = TblAppealMaster.objects.get(
             caseNumber=self.provMasterFromCase)
-        return str(hrqDate.appealCreateDate)
+        return hrqDate.appealCreateDate
 
     def get_no_days(self):
         hrqDate = TblAppealMaster.objects.get(caseNumber=self.provMasterFromCase)
@@ -420,8 +428,72 @@ class NPRDueDatesMaster(models.Model):
         return due_date
 
 
+class TblCriticalDatesMaster(models.Model):
+    id = models.AutoField(primary_key=True)
+    caseNumber = models.ForeignKey('TblAppealMaster', on_delete=models.CASCADE)
+    dueDate = models.DateField()
+    actionID = models.ForeignKey(
+        'TblActionMaster', on_delete=models.CASCADE, blank=True, null=True)
+    # action = models.TextField(blank=True, null=True)
+    response = models.TextField(blank=True, null=True)
+    progress_choices = [
+        ('Unknown', 'Unknown'),
+        ('Not Applicable', 'Not Applicable'),
+        ('Not Started', 'Not Started'),
+        ('In Progress', 'In Progress'),
+        ('Completed', 'Completed')
+    ]
+    progress = models.CharField(
+        max_length=20, choices=progress_choices, default='Not Started', blank=True, null=True)
+
+    class Meta:
+        ordering = ['dueDate']
+
+    def __str__(self):
+        return str(self.caseNumber)
+
+    def due_date_status(self):
+        today = datetime.datetime.strptime(
+            str(datetime.date.today()), "%Y-%m-%d")
+        due = datetime.datetime.strptime(str(self.dueDate), "%Y-%m-%d")
+        if (due-today).days < 90:
+            return "Low"
+        elif (due-today).days < 60:
+            return "Medium"
+        elif (due-today).days < 30:
+            return "Important"
+        elif (due-today).days < 7:
+            return "URGENT"
+        else:
+            return ""
+
+    def get_action_note(self):
+        return self.actionID.note
+
+    def get_action_details(self):
+        return self.actionID.description
+
+    def get_response(self):
+        return self.actionID.type
+
+    def get_case_structure(self):
+        return self.caseNumber.appealStructure
+
+    def get_appeal_name(self):
+        return self.caseNumber.appealName
+
+    def get_provider(self):
+        caseIssues = TblProviderMaster.objects.filter(
+            caseNumber=self.caseNumber)
+        provInfo = caseIssues.first()
+        provNum = provInfo.providerID
+        provName = TblProviderNameMaster.objects.get(providerID=provNum)
+        provName = provName.providerName
+        return '{0} - {1}'.format(provNum, provName)
+
+
 class CriticalDatesMaster(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4)
+    id = models.AutoField(primary_key=True)
     caseNumber = models.ForeignKey(
         'TblAppealMaster', on_delete=models.CASCADE, blank=True, null=True)
     dueDate = models.DateField()
@@ -430,6 +502,7 @@ class CriticalDatesMaster(models.Model):
     # action = models.TextField(blank=True, null=True)
     response = models.TextField(blank=True, null=True)
     progress_choices = [
+        ('Unknown', 'Unknown'),
         ('Not Applicable', 'Not Applicable'),
         ('Not Started', 'Not Started'),
         ('In Progress', 'In Progress'),
