@@ -25,7 +25,7 @@ SECRET_KEY = os.environ.get(
 # SECRET_KEY = ')g6*5l(b3r9yh@sn_^i&s&sr&eq_!#9vpxrvhhzafs5rw8^h@n'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = FALSE
+DEBUG = 'FALSE'
 
 ALLOWED_HOSTS = ['myappeals.herokuapp.com','localhost', 'appeals.azurewebsites.net', '127.0.0.1:8000', '127.0.0.1',
                  '65.119.155.98']
