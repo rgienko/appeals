@@ -61,13 +61,16 @@
                             </tr>
                         </thead>
                             {% for npr in nprDueDates %}
-                            <tr>
-                                <td class="text-center"><a href="">{{ npr.providerID }}</a></td>
-                                <td class="text-center">{{ npr.get_prov_name|title }}</td>
-                                <td class="text-center">{{ npr.nprFY }}</td>
-                                <td class="text-center">{{ npr.nprDate|date:'m/d/Y' }}</td>
-                                <td class="text-center">{{ npr.calc_deadline|date:'m/d/Y' }}</td>
-                            </tr>
+                                {% if npr.calc_deadline < today %}
+                                {% else %}
+                                    <tr>
+                                        <td class="text-center"><a href="">{{ npr.providerID }}</a></td>
+                                        <td class="text-center">{{ npr.get_prov_name|title }}</td>
+                                        <td class="text-center">{{ npr.nprFY }}</td>
+                                        <td class="text-center">{{ npr.nprDate|date:'m/d/Y' }}</td>
+                                        <td class="text-center">{{ npr.calc_deadline|date:'m/d/Y' }}</td>
+                                    </tr>
+                                {% endif %}
                             {% endfor %}
                     </table>
                 </div>

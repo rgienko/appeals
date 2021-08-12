@@ -1,9 +1,10 @@
+import datetime
 import locale
 import random
 from io import BytesIO
 
 from django.contrib import auth, messages
-from django.db.models import Sum
+from django.db.models import Sum, Q
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
@@ -100,7 +101,8 @@ def main(request):
     context = initialize_context(request)
 
     allDueDates = TblCriticalDatesMaster.objects.all().filter(progress='Not Started').order_by('dueDate')[:10]
-    nprDueDates = NPRDueDatesMaster.objects.all().order_by('nprDate')[:10]
+    nprDueDates = NPRDueDatesMaster.objects.all().order_by('nprDate')
+    today = datetime.date.today()
 
     if request.method == 'POST' and 'add_npr_due_button' not in request.POST:
         search_case = request.POST.get('search')
@@ -152,6 +154,7 @@ def main(request):
     context['form'] = form
     context['allDueDates'] = allDueDates
     context['nprDueDates'] = nprDueDates
+    context['today'] = today
 
     return render(request, 'main/index.html', context)
 
@@ -514,7 +517,13 @@ def updateCaseStatus(request, pk):
 def appealDetailsView(request, pk):
     context = initialize_context(request)
     caseObj = get_object_or_404(TblAppealMaster, pk=pk)
-    caseIssues = TblProviderMaster.objects.filter(caseNumber=pk).order_by('providerID')
+    caseIssues = TblProviderMaster.objects.filter(caseNumber=pk).order_by('-provMasterIsActive',
+                                                                          'provMasterTransferDate',
+                                                                          'providerID', )
+
+    # caseDueDates = TblCriticalDatesMaster.objects.filter(Q(caseNumber=pk, progress='Not Started') |
+    #                                                     Q(caseNumber=pk, progress='In Progress')).order_by('dueDate')
+
     caseDueDates = TblCriticalDatesMaster.objects.filter(caseNumber=pk).order_by('dueDate')
 
     if caseObj.appealStructure == 'Individual':
@@ -580,9 +589,10 @@ def addProviderToGroup(request, pk):
                                                provMasterAuditAdjs=added_provider.provMasterAuditAdjs,
                                                provMasterToCase='NULL',
                                                provMasterTransferDate=datetime.date.today(),
-                                               provMasterFromCase=str(
-                                                   added_provider.caseNumber),
-                                               provMasterNote=added_provider.provMasterNote)
+                                               provMasterFromCase='NULL',
+                                               provMasterNote=added_provider.provMasterNote,
+                                               provMasterDateStamp=datetime.datetime.today()
+                                               )
             added_provider.save(force_insert=True)
             return redirect('appeal-details', case_instance.caseNumber)
     else:
@@ -602,29 +612,54 @@ def addIssueView(request, pk):
     case_issue_count = TblProviderMaster.objects.filter(
         caseNumber__caseNumber=cur_case).count()
     case_issues = TblProviderMaster.objects.filter(caseNumber=cur_case)
+    today = datetime.date.today()
 
     if request.method == 'POST':
         form = ProviderMasterCreateForm(request.POST)
 
         if form.is_valid():
-            new_issue = form.save(commit=False)
-            new_issue.save()
+            if case_instance.appealStructure == 'Individual':
+                new_issue = form.save(commit=False)
+                new_issue.save()
 
-            return redirect(r'appeal-details', cur_case)
+                return redirect(r'appeal-details', cur_case)
+            else:
+                added_provider = form.save(commit=False)
+
+                added_provider = TblProviderMaster(caseNumber=added_provider.caseNumber,
+                                                   providerID=added_provider.providerID,
+                                                   provMasterDeterminationDate=added_provider.provMasterDeterminationDate,
+                                                   provMasterDeterminationType=added_provider.provMasterDeterminationType,
+                                                   provMasterFiscalYear=added_provider.provMasterFiscalYear,
+                                                   issueID=added_provider.issueID,
+                                                   provMasterAuditAdjs=added_provider.provMasterAuditAdjs,
+                                                   provMasterWasAdded=True,
+                                                   provMasterImpact=added_provider.provMasterImpact,
+                                                   provMasterToCase='NULL',
+                                                   provMasterTransferDate=today,
+                                                   provMasterFromCase='NULL',
+                                                   provMasterNote=added_provider.provMasterNote,
+                                                   provMasterDateStamp=today,
+                                                   provMasterIsActive=True,
+                                                   )
+                added_provider.save(force_insert=True)
+                return redirect(r'appeal-details', cur_case)
     else:
         if case_issue_count > 0 and case_instance.appealStructure == 'Individual':
             form = ProviderMasterCreateForm(initial={'caseNumber': cur_case,
                                                      'providerID': case_issues.first().providerID,
-                                                     'provMasterDateStamp': datetime.datetime.today()
+                                                     'provMasterDateStamp': today
                                                      })
         else:
             form = ProviderMasterCreateForm(initial={'caseNumber': cur_case,
-                                                     'provMasterDateStamp': datetime.datetime.today()})
+                                                     'provMasterWasAdded': True,
+                                                     'provMasterDateStamp': today
+                                                     })
 
     return render(request, 'create/create_form.html',
                   {
                       'form': form,
-                      'formName': 'Add Issue / Provider to Appeal'
+                      'formName': 'Add Issue / Provider (Direct Add) to Appeal'
                   })
 
 
@@ -1070,8 +1105,9 @@ def createFormG(request, pk):
                       columnHeaderD, columnHeaderE, columnHeaderF, columnHeaderG]]
 
     # Assemble rows for Form G
-    caseProviders = TblProviderMaster.objects.filter(caseNumber=caseNum).order_by('provMasterTransferDate',
-                                                                                  'providerID')
+    caseProviders = TblProviderMaster.objects.filter(caseNumber=caseNum).filter(provMasterIsActive='True').order_by(
+                                                                                'provMasterTransferDate',
+                                                                                'providerID')
     global groupTotalImpact
     groupImpact = caseProviders.aggregate(Sum('provMasterImpact'))
     groupTotalImpact = "Total Amount in Controversy for All Providers: ${0:,}".format(
@@ -1091,17 +1127,31 @@ def createFormG(request, pk):
         columnDataFYE = Paragraph('<para align=center>' + str(prov.provMasterFiscalYear.strftime("%m/%d/%Y")) +
                                   '</para>', styles["Normal"])
 
-        columnDataMAC = Paragraph('<para align=center>' + str(caseObj.fiID) + '</para>', styles["Normal"])
+        columnDataMAC = Paragraph('<para align=center>' + str(prov.get_ind_fi()) + '</para>', styles["Normal"])
 
         columnDataA = Paragraph('<para align=center>' + str(prov.provMasterDeterminationDate.strftime("%m/%d/%Y")) +
                                 '</para>', styles["Normal"])
 
-        hrqDate = TblAppealMaster.objects.get(caseNumber=prov.provMasterFromCase)
-        columnDataB = Paragraph('<para align=center>' + str(hrqDate.appealCreateDate.strftime("%m/%d/%Y")) + '</para>',
-                                styles["Normal"])
+        if prov.provMasterWasAdded == 1:
+            hrqDate = prov.provMasterDateStamp
+            columnDataB = Paragraph(
+                '<para align=center> N/A - Provider Direct Added to Group</para>',
+                styles["Normal"])
+            columnDataC = Paragraph('<para align=center> N/A </para>', styles["Normal"])
+            columnDataG = Paragraph(
+                '<para align=center>' + str(hrqDate.strftime("%m/%d/%Y")) + '</para>',
+                styles["Normal"])
+        else:
+            hrqDate = TblAppealMaster.objects.get(caseNumber=prov.provMasterFromCase)
+            columnDataB = Paragraph(
+                '<para align=center>' + str(hrqDate.appealCreateDate.strftime("%m/%d/%Y")) + '</para>',
+                styles["Normal"])
+            no_of_days = prov.get_no_days()
+            columnDataC = Paragraph('<para align=center>' + str(no_of_days) + '</para>', styles["Normal"])
+            columnDataG = Paragraph(
+                '<para align=center>' + str(prov.provMasterTransferDate.strftime("%m/%d/%Y")) + '</para>',
+                styles["Normal"])
 
-        no_of_days = prov.get_no_days()
-        columnDataC = Paragraph('<para align=center>' + str(no_of_days) + '</para>', styles["Normal"])
         columnDataD = Paragraph('<para align=center>' + str(prov.provMasterAuditAdjs) + '</para>', styles["Normal"])
 
         locale.setlocale(locale.LC_ALL, '')
@@ -1110,8 +1160,6 @@ def createFormG(request, pk):
                                 '</para>', styles["Normal"])
 
         columnDataF = Paragraph('<para align=center>' + str(prov.provMasterFromCase) + '</para>', styles["Normal"])
-        columnDataG = Paragraph(
-            '<para align=center>' + str(prov.provMasterTransferDate.strftime("%m/%d/%Y")) + '</para>', styles["Normal"])
 
         scheduleGData.append([columnDataNumber, columnDataProviderNumber, columnDataProviderInfo, columnDataFYE,
                               columnDataMAC, columnDataA, columnDataB, columnDataC, columnDataD, columnDataE,

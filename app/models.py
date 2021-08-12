@@ -401,6 +401,11 @@ class TblProviderMaster(models.Model):
         delta = hrqDate.appealCreateDate - self.provMasterDeterminationDate
         return delta.days
 
+    def get_ind_fi(self):
+        indivCase = TblAppealMaster.objects.get(caseNumber=self.provMasterFromCase)
+        fi = indivCase.fiID
+        return fi
+
 
 class TblActionMaster(models.Model):
     actionID = models.CharField(primary_key=True, max_length=25, default='')

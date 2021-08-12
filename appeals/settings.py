@@ -27,7 +27,8 @@ SECRET_KEY = os.environ.get(
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost', 'appeals.azurewebsites.net', '127.0.0.1:8000', '127.0.0.1']
+ALLOWED_HOSTS = ['localhost', 'appeals.azurewebsites.net', '127.0.0.1:8000', '127.0.0.1',
+                 '65.119.155.98']
 
 
 # Application definition

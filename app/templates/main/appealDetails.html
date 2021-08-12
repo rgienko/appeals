@@ -3,8 +3,7 @@
 {% block content %}
     {% load humanize %}
         <div class="row mt-4">
-            <div class="col-md-6">
-
+            <div class="col-xl-6 col-lg-12 col-md-12 col-sm-12">
                 <div class="p-2 shadow rounded">
                     <h5 class="fw-bolder pl-1">
                         Case Details - CN: {{ caseObj.caseNumber }} <a class="" title="Edit Case" href=""><i class="fas fa-pen-square"></i></a>
@@ -45,7 +44,7 @@
                 </div>
             </div>
 
-            <div class="col-md-6">
+            <div class="col-xl-6 col-lg-12 col-md-12 col-sm-12">
                 <div class="shadow rounded">
                     <ul class="nav nav-tabs" id="myTab" role="tablist">
                         <li class="nav-item">
@@ -129,11 +128,11 @@
                                                     {% if date.progress == 'Not Started' %}
                                                         <td class="text-center bg-warning" style="width: 175px;"><a class="text-dark" href="{% url 'update-due-progress' date.id %}"><i class="bi bi-circle"></i> {{ date.progress }}</a></td>
                                                     {% elif date.progress == 'In Progress' %}
-                                                        <td class="text-center bg-primary text-white" style="width: 175px;"><a class="text-white" href="{% url 'update-due-progress' date.id %}"><i class="fas fa-spinner"></i> {{ date.progress }}</a></td>
+                                                        <td class="text-center bg-primary text-white" style="width: 175px;"><a class="text-white" href="{% url 'update-due-progress' date.id %}"><i class="bi bi-circle-half"></i> {{ date.progress }}</a></td>
                                                     {% elif date.progress == 'Completed' %}
-                                                        <td class="text-center bg-success text-white" style="width: 175px;"><a class="text-white" href="{% url 'update-due-progress' date.id %}"><i class="far fa-check-circle"></i> {{ date.progress }}</a></td>
+                                                        <td class="text-center bg-success text-white" style="width: 175px;"><a class="text-white" href="{% url 'update-due-progress' date.id %}"><i class="bi bi-check-circle-fill"></i> {{ date.progress }}</a></td>
                                                     {% else %}
-                                                        <td class="text-center bg-info" style="width: 175px;"><a class="text-dark" href="{% url 'update-due-progress' date.id %}">{{ date.progress }}</td>
+                                                        <td class="text-center bg-info" style="width: 175px;"><a class="text-dark" href="{% url 'update-due-progress' date.id %}">{{ date.progress }}</a></td>
                                                     {% endif %}
                                                 </tr>
                                             {% endfor %}
@@ -142,8 +141,6 @@
                                 </div>
                             </div>
                         </div>
-
-
 
                         <div class="tab-pane fade" id="notes" role="tabpanel" aria-labelledby="notes-tab"> <!-- Critical Due Dates-->
                             <div class=" mt-3 p-2" style="">
@@ -200,9 +197,9 @@
                                             {{ caseObj.appealCreateDate|date:'m/d/Y' }}
                                         {% else %}
                                             {% if issue.provMasterWasAdded is True %}
-                                                {{ issue.provMasterDateStamp|date:'m/d/y' }}
+                                                {{ issue.provMasterTransferDate|date:'m/d/Y' }}
                                             {% else %}
-                                                {{ issue.get_hrq_date|date:'m/d/y' }}
+                                                {{ issue.get_hrq_date|date:'m/d/Y' }}
                                             {% endif %}
                                         {% endif %}
                                     </td>
@@ -225,13 +222,19 @@
                                     {% endif %}
 
                                     {% if issue.provMasterTransferDate is None %}
-                                        <td style="width:100px;"></td>
+                                            <td style="width:100px;"></td>
                                     {% else %}
                                         <td class="text-center" style="width:100px;">
                                             {{ issue.provMasterTransferDate|date:'m/d/Y' }}
                                         </td>
+
                                     {% endif %}
-                                    {% if issue.provMasterFromCase is None or issue.provMasterFromCase == 'NULL' %}
+
+                                    {% if issue.provMasterWasAdded is True %}
+                                        <td class="text-center" style="width:85px">
+                                            DA
+                                        </td>
+                                    {% elif issue.provMasterFromCase is None or issue.provMasterFromCase == 'NULL' %}
                                         <td class="text-center" style="width:85px;"></td>
                                     {% else %}
                                         <td class="text-center" style="width:85px;">
