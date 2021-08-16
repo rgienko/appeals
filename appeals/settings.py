@@ -87,7 +87,7 @@ DATABASES = {
         'NAME': 'appealMasterv2',
         'USER': 'randall.gienko',
         'PASSWORD': 'R@nd@ll22',
-        'HOST': 'srgsqlserver.database.windows.net',
+        'HOST': HTTPS_PROXY + 'srgsqlserver.database.windows.net',
         'PORT': '',
         'OPTIONS': {
             'driver': 'ODBC Driver 17 for SQL Server',
