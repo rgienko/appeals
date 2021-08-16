@@ -30,8 +30,13 @@ DEBUG = True
 ALLOWED_HOSTS = ['myappeals.herokuapp.com','localhost', 'appeals.azurewebsites.net', '127.0.0.1:8000', '127.0.0.1',
                  '65.119.155.98']
 
-HTTP_PROXY = ('https://8bgghzfatdmy2:2jhmc41c1dqes6n3ck043qyux3syia@us-east-shield-02.quotaguard.com:9294')
-HTTPS_PROXY = ('https://8bgghzfatdmy2:2jhmc41c1dqes6n3ck043qyux3syia@us-east-shield-02.quotaguard.com:9294')
+
+proxy = 'https://8bgghzfatdmy2:2jhmc41c1dqes6n3ck043qyux3syia@us-east-shield-02.quotaguard.com:9294'
+
+os.environ['http_proxy'] = proxy
+os.environ['HTTP_PROXY'] = proxy
+os.environ['https_proxy'] = proxy
+os.environ['HTTPS_PROXY'] = proxy
 # Application definition
 
 INSTALLED_APPS = [
