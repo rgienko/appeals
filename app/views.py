@@ -189,7 +189,7 @@ def providerNameUpdateView(request, pk):
             provider_object = form.save(commit=False)
             provider_object.save()
 
-            return redirect('main')
+            return redirect('provider-master')
     else:
         form = ProviderNameMasterCreateForm(instance=provider_object)
 
@@ -200,8 +200,8 @@ def providerNameUpdateView(request, pk):
 
 def providerMasterView(request):
     context = initialize_context(request)
-    all_providers = TblProviderNameMaster.objects.all()
-    all_clients = TblProviderNameMaster.objects.filter(providerIsClient=1).order_by('providerID')
+    # all_providers = TblProviderNameMaster.objects.all()
+    all_clients = TblProviderNameMaster.objects.filter(providerIsClient=1).order_by('parentID', 'providerID')
     context['all_providers'] = all_clients
     return render(request, 'main/providerMaster.html', context)
 

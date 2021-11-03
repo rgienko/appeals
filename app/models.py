@@ -126,6 +126,7 @@ class TblProviderNameMaster(models.Model):
         'TblStateMaster', on_delete=models.CASCADE, db_column='stateID', blank=True, null=True)
     parentID = models.ForeignKey('TblParentMaster', on_delete=models.CASCADE, db_column='parentID', blank=True,
                                  null=True)
+    fiID = models.ForeignKey('TblFIMaster', on_delete=models.CASCADE, blank=True, null=True)
 
     class Meta:
         db_table = 'tblProviderNameMaster'

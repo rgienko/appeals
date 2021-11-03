@@ -50,6 +50,7 @@ class ProviderNameMasterCreateForm(forms.ModelForm):
             'providerCounty',
             'stateID',
             'parentID',
+            'fiID',
             'providerIsClient'
         ]
 
@@ -61,6 +62,7 @@ class ProviderNameMasterCreateForm(forms.ModelForm):
             'providerCounty': _('County'),
             'stateID': _('State:'),
             'parentID': _('Parent:'),
+            'fiID': _('MAC:'),
             'providerIsClient': _('Is Client?:')
 
         }
