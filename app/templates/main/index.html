@@ -58,6 +58,7 @@
                                 <th scope="col" class="text-center">Fiscal Year</th>
                                 <th scope="col" class="text-center">NPR Date</th>
                                 <th scope="col" class="text-center">Due Date</th>
+                                <th scope="col" class="text-center">Status</th>
                             </tr>
                         </thead>
                             {% for npr in nprDueDates %}
@@ -69,6 +70,15 @@
                                         <td class="text-center">{{ npr.nprFY }}</td>
                                         <td class="text-center">{{ npr.nprDate|date:'m/d/Y' }}</td>
                                         <td class="text-center">{{ npr.calc_deadline|date:'m/d/Y' }}</td>
+                                        {% if npr.status == 'Completed' %}
+                                            <td class="text-center bg-primary text-light"><a class="text-white" href="{% url 'update-npr-progress' npr.nprID %}">{{ npr.status}}</a></td>
+                                        {% elif npr.status == 'Not Started' %}
+                                            <td class="text-center bg-warning"><a class="text-dark" href="{% url 'update-npr-progress' npr.nprID %}">{{ npr.status}}</a></td>
+                                        {% elif npr.status == 'Not Filed' %}
+                                            <td class="text-center bg-danger"><a class="text-white" href="{% url 'update-npr-progress' npr.nprID %}">{{ npr.status}}</a></td>
+                                        {% else %}
+                                            <td class="text-center bg-secondary"><a class="text-dark" href="{% url 'update-npr-progress' npr.nprID %}">{{ npr.status}}</a></td>
+                                        {% endif %}
                                     </tr>
                                 {% endif %}
                             {% endfor %}

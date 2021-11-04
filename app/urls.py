@@ -15,6 +15,7 @@ urlpatterns = [
     path(r'<pk>/details/add-prov', views.addProviderToGroup, name='add-prov'),
     path(r'edit/details/issue/<pk>', views.providerMasterUpdateView, name='edit-case-issue'),
     path(r'edit/details/due-dates/<pk>', views.updateDueDateProgress, name='update-due-progress'),
+    path(r'edit/npr-due-date/<pk>', views.updateNPRDueDateProgress, name='update-npr-progress'),
     path(r'<pk>/details/add-due-dates/', views.addCriticalDueView, name='add-due'),
     path(r'<pk>/transfer-issue/', views.transferIssueView, name='transfer-issue'),
     path(r'<pk>/withdraw-issue/', views.withdrawFromCase, name='withdraw-from-case'),

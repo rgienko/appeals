@@ -413,3 +413,16 @@ class UpdateDueDateProgressForm(forms.Form):
     def clean_new_progress(self):
         data = self.cleaned_data['new_progress']
         return data
+
+
+class UpdateNPRDateProgressForm(forms.Form):
+    statuses = [
+        ('Not Filed', 'Not Filed'),
+        ('Not Started', 'Not Started'),
+        ('Completed', 'Completed')
+    ]
+    new_status = forms.ChoiceField(label='Update Status:', choices=statuses)
+
+    def clean_new_status(self):
+        data = self.cleaned_data['new_status']
+        return data

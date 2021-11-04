@@ -425,6 +425,12 @@ class NPRDueDatesMaster(models.Model):
     providerID = models.ForeignKey('TblProviderNameMaster', on_delete=models.CASCADE, blank=True, null=True)
     nprFY = models.IntegerField()
     nprDate = models.DateField()
+    statuses = [
+        ('Not Filed', 'Not Filed'),
+        ('Not Started', 'Not Started'),
+        ('Completed', 'Completed')
+    ]
+    status = models.CharField(max_length=20, choices=statuses, default= 'Not Started', blank=True, null=True)
 
     def get_prov_name(self):
         return self.providerID.providerName

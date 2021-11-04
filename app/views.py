@@ -834,6 +834,28 @@ def updateDueDateProgress(request, pk):
     return render(request, 'create/due_date_edit.html', context)
 
 
+def updateNPRDueDateProgress(request, pk):
+    context = initialize_context(request)
+    NPRDate_obj = get_object_or_404(NPRDueDatesMaster, pk=pk)
+    provNameMasterObj = TblProviderNameMaster.objects.filter(providerID=NPRDate_obj.providerID)
+
+    if request.method == 'POST':
+        form = UpdateNPRDateProgressForm(request.POST)
+
+        if form.is_valid():
+            NPRDate_obj.status = request.POST.get('new_status')
+            NPRDate_obj.save()
+
+            return redirect('main')
+    else:
+        form = UpdateNPRDateProgressForm()
+
+    context['NPRDate_obj'] = NPRDate_obj
+    context['form'] = form
+    context['provNameMasterObj'] = provNameMasterObj
+    return render(request, 'create/npr_date_edit.html', context)
+
+
 def providerAppealDetails(request):
     context = initialize_context(request)
     provMaster_list = TblProviderMaster.objects.all()
@@ -1106,8 +1128,8 @@ def createFormG(request, pk):
 
     # Assemble rows for Form G
     caseProviders = TblProviderMaster.objects.filter(caseNumber=caseNum).filter(provMasterIsActive='True').order_by(
-                                                                                'provMasterTransferDate',
-                                                                                'providerID')
+        'provMasterTransferDate',
+        'providerID')
     global groupTotalImpact
     groupImpact = caseProviders.aggregate(Sum('provMasterImpact'))
     groupTotalImpact = "Total Amount in Controversy for All Providers: ${0:,}".format(
