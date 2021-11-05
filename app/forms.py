@@ -168,9 +168,9 @@ class FIMasterCreateForm(forms.ModelForm):
 
         widgets = {
             'fiName': forms.TextInput(attrs={'size': 50}),
-            'fiTitle':  forms.TextInput(attrs={'size': 50}),
-            'fiEmail':  forms.TextInput(attrs={'size': 50}),
-            'fiAppealsEmail':  forms.TextInput(attrs={'size': 50})
+            'fiTitle': forms.TextInput(attrs={'size': 50}),
+            'fiEmail': forms.TextInput(attrs={'size': 50}),
+            'fiAppealsEmail': forms.TextInput(attrs={'size': 50})
         }
 
 
@@ -339,14 +339,16 @@ class NPRDueDatesMasterCreateForm(forms.ModelForm):
             'parentID',
             'providerID',
             'nprFY',
-            'nprDate'
+            'nprDate',
+            'status',
         ]
 
         labels = {
             'parentID': _('Parent:'),
             'providerID': _('Provider #:'),
             'nprFY': _('Fiscal Year:'),
-            'nprDate': _('NPR Date:')
+            'nprDate': _('NPR Date:'),
+            'status': _('Status:')
         }
 
 

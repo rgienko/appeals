@@ -62,6 +62,8 @@ def store_user(request, user):
         request.session['user'] = {
             'is_authenticated': True,
             'name': user['displayName'],
+            'firstName': user['givenName'],
+            'lastName': user['surname'],
             'email': user['mail'] if (user['mail'] != None) else user['userPrincipalName'],
             'timeZone': user['mailboxSettings']['timeZone']
         }

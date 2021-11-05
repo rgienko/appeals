@@ -13,7 +13,7 @@ def get_user(token):
             'Authorization': 'Bearer {0}'.format(token)
         },
         params={
-            '$select': 'displayName,mail, mailboxSettings, userPrincipalName'
+            '$select': 'displayName, givenName, surname, mail, mailboxSettings, userPrincipalName'
         })
     return user.json()
 

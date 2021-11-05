@@ -1,7 +1,7 @@
 app_id: "7e790527-9721-4fbc-8c99-2c9754449464"
 app_secret: "KskR_A-uB_6Gz~.Q4nqp.h0_SB2M9Il2Eq"
-redirect: "https://myappeals.azurewebsites.net/callback"
-# redirect: "http://localhost:8000/callback"
+# redirect: "https://myappeals.azurewebsites.net/callback"
+redirect: "http://localhost:8000/callback"
 scopes:
   - user.read
   - mailboxsettings.read
