@@ -20,9 +20,23 @@
     display: flex;
     width: 100%;
     align-items: stretch;
+    overflow-x:hidden;
 }
 
 #sidebar {
+    min-width: 100px;
+    max-width: 100px;
+    min-height: 100vh;
+    background: #404552;
+    text-align: center;
+    color: #fff;
+    transition: all 0.3s;
+    position: fixed;
+    top:0;
+    z-index:1
+}
+
+#sidebar.active {
     min-width: 250px;
     max-width: 250px;
     min-height: 100vh;
@@ -31,38 +45,42 @@
     transition: all 0.3s;
 }
 
-#sidebar.active {
-    min-width: 100px;
-    max-width: 100px;
-    text-align: center;
-}
-
 .submenu li a {
     font-size:10pt;
 }
 
 /* Toggling the sidebar header content, hide the big heading [h3] and showing the small heading [strong] and vice versa*/
-#sidebar .sidebar-header strong {
+#sidebar.active .sidebar-header strong {
     display: none;
 }
 #sidebar.active .sidebar-header h3 {
-    display: none;
-}
-#sidebar.active .sidebar-header strong {
     display: block;
 }
 
-#sidebar ul li a {
-    text-align: left;
+#sidebar .sidebar-header h3 {
+    display: none;
+}
+
+#sidebar .sidebar-header strong {
+    display: block;
 }
 
 #sidebar.active ul li a {
+    text-align: left;
+}
+
+#sidebar ul li a {
     padding: 20px 10px;
     text-align: center;
     font-size: 0.85em;
 }
 
-#sidebar.active ul li a i {
+#sidebar.active ul li a {
+    padding: 20px 10px;
+    font-size: 1em;
+}
+
+#sidebar ul li a i {
     margin-right:  0;
     display: block;
     font-size: 1.8em;
@@ -70,7 +88,7 @@
 }
 
 /* Same dropdown links padding*/
-#sidebar.active ul ul a {
+#sidebar ul ul a {
     padding: 10px !important;
 }
 
