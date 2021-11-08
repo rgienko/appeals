@@ -1,0 +1,82 @@
+{% extends "main/layout.html" %}
+
+{% block content %}
+{% load humanize %}
+<div class="container-fluid w-75 mt-5">
+    <h5 class="font-weight-bold text-uppercase pl-1 pt-1">Update NPR Due Date</h5>
+    <hr class="mt-0"/>
+
+    <table class="table table table-hover table-bordered">
+        <thead class="thead-light text-center">
+            <tr>
+                <th scope="col" class="text-center">Provider #</th>
+                <th scope="col" class="text-center">Name</th>
+                <th scope="col" class="text-center">Fiscal Year</th>
+                <th scope="col" class="text-center">NPR Date</th>
+                <th scope="col" class="text-center">Due Date</th>
+                <th scope="col" class="text-center">Status</th>
+            </tr>
+        </thead>
+            <tr>
+            <td class="text-center"><a href="">{{ NPRDate_obj.providerID }}</a></td>
+            <td class="text-center">{{ NPRDate_obj.get_prov_name|title }}</td>
+            <td class="text-center">{{ NPRDate_obj.nprFY }}</td>
+            <td class="text-center">{{ NPRDate_obj.nprDate|date:'m/d/Y' }}</td>
+            <td class="text-center">{{ NPRDate_obj.calc_deadline|date:'m/d/Y' }}</td>
+            <td class="text-center">{{ NPRDate_obj.status}}</td>
+        </tr>
+    </table>
+
+    <hr class="mt-0"/>
+
+    <div class="row">
+        <div class="col-4">
+            <div class="card">
+                <h5 class="font-weight-bold px-2 pt-1">Update Status Form</h5>
+                <form class="" action="" method="post">
+                    {% csrf_token %}
+                    {% for hidden_field in form.hidden_fields %}
+                        {{ hidden_field }}
+                    {% endfor %}
+
+                    {% for field in form.visible_fields %}
+                            <ul class="list-group border-0 p-0">
+                                <li class="list-group-item p-0 border-0">
+                                    <ul class="list-group list-group-horizontal border-0 p-0 mt-1">
+                                        <li class="list-group-item p-0 px-2 border-0">{{ field.label_tag }}</li>
+                                        <li class="list-group-item p-0 px-2 border-0">{{ field }}</li>
+                                    </ul>
+                                </li>
+                            </ul>
+                    {% endfor %}
+
+                    <input type="submit" name="update_due_date_button" value="Update Status" class="btn btn-primary mt-3 m-2"/>
+                </form>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card">
+                <h5 class="font-weight-bold px-2 pt-1">Provider Info.</h5>
+                <table class="table table-sm table-hover table-bordered">
+                    <thead class="thead-light text-center">
+                        <tr>
+                            <th scope="col">Case #</th>
+                            <th scope="col">Provider #</th>
+                            <th scope="col">Issue</th>
+                        </tr>
+                    </thead>
+                    {% for issue in provMasterObj %}
+                        <tr>
+                            <td class="text-center" style="width: 80px">{{ issue.caseNumber }}</td>
+                            <td class="text-center" style="width: 95px">{{ issue.providerID }}</td>
+                            <td>{{ issue.get_issue_name }}</td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}
