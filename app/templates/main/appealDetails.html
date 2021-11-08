@@ -1,8 +1,8 @@
-{% extends 'main/layoutV2.html' %}
+{% extends 'main/layout.html' %}
 
 {% block content %}
     {% load humanize %}
-    <div class="container-fluid border p-lg-4">
+    <div class="container-fluid">
         <div class="row d-flex justify-content-center">
             <div class="col-xl-6 col-lg-12 col-md-12 col-sm-12 mt-4">
                 <div class="p-2 shadow rounded">
@@ -160,7 +160,7 @@
         </div>
 
         <div class="row mt-4">
-            <div class="col-lg-12 col-md-10 col-sm-12">
+            <div class="col-lg-12 col-md-12 col-sm-12">
                 <h5 class="font-weight-bold px-1">
                     {% if caseObj.appealStructure == 'Individual' %}
                         Case Issues <a class="" data-toggle="tooltip" data-placement="bottom" title="Add Issue" href="{% url 'add-issue' caseObj.caseNumber %}">

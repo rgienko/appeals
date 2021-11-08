@@ -239,7 +239,7 @@ class AppealMasterCreateForm(forms.ModelForm):
             'appealName': forms.TextInput(attrs={'size': 65}),
             'appealCreateDate': forms.DateInput(),
             'appealAckDate': forms.DateInput(),
-            'appealNotes': forms.Textarea(attrs={'cols': 65, 'rows': 5}),
+            'appealNotes': forms.Textarea(attrs={'cols': 65, 'rows': 2}),
 
         }
 
