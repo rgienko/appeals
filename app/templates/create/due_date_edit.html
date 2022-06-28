@@ -2,7 +2,7 @@
 
 {% block content %}
 {% load humanize %}
-<div class="container-fluid w-75 mt-5">
+<div class="container-fluid mt-5">
     <h5 class="font-weight-bold text-uppercase pl-1 pt-1">Update Critical Due Date</h5>
     <hr class="mt-0"/>
 
@@ -46,14 +46,13 @@
                     {% for field in form.visible_fields %}
                             <ul class="list-group border-0 p-0">
                                 <li class="list-group-item p-0 border-0">
-                                    <ul class="list-group list-group-horizontal border-0 p-0 mt-1">
+                                    <ul class="list-group border-0 p-0 mt-1">
                                         <li class="list-group-item p-0 px-2 border-0">{{ field.label_tag }}</li>
                                         <li class="list-group-item p-0 px-2 border-0">{{ field }}</li>
                                     </ul>
                                 </li>
                             </ul>
                     {% endfor %}
-
                     <input type="submit" name="update_due_date_button" value="Update Progress" class="btn btn-primary mt-3 m-2"/>
                 </form>
             </div>

@@ -2,7 +2,7 @@
 
 {% block content %}
 {% load humanize %}
-<div class="container-fluid w-75 mt-5">
+<div class="container-fluid mt-5">
     <h4 class="font-weight-bold pl-1 pt-1">Transfer Issue</h4>
     <hr class="mt-0"/>
 
@@ -21,8 +21,8 @@
             </tr>
         </thead>
             <tr>
-                <td class="text-center" style="width: 100px">{{ issue_trans.providerID }}</td>
-                <td class="text-center" style="width: 75px">{{ caseFiscalYear }}</td>
+                <td class="text-center" style="width: 85px">{{ issue_trans.providerID }}</td>
+                <td class="text-center" style="width: 65px">{{ caseFiscalYear }}</td>
                 <td>{{ issue_trans.issueID}}</td>
                 <td>{{ issue_trans.provMasterAuditAdjs }}</td>
                 <td class="px-2 text-center">

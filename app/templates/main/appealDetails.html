@@ -9,7 +9,7 @@
                     <h5 class="fw-bolder pl-1">
                         Case Details - CN: {{ caseObj.caseNumber }} <a class="" title="Edit Case" href=""><i class="fas fa-pen-square"></i></a>
                     </h5>
-                    <dl class="row my-0">
+                    <dl class="row my-0" style="font-size:10pt">
                         <dt class="col-sm-3">Representative:</dt>
                         <dd class="col-sm-9"> {{ caseObj.staffID }}</dd>
 
@@ -45,7 +45,7 @@
                 </div>
             </div>
 
-            <div class="col-xl-6 col-lg-12 col-md-12 col-sm-12 mt-4">
+            <div class="col-xl-6 col-lg-12 col-md-12 col-sm-12 mt-4" style="font-size:10pt">
                 <div class="shadow rounded">
                     <ul class="nav nav-tabs" id="myTab" role="tablist">
                         <li class="nav-item">
@@ -138,7 +138,7 @@
                                                 </tr>
                                             {% endfor %}
                                     </table>
-                                    <a class="btn btn-primary" href="{% url 'add-due' caseObj.caseNumber %}"> Review / Add Critical Due Dates</a>
+                                    <a class="btn btn-primary btn-sm" href="{% url 'add-due' caseObj.caseNumber %}"> Review / Add Critical Due Dates</a>
                                 </div>
                             </div>
                         </div>
@@ -172,7 +172,7 @@
 
                 <div class="card shadow table-responsive">
                     <table class="table table-striped table-sm table-hover table-bordered">
-                        <thead class="text-center">
+                        <thead class="text-center" style="font-size:10pt">
                             <tr>
                                 <th scope="col">Provider</th>
                                 <th scope="col">Year</th>
@@ -189,7 +189,7 @@
                             </tr>
                         </thead>
                             {% for issue in caseIssues %}
-                                <tr class="{% if issue.provMasterIsActive is False %} fst-italic text-muted {% else %}{% endif %}">
+                                <tr class="{% if issue.provMasterIsActive is False %} fst-italic text-muted {% else %}{% endif %}" style="font-size:10pt">
                                     <td class="text-center" style="width:85px;">{{ issue.providerID }}</td>
                                     <td class="text-center" style="width:65px;">{{ issue.provMasterFiscalYear|date:'Y' }}</td>
                                     <td class="text-center" style="width:100px;">{{ issue.provMasterDeterminationDate|date:'m/d/Y' }}</td>
@@ -215,7 +215,7 @@
                                     {% else %}
                                         <td class="text-center px-2"></td>
                                     {% endif %}
-                                    <td class="text-left px-2" style="width:100px">$ {{ issue.provMasterImpact|intcomma }}</td>
+                                    <td class="text-left px-2" style="width:100px">{{ issue.provMasterImpact|intcomma }}</td>
                                     {% if issue.provMasterToCase is None or issue.provMasterToCase == 'NULL' %}
                                         <td style="width:85px;"></td>
                                     {% else %}

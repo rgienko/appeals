@@ -37,17 +37,27 @@
     -->
 
     <div class="container-fluid">
-          <div class="row min-vh-100">
-                <nav id="sidebarMenu" class="my-bg-dark col-md-2 d-md-block sidebar collapse" style="background-color: #404552">
+          <div class="row min-vh-100 border border-dark">
+                <nav id="sidebarMenu" class="my-bg-dark col-xl-2 col-lg-1 col-md-2 col-sm-1 col-1 d-md-block sidebar collapse" style="background-color: #404552">
                     <div class="col-sm border-bottom">
-                        <h4 class="navbar-brand text-light px-3 pt-3">
-                            {% if user.is_authenticated %}
-                                Welcome, {{ user.name }} <br>
-                                <span class="text-muted fs-6">{{ user.email }} <br>
-                                    <a class="text-light text-decoration-none" href="{% url 'signout' %}">Sign Out</a></span>
-                            {% else %}
-                            {% endif %}
-                        </h4>
+                         <div class="dropdown border-bottom">
+                            <a href="#" class="d-flex align-items-center justify-content-center p-3 link-light text-decoration-none dropdown-toggle" id="dropdownUser3" data-bs-toggle="dropdown" aria-expanded="false">
+                                {% if user.is_authenticated %}
+                                    <span class="fs-4">{{ user.firstName.0 }}{{ user.lastName.0 }}</span>
+                                {% else %}
+                                {% endif %}
+                            </a>
+                            <ul class="dropdown-menu text-small shadow" aria-labelledby="dropdownUser3">
+                                <li><a class="dropdown-item" href="{% url 'signout' %}">Sign out</a></li>
+                                <!--
+                                <li><a class="dropdown-item" href="#">New project...</a></li>
+                                <li><a class="dropdown-item" href="#">Settings</a></li>
+                                <li><a class="dropdown-item" href="#">Profile</a></li>
+
+                                <li><hr class="dropdown-divider"></li>
+                                -->
+                            </ul>
+                        </div>
                     </div>
                     <div class="sidebar-sticky mt-4">
                         <div class="search-bar">
@@ -157,12 +167,11 @@
 
                   </div>
                 </nav>
-                <main role="main" class="col-md-10 ml-sm-auto col-lg-10 px-md-4 bg-light">
+                <main role="main" class="col-xl-10 col-lg-11 col-md-10 col-md-10 col-11 ml-sm-auto px-md-4 bg-light">
                     {% block content %}
 
 
                     {% endblock %}
-
                     <div class="modal fade mx-5" id="add_npr_due_modal" tabindex="-1" role="dialog">
                         <div class="modal-dialog modal-lg" role="document">
                             <div class="modal-content">
