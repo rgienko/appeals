@@ -2,11 +2,11 @@
 
 {% block content %}
 
-    <div class="container d-flex justify-content-center">
+    <div class="container d-flex justify-content-center h-100">
         <div class="row">
-            <div class="col-lg-12 border shadow mt-4">
-                <h4 class="mt-4">{{ formName }}</h4>
-                    <form method="post">
+            <div class="col-lg-12 border bg-white p-5 align-self-center">
+                <h4 class="">{{ formName }}</h4>
+                    <form method="post" class="">
                         {% csrf_token %}
                         {% for hidden_field in form.hidden_fields %}
                             {{ hidden_field }}
@@ -18,7 +18,7 @@
 
                         {% endfor %}
                         <div class="d-grid gap-2 d-md-flex justify-content-md-end my-2">
-                            <input type="submit" class="btn btn-primary w-25" value="Submit" />
+                            <input type="submit" class="btn btn-primary w-50" value="Submit" />
                         </div>
                     </form>
 

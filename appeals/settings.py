@@ -27,7 +27,7 @@ SECRET_KEY = os.environ.get(
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['myappeals.herokuapp.com','localhost', 'myappeals.azurewebsites.net', '127.0.0.1:8000', '127.0.0.1',
+ALLOWED_HOSTS = ['myappeals.herokuapp.com', 'localhost', 'myappeals.azurewebsites.net', '127.0.0.1:8000', '127.0.0.1',
                  '65.119.155.98']
 
 
@@ -83,7 +83,7 @@ WSGI_APPLICATION = 'appeals.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'sql_server.pyodbc',
-        'NAME': 'appealMasterv2',
+        'NAME': 'appealMasterv4',
         'USER': 'randall.gienko',
         'PASSWORD': 'R@nd@ll22',
         'HOST': 'srgsqlserver.database.windows.net',

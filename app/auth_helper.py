@@ -79,7 +79,7 @@ def get_token(request):
     if accounts:
         result = auth_app.acquire_token_silent(
             settings['scopes'],
-            account=accounts[0],)
+            account=accounts[0], )
 
         save_cache(request, cache)
 

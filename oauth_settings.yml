@@ -6,5 +6,6 @@ scopes:
   - user.read
   - mailboxsettings.read
   - calendars.readwrite
+# authority: "https://login.microsoftonline.com/common"
 authority: "https://login.microsoftonline.com/679b330a-1ac4-4b97-9edd-58e465d3dadf"
 token_url: 'https://login.microsoftonline.com/679b330a-1ac4-4b97-9edd-58e465d3dadf/oauth2/v2.0/token'
