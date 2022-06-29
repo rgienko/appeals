@@ -1,7 +1,9 @@
 from django.urls import path
 from django.conf import settings
 from django.conf.urls.static import static
+from django_filters.views import FilterView
 from app import views
+from app.models import TblProviderMaster
 
 urlpatterns = [
     # path(r'', views.login, name='login'),
@@ -45,6 +47,7 @@ urlpatterns = [
     path(r'prrb-master/<pk>/edit', views.editPRRB, name='edit-prrb'),
     path(r'^search/$', views.searchCriticalDueDates, name='due-master'),
     path(r'search-two', views.searchCriticalDueDatesTwo, name='due-master-two'),
-    path(r'provmaster-filter', views.providerAppealDetails, name='prov-appeal-details')
+    path(r'provmaster-filter', views.providerAppealDetails, name='prov-appeal-details'),
+    path(r'provmaster-filter', FilterView.as_view(model=TblProviderMaster), name='prov-appeal-details')
 
 ]

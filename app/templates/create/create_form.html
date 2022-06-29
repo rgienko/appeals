@@ -2,26 +2,26 @@
 
 {% block content %}
 
-    <div class="container d-flex justify-content-center h-100">
-        <div class="row">
-            <div class="col-lg-12 border bg-white p-5 align-self-center">
+    <div class="container-fluid">
+        <div class="row d-flex justify-content-center" style="margin-top:25%">
+            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 py-4 border bg-white">
                 <h4 class="">{{ formName }}</h4>
+                <hr class="mt-0"/>
+                <div class="card border-0">
                     <form method="post" class="">
                         {% csrf_token %}
                         {% for hidden_field in form.hidden_fields %}
                             {{ hidden_field }}
                         {% endfor %}
-
                         {% for field in form.visible_fields %}
                             <label class="form-control border-0">{{ field.label_tag }}</label>
                             <span class="form-control border-0">{{ field }}</span>
-
                         {% endfor %}
-                        <div class="d-grid gap-2 d-md-flex justify-content-md-end my-2">
-                            <input type="submit" class="btn btn-primary w-50" value="Submit" />
-                        </div>
-                    </form>
+                        <hr class="mt-3"/>
+                        <input type="submit" class="btn btn-primary my-1 mx-2 px-5" value="Submit" />
 
+                    </form>
+                </div>
             </div>
         </div>
     </div>

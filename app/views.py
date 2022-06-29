@@ -717,7 +717,7 @@ def addCriticalDueView(request, pk):
     else:
         form = CriticalDatesMasterCreateForm(initial={'caseNumber': cur_case})
 
-    context['formName'] = 'Add Critical Due Date'
+    context['formName'] = 'Add Critical Due Date Form'
     context['form'] = form
     context['case_due_dates'] = case_due_dates
 

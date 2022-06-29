@@ -3,7 +3,7 @@ from django.core.exceptions import ValidationError
 from django.utils.translation import ugettext_lazy as _
 
 from .models import *
-from datetime import datetime
+from datetime import datetime, date, timedelta
 import datetime
 
 
@@ -388,8 +388,9 @@ class AcknowledgeCaseForm(forms.Form):
         data = self.cleaned_data['ack_date']
 
         # Check if date is in the past
-        if data < datetime.date.today():
-            raise ValidationError(_('Invalid Date - Date is in the past'))
+
+        if data < datetime.date.today() - timedelta(5):
+            raise ValidationError(_('Invalid Date - Date is to far in the past'))
 
         return data
 
