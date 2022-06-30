@@ -4,117 +4,90 @@
     {% load humanize %}
     <div class="container-fluid">
         <div class="row d-flex justify-content-center">
-            <div class="col-xl-6 col-lg-12 col-md-12 col-sm-12 mt-4">
-                <div class="p-2 shadow rounded">
-                    <h5 class="fw-bolder pl-1">
+            <div class="col-xl-6 col-lg-12 col-md-12 col-sm-12 mt-4" style="min-height:250px;">
+                <div class="card">
+                    <div class="card-header text-white fw-normal fs-5" style="background-color: #5A6172 ">
                         Case Details - CN: {{ caseObj.caseNumber }} <a class="" title="Edit Case" href=""><i class="fas fa-pen-square"></i></a>
-                    </h5>
-                    <dl class="row my-0" style="font-size:10pt">
-                        <dt class="col-sm-3">Representative:</dt>
-                        <dd class="col-sm-9"> {{ caseObj.staffID }}</dd>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-lg-3 col-3 p-0">
+                                <ul class="list-group list-group-flush">
+                                    <li class="list-group-item fw-bolder">Representative:</li>
+                                    <li class="list-group-item fw-bolder">Intermediary:</li>
+                                    <li class="list-group-item fw-bolder">PRRB Contact:</li>
+                                    <li class="list-group-item fw-bolder">Case Status:</li>
+                                    <li class="list-group-item fw-bolder">Request Date: <br> Acknowledged:</li>
+                                    <li class="list-group-item fw-bolder">Case Name:</li>
+                                </ul>
+                            </div>
 
-                        <dt class="col-sm-3">Intermediary:
-                        <dd class="col-sm-9">{{ caseObj.fiID }}</dd>
+                            <div class="col-lg-9 col-9 p-0">
+                                <ul class="list-group list-group-flush">
+                                    <li class="list-group-item">{{ caseObj.staffID }}</li>
+                                    <li class="list-group-item">{{ caseObj.fiID }}</li>
+                                    <li class="list-group-item">{{ caseObj.prrbContactID }}</li>
+                                    <li class="list-group-item">{{ caseObj.statusID }}
+                                        <a type="button" class=" w-25" data-bs-toggle="modal" data-bs-target="#case_status_modal" href="">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="20" fill="currentColor" class="bi bi-pencil-square" viewBox="0 2 16 16">
+                                                    <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
+                                                    <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"/>
+                                            </svg>
+                                        </a>
+                                    </li>
+                                    <li class="list-group-item">
+                                        {{ caseObj.appealCreateDate|date:'m/d/Y' }}
+                                        <br>
+                                        {% if caseObj.appealAckDate is None %}
+                                            <a data-bs-toggle="modal" data-bs-target="#ack_modal" href="" class="">Acknowledge</a>
+                                        {% else %}
+                                            {{ caseObj.appealCreateDate|date:'m/d/Y' }}
+                                        {% endif %}
+                                    </li>
+                                    <li class="list-group-item">
+                                        {% if caseObj.appealStructure == 'Individual'%}
+                                            {{ provInfo.providerID }} - {{ provInfo.get_prov_name|title }} ({{ provInfo.provMasterFiscalYear|date:'m/d/Y' }})
+                                        {% else %}
+                                            {{ caseObj.appealName }}
+                                        {% endif %}
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
 
-                        <dt class="col-sm-3">PRRB Rep:</dt>
-                        <dd class="col-sm-9"> {{ caseObj.prrbContactID }}</dd>
-
-                        <dt class="col-sm-3">Case Status:</dt>
-                        <dd class="col-sm-9">{{ caseObj.statusID }}</dd>
-
-                        <dt class="col-sm-3">Case Name:</dt>
-                        {% if caseObj.appealStructure == 'Individual'%}
-                            <dd class="col-sm-9">{{ provInfo.providerID }} - {{ provInfo.get_prov_name|title }} ({{ provInfo.provMasterFiscalYear|date:'m/d/Y' }})</dd>
-                        {% else %}
-                            <dd class="col-sm-9">{{ caseObj.appealName }}</dd>
-                        {% endif %}
-
-                        <dt class="col-sm-3">Case Structure:</dt>
-                        <dd class="col-sm-9">{{ caseObj.appealStructure }}</dd>
-
-                        <dt class="col-sm-3">Request Date:</dt>
-                        <dd class="col-sm-9">{{ caseObj.appealCreateDate|date:'m/d/Y' }}</dd>
-
-                        <dt class="col-sm-3">Acknowledged:</dt>
-                        {% if caseObj.appealAckDate is None %}
-                            <dd class="col-sm-9"><a data-bs-toggle="modal" data-bs-target="#ack_modal" href="" class="">Acknowledge</a></dd>
-                        {% else %}
-                            <dd class="col-sm-9">{{ caseObj.appealAckDate|date:'m/d/Y' }}</dd>
-                        {% endif %}
-                    </dl>
                 </div>
             </div>
 
-            <div class="col-xl-6 col-lg-12 col-md-12 col-sm-12 mt-4" style="font-size:10pt">
-                <div class="shadow rounded">
-                    <ul class="nav nav-tabs" id="myTab" role="tablist">
+            <div class="col-xl-6 col-lg-12 col-md-12 col-sm-12 mt-4">
+                <div class="card">
+                    <ul class="nav nav-tabs p-0 m-0" id="myTab" role="tablist" style="background-color: #5A6172">
                         <li class="nav-item">
-                            <a class="nav-link active text-dark" id="due-tab" data-bs-toggle="tab" href="#due" role="tab" aria-controls="due" aria-selected="false">
+                            <a class="nav-link active" id="due-tab" data-bs-toggle="tab" href="#due" role="tab" aria-controls="due" aria-selected="false">
                                 <h6 class="font-weight-bold pl-1">Due Dates</h6></a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" id="actions-tab" data-bs-toggle="tab" href="#actions" role="tab" aria-controls="provider" aria-selected="true">
+                            <a class="nav-link" id="actions-tab" data-bs-toggle="tab" href="#actions" role="tab" aria-controls="provider" aria-selected="true">
                                 <h6 class="font-weight-bold pl-1">Actions</h6></a>
                         </li>
 
                         <li class="nav-item">
-                            <a class="nav-link text-dark" id="provider-tab" data-bs-toggle="tab" href="#provider" role="tab" aria-controls="provider" aria-selected="true">
+                            <a class="nav-link" id="provider-tab" data-bs-toggle="tab" href="#provider" role="tab" aria-controls="provider" aria-selected="true">
                                 <h6 class="font-weight-bold pl-1">Provider Info</h6></a>
                         </li>
 
                         <li class="nav-item">
-                            <a class="nav-link text-dark" id="notes-tab" data-bs-toggle="tab" href="#notes" role="tab" aria-controls="notes" aria-selected="false">
+                            <a class="nav-link" id="notes-tab" data-bs-toggle="tab" href="#notes" role="tab" aria-controls="notes" aria-selected="false">
                                 <h6 class="font-weight-bold pl-1">Case Notes</h6></a>
                         </li>
                     </ul>
 
                     <div class="tab-content" id="myTabContent">
-                        <div class="tab-pane fade" id="actions" role="tabpanel" aria-labelledby="actions-tab">
-                            <div class="mt-3 p-2"> <!--Provider Information-->
-                                <div class="card overflow-auto" style="min-height:220px; max-height:220px;">
-                                    <a type="button" class="m-2 btn btn-primary w-25" data-bs-toggle="modal" data-bs-target="#schedule_g_modal" href="">Schedule G</a>
-                                    <a type="button" class="m-2 btn btn-primary w-25" data-bs-toggle="modal" data-bs-target="#case_status_modal" href="">Update Case Status</a>
-                                </div>
-                            </div>
-                        </div>
 
-                        <div class="tab-pane fade" id="provider" role="tabpanel" aria-labelledby="provider-tab">
-                            <div class="mt-3 p-2"> <!--Provider Information-->
-                                <div class="card overflow-auto" style="min-height:220px; max-height:220px;">
-                                    <table class="table table-bordered table-sm">
-                                        <thead class="thead-light">
-                                            <tr>
-                                                <th scope="col" class="text-center">Provider #</th>
-                                                <th scope="col" class="text-center">Provider Name</th>
-                                                <th scope="col" class="text-center">Parent</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            {% if caseObj.appealStructure == 'Individual'%}
-                                                <tr class="p-0">
-                                                    <td class="text-center" style="width:100px;">{{ provInfo.providerID }}</td>
-                                                    <td class="p-1">{{ provInfo.get_prov_name|title }}</td>
-                                                    <td class="text-center pt-1">{{ provInfo.get_parent|title }}</td>
-                                                </tr>
-                                            {% else %}
-                                                {% for provider in provInfo %}
-                                                    <tr class="p-0">
-                                                        <td class="text-center" style="width:100px;">{{ provider.providerID }}</td>
-                                                        <td class="p-1">{{ provider.get_prov_name|title }}</td>
-                                                        <td class="text-center pt-1">{{ provider.get_parent|title }}</td>
-                                                    </tr>
-                                                {% endfor %}
-                                            {% endif %}
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="tab-pane fade show active" id="due" role="tabpanel" aria-labelledby="due-tab"> <!-- Critical Due Dates-->
-                            <div class=" mt-3 p-2" style="">
-                                <div class="card overflow-auto" style="min-height:220px; max-height:220px;">
-                                    <table class="table table-bordered table-sm table-hover">
+                        <div class="tab-pane fade show active overflow-auto" id="due" role="tabpanel" aria-labelledby="due-tab" style="min-height:250px; max-height:250px;">
+                            <div class="mt-2 p-2 overflow-auto" style="">
+                                <div class="card bg-transparent border-0">
+                                    <table class="table table-bordered table-hover table-sm bg-white">
                                         <thead class="thead-light">
                                             <tr>
                                                 <th class="text-center" scope="col">Action</th>
@@ -138,22 +111,66 @@
                                                 </tr>
                                             {% endfor %}
                                     </table>
-                                    <a class="btn btn-primary btn-sm" href="{% url 'add-due' caseObj.caseNumber %}"> Review / Add Critical Due Dates</a>
+                                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                                        <a class="btn btn-primary" href="{% url 'add-due' caseObj.caseNumber %}"> Review / Add Critical Due Dates</a>
+                                    </div>
                                 </div>
                             </div>
                         </div>
 
-                        <div class="tab-pane fade" id="notes" role="tabpanel" aria-labelledby="notes-tab"> <!-- Critical Due Dates-->
-                            <div class=" mt-3 p-2" style="">
-                                <div class="card overflow-auto" style="min-height:220px; max-height:220px;">
+                        <div class="tab-pane fade overflow-auto" id="actions" role="tabpanel" aria-labelledby="actions-tab" style="min-height:250px; max-height:250px;">
+                            <div class="card overflow-auto mt-2 p-2 border-0">
+                                <a type="button" class="m-2 btn btn-primary w-25" data-bs-toggle="modal" data-bs-target="#schedule_g_modal" href="">Schedule G</a>
+                                <a type="button" class="m-2 btn btn-primary w-25" data-bs-toggle="modal" data-bs-target="#case_status_modal" href="">Update Case Status</a>
+                            </div>
+
+                        </div>
+
+                        <div class="tab-pane fade overflow-auto" id="provider" role="tabpanel" aria-labelledby="provider-tab" style="min-height:250px; max-height:250px;">
+                            <div class="card overflow-auto mt-2 p-2 border-0">
+                                <table class="table table-bordered table-sm">
+                                    <thead class="thead-light">
+                                        <tr>
+                                            <th scope="col" class="text-center">Provider #</th>
+                                            <th scope="col" class="text-center">Provider Name</th>
+                                            <th scope="col" class="text-center">Parent</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% if caseObj.appealStructure == 'Individual'%}
+                                            <tr class="p-0">
+                                                <td class="text-center" style="width:100px;">{{ provInfo.providerID }}</td>
+                                                <td class="p-1">{{ provInfo.get_prov_name|title }}</td>
+                                                <td class="text-center pt-1">{{ provInfo.get_parent|title }}</td>
+                                            </tr>
+                                        {% else %}
+                                            {% for provider in provInfo %}
+                                                <tr class="p-0">
+                                                    <td class="text-center" style="width:100px;">{{ provider.providerID }}</td>
+                                                    <td class="p-1">{{ provider.get_prov_name|title }}</td>
+                                                    <td class="text-center pt-1">{{ provider.get_parent|title }}</td>
+                                                </tr>
+                                            {% endfor %}
+                                        {% endif %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <div class="tab-pane fade overflow-auto" id="notes" role="tabpanel" aria-labelledby="notes-tab" style="min-height:250px; max-height:250px;">
+                            <div class="mt-2 p-2 overflow-auto" style="">
+                                <div class="card overflow-auto border-0 bg-transparent">
                                     <form method="POST">
                                         {% csrf_token %}
-                                        <textarea class="form-control bg-white text-dark" id="save_notes_button" name="save_notes_button" style="min-height: 180px;max-height: 180px">{{ caseObj.appealNotes }}</textarea>
-                                        <input type="submit" class="btn btn-primary w-100" value="Save" />
+                                        <textarea class="form-control bg-white text-dark" id="save_notes_button" name="save_notes_button" style="min-height: 175px;max-height: 175px">{{ caseObj.appealNotes }}</textarea>
+                                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                                            <input type="submit" class="btn btn-primary mt-2 px-5" value="Save" />
+                                        </div>
                                     </form>
                                 </div>
                             </div>
                         </div>
+
                     </div>
                 </div>
             </div>
@@ -171,8 +188,8 @@
                 </h5>
 
                 <div class="card shadow table-responsive">
-                    <table class="table table-striped table-sm table-hover table-bordered">
-                        <thead class="text-center" style="font-size:10pt">
+                    <table class="table table-striped table-hover table-bordered">
+                        <thead class="text-center text-light fw-light" style="font-size:15px; background-color: #5A6172">
                             <tr>
                                 <th scope="col">Provider</th>
                                 <th scope="col">Year</th>
@@ -189,7 +206,7 @@
                             </tr>
                         </thead>
                             {% for issue in caseIssues %}
-                                <tr class="{% if issue.provMasterIsActive is False %} fst-italic text-muted {% else %}{% endif %}" style="font-size:10pt">
+                                <tr class="{% if issue.provMasterIsActive is False %} fst-italic text-muted {% else %}{% endif %}" style="font-size:14px">
                                     <td class="text-center" style="width:85px;">{{ issue.providerID }}</td>
                                     <td class="text-center" style="width:65px;">{{ issue.provMasterFiscalYear|date:'Y' }}</td>
                                     <td class="text-center" style="width:100px;">{{ issue.provMasterDeterminationDate|date:'m/d/Y' }}</td>
@@ -208,7 +225,7 @@
                                             {% endif %}
                                         {% endif %}
                                     </td>
-                                    <td style="">{{ issue.issueID }}</td>
+                                    <td style="min-width: 200px">{{ issue.issueID }}</td>
                                     <td class="text-center px-2">{{ issue.provMasterAuditAdjs }}</td>
                                     {% if issue.provMasterWasAdded == 1 %}
                                         <td class="text-center px-2"><i class="bi bi-check-square"></i></td>
@@ -217,9 +234,9 @@
                                     {% endif %}
                                     <td class="text-left px-2" style="width:100px">{{ issue.provMasterImpact|intcomma }}</td>
                                     {% if issue.provMasterToCase is None or issue.provMasterToCase == 'NULL' %}
-                                        <td style="width:85px;"></td>
+                                        <td style="min-width:85px;"></td>
                                     {% else %}
-                                        <td class="text-center" style="width:85px;">
+                                        <td class="text-center" style="min-width:85px;">
                                             <a href="{% url 'appeal-details' issue.provMasterToCase %}">
                                                 {{ issue.provMasterToCase }}
                                             </a>
@@ -249,11 +266,11 @@
                                         </td>
                                     {% endif %}
                                     {% if issue.provMasterIsActive is False %}
-                                        <td class="text-center" style="width:150px;">
+                                        <td class="text-center" style="min-width:125px;">
                                             Withdrawn
                                         </td>
                                     {% else %}
-                                        <td class="m-0 p-0 text-center" style="width:150px;">
+                                        <td class="m-0 p-0 text-center" style="min-width:135px;">
                                             <a type="button" class="btn btn-primary" href="{% url 'transfer-issue' issue.provMasterID %}">
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="20" fill="currentColor" class="bi bi-arrow-left-right" viewBox="0 2 16 16">
                                                     <path fill-rule="evenodd" d="M1 11.5a.5.5 0 0 0 .5.5h11.793l-3.147 3.146a.5.5 0 0 0 .708.708l4-4a.5.5 0 0 0 0-.708l-4-4a.5.5 0 0 0-.708.708L13.293 11H1.5a.5.5 0 0 0-.5.5zm14-7a.5.5 0 0 1-.5.5H2.707l3.147 3.146a.5.5 0 1 1-.708.708l-4-4a.5.5 0 0 1 0-.708l4-4a.5.5 0 1 1 .708.708L2.707 4H14.5a.5.5 0 0 1 .5.5z"/>

@@ -524,7 +524,7 @@ def appealDetailsView(request, pk):
     # caseDueDates = TblCriticalDatesMaster.objects.filter(Q(caseNumber=pk, progress='Not Started') |
     #                                                     Q(caseNumber=pk, progress='In Progress')).order_by('dueDate')
 
-    caseDueDates = TblCriticalDatesMaster.objects.filter(caseNumber=pk).order_by('dueDate')
+    caseDueDates = TblCriticalDatesMaster.objects.filter(caseNumber=pk).order_by('-dueDate')
 
     if caseObj.appealStructure == 'Individual':
         provInfo = caseIssues.first()

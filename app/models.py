@@ -435,6 +435,9 @@ class NPRDueDatesMaster(models.Model):
     def get_prov_name(self):
         return self.providerID.providerName
 
+    def get_prov_parent(self):
+        return self.providerID.parentID
+
     def calc_deadline(self):
         due_date = self.nprDate + timedelta(days=180)
         return due_date
@@ -502,6 +505,13 @@ class TblCriticalDatesMaster(models.Model):
         provName = TblProviderNameMaster.objects.get(providerID=provNum)
         provName = provName.providerName
         return '{0} - {1}'.format(provNum, provName)
+
+    def get_fy(self):
+        caseIssues = TblProviderMaster.objects.filter(
+            caseNumber=self.caseNumber)
+        provInfo = caseIssues.first()
+        caseFY = provInfo.provMasterFiscalYear
+        return caseFY
 
 
 class CriticalDatesMaster(models.Model):
