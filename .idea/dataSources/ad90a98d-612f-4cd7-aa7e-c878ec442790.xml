@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dataSource name="AppealsDB">
-  <database-model serializer="dbm" dbms="AZURE" family-id="AZURE" format-version="4.39">
+  <database-model serializer="dbm" dbms="AZURE" family-id="AZURE" format-version="4.40">
     <root id="1">
       <Dbms>AZURE</Dbms>
     </root>
@@ -339,7 +339,6 @@ int</ExtendedProperties>
       <Unique>1</Unique>
     </index>
     <key id="68" parent="25" name="PK__auth_gro__3213E83FEFE5AED9">
-      <ColNames>id</ColNames>
       <CreatedTimestamp>2020-12-23.15:28:06.007</CreatedTimestamp>
       <ModifiedTimestamp>2020-12-23.15:28:06.007</ModifiedTimestamp>
       <NameSurrogate>1</NameSurrogate>
@@ -348,7 +347,6 @@ int</ExtendedProperties>
       <UnderlyingIndexName>PK__auth_gro__3213E83FEFE5AED9</UnderlyingIndexName>
     </key>
     <key id="69" parent="25" name="auth_group_name_a6ea08ec_uniq">
-      <ColNames>name</ColNames>
       <CreatedTimestamp>2020-12-23.15:31:37.980</CreatedTimestamp>
       <ModifiedTimestamp>2020-12-23.15:31:37.980</ModifiedTimestamp>
       <ObjectId>2021582240</ObjectId>
@@ -376,7 +374,6 @@ int</ExtendedProperties>
       <ModifiedTimestamp>2020-12-23.15:28:07.913</ModifiedTimestamp>
       <ObjectId>1813581499</ObjectId>
       <RefColNames>id</RefColNames>
-      <RefKeyName>PK__auth_gro__3213E83FEFE5AED9</RefKeyName>
       <RefTableId>1621580815</RefTableId>
       <RefTableName>auth_group</RefTableName>
     </foreign-key>
@@ -386,7 +383,6 @@ int</ExtendedProperties>
       <ModifiedTimestamp>2020-12-23.15:28:08.133</ModifiedTimestamp>
       <ObjectId>1845581613</ObjectId>
       <RefColNames>id</RefColNames>
-      <RefKeyName>PK__auth_per__3213E83FA930AA15</RefKeyName>
       <RefTableId>1589580701</RefTableId>
       <RefTableName>auth_permission</RefTableName>
     </foreign-key>
@@ -413,7 +409,6 @@ permission_id</ColNames>
       <Position>4</Position>
     </index>
     <key id="79" parent="26" name="PK__auth_gro__3213E83F853403FD">
-      <ColNames>id</ColNames>
       <CreatedTimestamp>2020-12-23.15:28:06.493</CreatedTimestamp>
       <ModifiedTimestamp>2020-12-23.15:28:06.493</ModifiedTimestamp>
       <NameSurrogate>1</NameSurrogate>
@@ -448,7 +443,6 @@ permission_id</ColNames>
       <ModifiedTimestamp>2020-12-23.15:28:08.467</ModifiedTimestamp>
       <ObjectId>1893581784</ObjectId>
       <RefColNames>id</RefColNames>
-      <RefKeyName>PK__django_c__3213E83F49488739</RefKeyName>
       <RefTableId>1557580587</RefTableId>
       <RefTableName>django_content_type</RefTableName>
     </foreign-key>
@@ -471,7 +465,6 @@ codename</ColNames>
       <Unique>1</Unique>
     </index>
     <key id="88" parent="27" name="PK__auth_per__3213E83FA930AA15">
-      <ColNames>id</ColNames>
       <CreatedTimestamp>2020-12-23.15:28:05.733</CreatedTimestamp>
       <ModifiedTimestamp>2020-12-23.15:28:05.733</ModifiedTimestamp>
       <NameSurrogate>1</NameSurrogate>
@@ -547,7 +540,6 @@ codename</ColNames>
       <Unique>1</Unique>
     </index>
     <key id="102" parent="28" name="PK__auth_use__3213E83F593EAEBE">
-      <ColNames>id</ColNames>
       <CreatedTimestamp>2020-12-23.15:28:06.903</CreatedTimestamp>
       <ModifiedTimestamp>2020-12-23.15:28:06.903</ModifiedTimestamp>
       <NameSurrogate>1</NameSurrogate>
@@ -556,7 +548,6 @@ codename</ColNames>
       <UnderlyingIndexName>PK__auth_use__3213E83F593EAEBE</UnderlyingIndexName>
     </key>
     <key id="103" parent="28" name="auth_user_username_6821ab7c_uniq">
-      <ColNames>username</ColNames>
       <CreatedTimestamp>2020-12-23.15:31:34.543</CreatedTimestamp>
       <ModifiedTimestamp>2020-12-23.15:31:34.543</ModifiedTimestamp>
       <ObjectId>2005582183</ObjectId>
@@ -584,7 +575,6 @@ codename</ColNames>
       <ModifiedTimestamp>2020-12-23.15:28:07.967</ModifiedTimestamp>
       <ObjectId>1829581556</ObjectId>
       <RefColNames>id</RefColNames>
-      <RefKeyName>PK__auth_use__3213E83F593EAEBE</RefKeyName>
       <RefTableId>1701581100</RefTableId>
       <RefTableName>auth_user</RefTableName>
     </foreign-key>
@@ -594,7 +584,6 @@ codename</ColNames>
       <ModifiedTimestamp>2020-12-23.15:28:08.303</ModifiedTimestamp>
       <ObjectId>1861581670</ObjectId>
       <RefColNames>id</RefColNames>
-      <RefKeyName>PK__auth_gro__3213E83FEFE5AED9</RefKeyName>
       <RefTableId>1621580815</RefTableId>
       <RefTableName>auth_group</RefTableName>
     </foreign-key>
@@ -621,7 +610,6 @@ group_id</ColNames>
       <Unique>1</Unique>
     </index>
     <key id="113" parent="29" name="PK__auth_use__3213E83FA7C0658B">
-      <ColNames>id</ColNames>
       <CreatedTimestamp>2020-12-23.15:28:07.100</CreatedTimestamp>
       <ModifiedTimestamp>2020-12-23.15:28:07.100</ModifiedTimestamp>
       <NameSurrogate>1</NameSurrogate>
@@ -651,7 +639,6 @@ group_id</ColNames>
       <ModifiedTimestamp>2020-12-23.15:28:08.797</ModifiedTimestamp>
       <ObjectId>1909581841</ObjectId>
       <RefColNames>id</RefColNames>
-      <RefKeyName>PK__auth_use__3213E83F593EAEBE</RefKeyName>
       <RefTableId>1701581100</RefTableId>
       <RefTableName>auth_user</RefTableName>
     </foreign-key>
@@ -661,7 +648,6 @@ group_id</ColNames>
       <ModifiedTimestamp>2020-12-23.15:28:08.407</ModifiedTimestamp>
       <ObjectId>1877581727</ObjectId>
       <RefColNames>id</RefColNames>
-      <RefKeyName>PK__auth_per__3213E83FA930AA15</RefKeyName>
       <RefTableId>1589580701</RefTableId>
       <RefTableName>auth_permission</RefTableName>
     </foreign-key>
@@ -688,7 +674,6 @@ permission_id</ColNames>
       <Position>4</Position>
     </index>
     <key id="123" parent="30" name="PK__auth_use__3213E83F364B72E3">
-      <ColNames>id</ColNames>
       <CreatedTimestamp>2020-12-23.15:28:07.260</CreatedTimestamp>
       <ModifiedTimestamp>2020-12-23.15:28:07.260</ModifiedTimestamp>
       <NameSurrogate>1</NameSurrogate>
@@ -748,7 +733,6 @@ permission_id</ColNames>
       <ModifiedTimestamp>2020-12-23.15:28:09.200</ModifiedTimestamp>
       <ObjectId>1973582069</ObjectId>
       <RefColNames>id</RefColNames>
-      <RefKeyName>PK__django_c__3213E83F49488739</RefKeyName>
       <RefTableId>1557580587</RefTableId>
       <RefTableName>django_content_type</RefTableName>
     </foreign-key>
@@ -758,7 +742,6 @@ permission_id</ColNames>
       <ModifiedTimestamp>2020-12-23.15:28:09.283</ModifiedTimestamp>
       <ObjectId>1989582126</ObjectId>
       <RefColNames>id</RefColNames>
-      <RefKeyName>PK__auth_use__3213E83F593EAEBE</RefKeyName>
       <RefTableId>1701581100</RefTableId>
       <RefTableName>auth_user</RefTableName>
     </foreign-key>
@@ -778,7 +761,6 @@ permission_id</ColNames>
       <Position>3</Position>
     </index>
     <key id="138" parent="31" name="PK__django_a__3213E83FD189C555">
-      <ColNames>id</ColNames>
       <CreatedTimestamp>2020-12-23.15:28:08.883</CreatedTimestamp>
       <ModifiedTimestamp>2020-12-23.15:28:08.883</ModifiedTimestamp>
       <NameSurrogate>1</NameSurrogate>
@@ -817,7 +799,6 @@ model</ColNames>
       <Unique>1</Unique>
     </index>
     <key id="144" parent="32" name="PK__django_c__3213E83F49488739">
-      <ColNames>id</ColNames>
       <CreatedTimestamp>2020-12-23.15:28:05.200</CreatedTimestamp>
       <ModifiedTimestamp>2020-12-23.15:28:05.200</ModifiedTimestamp>
       <NameSurrogate>1</NameSurrogate>
@@ -854,7 +835,6 @@ model</ColNames>
       <Unique>1</Unique>
     </index>
     <key id="150" parent="33" name="PK__django_m__3213E83F975C4D1D">
-      <ColNames>id</ColNames>
       <CreatedTimestamp>2020-12-23.15:28:05.097</CreatedTimestamp>
       <ModifiedTimestamp>2020-12-23.15:28:05.097</ModifiedTimestamp>
       <NameSurrogate>1</NameSurrogate>
@@ -889,7 +869,6 @@ model</ColNames>
       <Position>2</Position>
     </index>
     <key id="156" parent="34" name="PK__django_s__B3BA0F1F74459828">
-      <ColNames>session_key</ColNames>
       <CreatedTimestamp>2020-12-23.15:31:38.927</CreatedTimestamp>
       <ModifiedTimestamp>2020-12-23.15:31:38.927</ModifiedTimestamp>
       <NameSurrogate>1</NameSurrogate>
@@ -935,7 +914,6 @@ name</ColNames>
       <Unique>1</Unique>
     </index>
     <key id="164" parent="35" name="PK__sysdiagr__C2B05B61292FE43F">
-      <ColNames>diagram_id</ColNames>
       <CreatedTimestamp>2020-12-23.15:48:50.187</CreatedTimestamp>
       <ModifiedTimestamp>2020-12-23.15:48:50.187</ModifiedTimestamp>
       <NameSurrogate>1</NameSurrogate>
@@ -944,8 +922,6 @@ name</ColNames>
       <UnderlyingIndexName>PK__sysdiagr__C2B05B61292FE43F</UnderlyingIndexName>
     </key>
     <key id="165" parent="35" name="UK_principal_name">
-      <ColNames>principal_id
-name</ColNames>
       <CreatedTimestamp>2020-12-23.15:48:50.187</CreatedTimestamp>
       <ModifiedTimestamp>2020-12-23.15:48:50.187</ModifiedTimestamp>
       <ObjectId>2117582582</ObjectId>
@@ -998,7 +974,6 @@ name</ColNames>
       <ModifiedTimestamp>2021-01-18.22:40:53.990</ModifiedTimestamp>
       <ObjectId>1138103095</ObjectId>
       <RefColNames>staffID</RefColNames>
-      <RefKeyName>PK_tblStaffMaster_staffID</RefKeyName>
       <RefTableId>770101784</RefTableId>
       <RefTableName>tblStaffMaster</RefTableName>
     </foreign-key>
@@ -1008,7 +983,6 @@ name</ColNames>
       <ModifiedTimestamp>2021-01-18.22:40:54.063</ModifiedTimestamp>
       <ObjectId>1154103152</ObjectId>
       <RefColNames>statusID</RefColNames>
-      <RefKeyName>PK_tbl_statusMaster_statusID</RefKeyName>
       <RefTableId>914102297</RefTableId>
       <RefTableName>tblStatusMaster</RefTableName>
     </foreign-key>
@@ -1019,7 +993,6 @@ name</ColNames>
       <Unique>1</Unique>
     </index>
     <key id="179" parent="36" name="PK_tblAppealMaster_caseNumber">
-      <ColNames>caseNumber</ColNames>
       <CreatedTimestamp>2021-01-18.22:40:53.923</CreatedTimestamp>
       <ModifiedTimestamp>2021-01-18.22:40:53.923</ModifiedTimestamp>
       <ObjectId>1122103038</ObjectId>
@@ -1056,7 +1029,6 @@ name</ColNames>
       <Unique>1</Unique>
     </index>
     <key id="186" parent="37" name="PK_tblCategoryMaster_categoryID">
-      <ColNames>categoryID</ColNames>
       <CreatedTimestamp>2021-01-15.16:19:19.530</CreatedTimestamp>
       <ModifiedTimestamp>2021-01-15.16:19:19.530</ModifiedTimestamp>
       <ObjectId>706101556</ObjectId>
@@ -1108,7 +1080,6 @@ name</ColNames>
       <ModifiedTimestamp>2021-01-15.16:42:11.727</ModifiedTimestamp>
       <ObjectId>898102240</ObjectId>
       <RefColNames>staffID</RefColNames>
-      <RefKeyName>PK_tblStaffMaster_staffID</RefKeyName>
       <RefTableId>770101784</RefTableId>
       <RefTableName>tblStaffMaster</RefTableName>
     </foreign-key>
@@ -1119,7 +1090,6 @@ name</ColNames>
       <Unique>1</Unique>
     </index>
     <key id="197" parent="38" name="PK_tblIssueMaster_issueID">
-      <ColNames>issueID</ColNames>
       <CreatedTimestamp>2021-01-15.16:24:35.283</CreatedTimestamp>
       <ModifiedTimestamp>2021-01-15.16:24:35.283</ModifiedTimestamp>
       <ObjectId>738101670</ObjectId>
@@ -1142,7 +1112,6 @@ name</ColNames>
       <Unique>1</Unique>
     </index>
     <key id="201" parent="39" name="PK_tblParentMaster_parentID">
-      <ColNames>parentID</ColNames>
       <CreatedTimestamp>2021-01-18.22:06:33.907</CreatedTimestamp>
       <ModifiedTimestamp>2021-01-18.22:06:33.907</ModifiedTimestamp>
       <ObjectId>962102468</ObjectId>
@@ -1190,7 +1159,6 @@ name</ColNames>
       <ModifiedTimestamp>2021-01-18.22:24:33.270</ModifiedTimestamp>
       <ObjectId>1074102867</ObjectId>
       <RefColNames>providerID</RefColNames>
-      <RefKeyName>PK_tblProviderNameMaster_providerID</RefKeyName>
       <RefTableId>978102525</RefTableId>
       <RefTableName>tblProviderNameMaster</RefTableName>
     </foreign-key>
@@ -1200,7 +1168,6 @@ name</ColNames>
       <ModifiedTimestamp>2021-01-18.22:24:33.357</ModifiedTimestamp>
       <ObjectId>1090102924</ObjectId>
       <RefColNames>parentID</RefColNames>
-      <RefKeyName>PK_tblParentMaster_parentID</RefKeyName>
       <RefTableId>946102411</RefTableId>
       <RefTableName>tblParentMaster</RefTableName>
     </foreign-key>
@@ -1211,7 +1178,6 @@ name</ColNames>
       <Unique>1</Unique>
     </index>
     <key id="213" parent="40" name="PK_tblProviderContactMaster_contactID">
-      <ColNames>contactID</ColNames>
       <CreatedTimestamp>2021-01-18.22:24:33.167</CreatedTimestamp>
       <ModifiedTimestamp>2021-01-18.22:24:33.167</ModifiedTimestamp>
       <ObjectId>1058102810</ObjectId>
@@ -1253,7 +1219,6 @@ name</ColNames>
       <ModifiedTimestamp>2021-01-18.22:14:09.790</ModifiedTimestamp>
       <ObjectId>1010102639</ObjectId>
       <RefColNames>stateID</RefColNames>
-      <RefKeyName>PK_tblStateMaster_stateID</RefKeyName>
       <RefTableId>658101385</RefTableId>
       <RefTableName>tblStateMaster</RefTableName>
     </foreign-key>
@@ -1263,7 +1228,6 @@ name</ColNames>
       <ModifiedTimestamp>2021-01-18.22:14:40.263</ModifiedTimestamp>
       <ObjectId>1026102696</ObjectId>
       <RefColNames>parentID</RefColNames>
-      <RefKeyName>PK_tblParentMaster_parentID</RefKeyName>
       <RefTableId>946102411</RefTableId>
       <RefTableName>tblParentMaster</RefTableName>
     </foreign-key>
@@ -1274,7 +1238,6 @@ name</ColNames>
       <Unique>1</Unique>
     </index>
     <key id="224" parent="41" name="PK_tblProviderNameMaster_providerID">
-      <ColNames>providerID</ColNames>
       <CreatedTimestamp>2021-01-18.22:14:09.700</CreatedTimestamp>
       <ModifiedTimestamp>2021-01-18.22:14:09.700</ModifiedTimestamp>
       <ObjectId>994102582</ObjectId>
@@ -1309,7 +1272,6 @@ name</ColNames>
       <ModifiedTimestamp>2021-01-15.16:30:36.193</ModifiedTimestamp>
       <ObjectId>882102183</ObjectId>
       <RefColNames>titleAbbreviation</RefColNames>
-      <RefKeyName>PK_tblTitleMaster_titleAbbreviation</RefKeyName>
       <RefTableId>834102012</RefTableId>
       <RefTableName>tblTitleMaster</RefTableName>
     </foreign-key>
@@ -1320,7 +1282,6 @@ name</ColNames>
       <Unique>1</Unique>
     </index>
     <key id="232" parent="42" name="PK_tblStaffMaster_staffID">
-      <ColNames>staffID</ColNames>
       <CreatedTimestamp>2021-01-15.16:27:30.013</CreatedTimestamp>
       <ModifiedTimestamp>2021-01-15.16:27:30.013</ModifiedTimestamp>
       <ObjectId>786101841</ObjectId>
@@ -1344,7 +1305,6 @@ name</ColNames>
       <Unique>1</Unique>
     </index>
     <key id="236" parent="43" name="PK_tblStateMaster_stateID">
-      <ColNames>stateID</ColNames>
       <CreatedTimestamp>2021-01-15.16:12:05.930</CreatedTimestamp>
       <ModifiedTimestamp>2021-01-15.16:12:05.930</ModifiedTimestamp>
       <ObjectId>674101442</ObjectId>
@@ -1372,7 +1332,6 @@ name</ColNames>
       <Unique>1</Unique>
     </index>
     <key id="241" parent="44" name="PK_tbl_statusMaster_statusID">
-      <ColNames>statusID</ColNames>
       <CreatedTimestamp>2021-01-18.22:02:42.390</CreatedTimestamp>
       <ModifiedTimestamp>2021-01-18.22:02:42.390</ModifiedTimestamp>
       <ObjectId>930102354</ObjectId>
@@ -1395,7 +1354,6 @@ name</ColNames>
       <Unique>1</Unique>
     </index>
     <key id="245" parent="45" name="PK_tblTitleMaster_titleAbbreviation">
-      <ColNames>titleAbbreviation</ColNames>
       <CreatedTimestamp>2021-01-15.16:29:06.077</CreatedTimestamp>
       <ModifiedTimestamp>2021-01-15.16:29:06.077</ModifiedTimestamp>
       <ObjectId>850102069</ObjectId>
