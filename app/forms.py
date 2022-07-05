@@ -308,6 +308,7 @@ class ProviderMasterCreateForm(forms.ModelForm):
         }
 
         widgets = {
+            'caseNumber': forms.Select(attrs={'size': 1}),
             'provMasterNote': forms.Textarea(attrs={'cols': 75, 'rows': 5})
         }
 
