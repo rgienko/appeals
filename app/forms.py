@@ -285,11 +285,9 @@ class ProviderMasterCreateForm(forms.ModelForm):
             'provMasterFiscalYear',
             'issueID',
             'provMasterAuditAdjs',
-            'provMasterWasAdded',
-            'provMasterIsActive',
             'provMasterImpact',
+            'provMasterWasAdded',
             'provMasterNote',
-            'provMasterDateStamp'
         ]
 
         labels = {
@@ -300,11 +298,9 @@ class ProviderMasterCreateForm(forms.ModelForm):
             'provMasterFiscalYear': _('Fiscal Year:'),
             'issueID': _('Issue:'),
             'provMasterAuditAdjs': _('Audit Adjustments:'),
-            'provMasterWasAdded': _('Add?'),
-            'provMasterIsActive': _('Active?'),
             'provMasterImpact': _('Amount:'),
+            'provMasterWasAdded': _('Add?'),
             'provMasterNote': _('Note:'),
-            'provMasterDateStamp': _('Date Stamp:'),
         }
 
         widgets = {

@@ -607,6 +607,7 @@ def addProviderToGroup(request, pk):
 
 
 def addIssueView(request, pk):
+    context = initialize_context(request)
     case_instance = get_object_or_404(TblAppealMaster, pk=pk)
     cur_case = case_instance.caseNumber
     case_issue_count = TblProviderMaster.objects.filter(
@@ -656,11 +657,9 @@ def addIssueView(request, pk):
                                                      'provMasterDateStamp': today
                                                      })
 
-    return render(request, 'create/create_form.html',
-                  {
-                      'form': form,
-                      'formName': 'Add Issue / Provider (Direct Add) to Appeal'
-                  })
+    context['form'] = form
+    context['formName'] = 'Add Issue / Provider (DA) to Appeal'
+    return render(request, 'create/add_to_case_form.html', context)
 
 
 def addCriticalDueView(request, pk):

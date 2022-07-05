@@ -82,7 +82,7 @@ WSGI_APPLICATION = 'appeals.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'sql_server.pyodbc',
+        'ENGINE': 'mssql',
         'NAME': 'appealMasterv4',
         'USER': 'randall.gienko',
         'PASSWORD': 'R@nd@ll22',
