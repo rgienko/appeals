@@ -42,11 +42,11 @@
                             <td class="">{{ date.get_action_note }}</td>
                             <td class="text-center" style="width:85px;">{{ date.dueDate|date:'m/d/Y'}}</td>
                             {% if date.progress == 'Not Started' %}
-                                <td class="text-center bg-warning" style="width: 100px;"><a class="text-dark" href=""><i class="far fa-circle"></i> {{ date.progress }}</a></td>
+                                <td class="text-center bg-warning" style="width: 175px;"><a class="text-dark" href=""><i class="far fa-circle"></i> {{ date.progress }}</a></td>
                             {% elif date.progress == 'In Progress' %}
-                                <td class="text-center bg-primary text-white" style="width: 100px;"><a class="text-white" href=""><i class="fas fa-spinner"></i> {{ date.progress }}</a></td>
+                                <td class="text-center bg-primary text-white" style="width: 175px;"><a class="text-white" href=""><i class="fas fa-spinner"></i> {{ date.progress }}</a></td>
                             {% elif date.progress == 'Completed' %}
-                                <td class="text-center bg-success text-white" style="width: 100px;"><a class="text-white" href=""><i class="far fa-check-circle"></i> {{ date.progress }}</a></td>
+                                <td class="text-center bg-success text-white" style="width: 175px;"><a class="text-white" href=""><i class="far fa-check-circle"></i> {{ date.progress }}</a></td>
                             {% else %}
                                 <td class="text-center bg-info" style="width: 175px;"><a class="text-dark" href="{% url 'update-due-progress' date.id %}">{{ date.progress }}</a></td>
                             {% endif %}

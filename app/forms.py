@@ -218,7 +218,7 @@ class AppealMasterCreateForm(forms.ModelForm):
             'appealStructure',
             'appealName',
             'appealCreateDate',
-            'appealAckDate',
+            # 'appealAckDate',
             'appealNotes',
         ]
 
@@ -231,15 +231,15 @@ class AppealMasterCreateForm(forms.ModelForm):
             'appealStructure': _('Case Structure:'),
             'appealName': _('Case Name:'),
             'appealCreateDate': _('Create Date:'),
-            'appealAckDate': _('Acknowledged:'),
+            # 'appealAckDate': _('Acknowledged:'),
             'appealNotes': _('Case Notes'),
         }
 
         widgets = {
             'appealName': forms.TextInput(attrs={'size': 65}),
             'appealCreateDate': forms.DateInput(),
-            'appealAckDate': forms.DateInput(),
-            'appealNotes': forms.Textarea(attrs={'cols': 65, 'rows': 2}),
+            # 'appealAckDate': forms.DateInput(),
+            'appealNotes': forms.Textarea(attrs={'cols': 65, 'rows': 4}),
 
         }
 
@@ -417,6 +417,7 @@ class UpdateDueDateProgressForm(forms.Form):
 
 class UpdateNPRDateProgressForm(forms.Form):
     statuses = [
+        ('Not Applicable', 'Not Applicable'),
         ('Not Filed', 'Not Filed'),
         ('Not Started', 'Not Started'),
         ('Completed', 'Completed')
