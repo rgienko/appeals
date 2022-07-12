@@ -99,8 +99,8 @@ class IssueMasterCreateForm(forms.ModelForm):
 
         widgets = {
             'issueName': forms.TextInput(attrs={'size': 50}),
-            'issueShortDescription': forms.Textarea(attrs={'cols': 90, 'rows': 5}),
-            'issueLongDescription': forms.Textarea(attrs={'cols': 90, 'rows': 15}),
+            'issueShortDescription': forms.Textarea(attrs={'cols': 85, 'rows': 5}),
+            'issueLongDescription': forms.Textarea(attrs={'cols': 85, 'rows': 15}),
 
         }
 

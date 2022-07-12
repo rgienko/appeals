@@ -162,7 +162,7 @@ def main(request):
 class NewProviderView(CreateView):
     model = TblProviderNameMaster
     form_class = ProviderNameMasterCreateForm
-    template_name = 'create/prov_create_form.html'
+    template_name = 'create/create_form.html'
     context_object_name = 'new_provider'
 
     def form_valid(self, form):
@@ -195,7 +195,7 @@ def providerNameUpdateView(request, pk):
 
     context['form'] = form
     context['formName'] = 'Update Provider'
-    return render(request, 'create/prov_create_form.html', context)
+    return render(request, 'create/create_form.html', context)
 
 
 def providerMasterView(request):
@@ -209,7 +209,7 @@ def providerMasterView(request):
 class NewSystemView(CreateView):
     model = TblParentMaster
     form_class = ParentMasterCreateForm
-    template_name = 'create/parent_create_form.html'
+    template_name = 'create/create_form.html'
     context_object_name = 'new_parent'
 
     def form_valid(self, form):
@@ -249,7 +249,7 @@ def parentUpdateView(request, pk):
 
     context['form'] = form
     context['formName'] = 'Update System'
-    return render(request, 'create/parent_create_form.html', context)
+    return render(request, 'create/create_form.html', context)
 
 
 def providerMasterUpdateView(request, pk):
@@ -311,7 +311,7 @@ def issueEditView(request, pk):
 class NewIssueView(CreateView):
     model = TblIssueMaster
     form_class = IssueMasterCreateForm
-    template_name = 'create/issue_create_form.html'
+    template_name = 'create/create_form.html'
     context_object_name = 'new_issue'
 
     def form_valid(self, form):
@@ -320,13 +320,14 @@ class NewIssueView(CreateView):
         return redirect('issue-master')
 
     def get(self, request, *args, **kwargs):
+        context = initialize_context(request)
         form = self.form_class(request.POST)
+        context['form'] = form
+        context['formName'] = 'Add Issue'
         return render(
             request,
             self.template_name,
-            {
-                'form': form
-            }
+            context
         )
 
 
@@ -343,7 +344,7 @@ def staffMasterView(request):
 class NewStaffView(CreateView):
     model = TblStaffMaster
     form_class = StaffMasterCreateForm
-    template_name = 'create/staff_create_form.html'
+    template_name = 'create/create_form.html'
     context_object_name = 'new_staff'
 
     def form_valid(self, form):
@@ -352,13 +353,14 @@ class NewStaffView(CreateView):
         return redirect('staff-master')
 
     def get(self, request, *args, **kwargs):
+        context = initialize_context(request)
         form = self.form_class(request.POST)
+        context['form'] = form
+        context['formName'] = 'New Staff'
         return render(
             request,
             self.template_name,
-            {
-                'form': form
-            }
+            context
         )
 
 
