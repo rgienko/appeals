@@ -286,6 +286,7 @@ class ProviderMasterCreateForm(forms.ModelForm):
             'issueID',
             'provMasterAuditAdjs',
             'provMasterImpact',
+            'provMasterTransferDate',
             'provMasterWasAdded',
             'provMasterNote',
         ]
@@ -299,6 +300,7 @@ class ProviderMasterCreateForm(forms.ModelForm):
             'issueID': _('Issue:'),
             'provMasterAuditAdjs': _('Audit Adjustments:'),
             'provMasterImpact': _('Amount:'),
+            'provMasterTransferDate': _('Transfer / DA Date:'),
             'provMasterWasAdded': _('Add?'),
             'provMasterNote': _('Note:'),
         }

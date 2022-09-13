@@ -41,7 +41,7 @@
                                         {% if caseObj.appealAckDate is None %}
                                             <a data-bs-toggle="modal" data-bs-target="#ack_modal" href="" class="">Acknowledge</a>
                                         {% else %}
-                                            {{ caseObj.appealCreateDate|date:'m/d/Y' }}
+                                            {{ caseObj.appealAckDate|date:'m/d/Y' }}
                                         {% endif %}
                                     </li>
                                     <li class="list-group-item">

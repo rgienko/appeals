@@ -1031,7 +1031,9 @@ def createFormGToc(request, pk):
 def createFormGExhibits(request, pk):
     caseObj = get_object_or_404(TblAppealMaster, pk=pk)
     caseNum = caseObj.caseNumber
-    caseProviders = TblProviderMaster.objects.filter(caseNumber=caseNum)
+    caseProviders = TblProviderMaster.objects.filter(caseNumber=caseNum).filter(provMasterIsActive='True').order_by(
+        'provMasterTransferDate',
+        'providerID')
     styles = getSampleStyleSheet()
     styles.add(ParagraphStyle(name='Justify', alignment=TA_JUSTIFY))
 
