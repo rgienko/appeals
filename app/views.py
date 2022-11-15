@@ -1077,6 +1077,7 @@ def createFormG(request, pk):
     caseObj = get_object_or_404(TblAppealMaster, pk=pk)
     caseName = caseObj.appealName
     caseNum = caseObj.caseNumber
+    caseMac = caseObj.get_fi()
     providerMaster = TblProviderMaster.objects.filter(caseNumber=caseNum).first()
     issueID = providerMaster.issueID
     issueInfo = TblIssueMaster.objects.get(issueSRGID=str(issueID).split('-')[0])
@@ -1152,13 +1153,14 @@ def createFormG(request, pk):
         columnDataFYE = Paragraph('<para align=center>' + str(prov.provMasterFiscalYear.strftime("%m/%d/%Y")) +
                                   '</para>', styles["Normal"])
 
-        columnDataMAC = Paragraph('<para align=center>' + str(prov.get_ind_fi()) + '</para>', styles["Normal"])
+        # columnDataMAC = Paragraph('<para align=center>' + str(prov.get_ind_fi()) + '</para>', styles["Normal"])
 
         columnDataA = Paragraph('<para align=center>' + str(prov.provMasterDeterminationDate.strftime("%m/%d/%Y")) +
                                 '</para>', styles["Normal"])
 
         if prov.provMasterWasAdded == 1:
             hrqDate = prov.provMasterDateStamp
+            columnDataMAC = Paragraph('<para align=center>' + str(caseMac) + '</para>', styles["Normal"])
             columnDataB = Paragraph(
                 '<para align=center> N/A - Provider Direct Added to Group</para>',
                 styles["Normal"])
@@ -1168,6 +1170,7 @@ def createFormG(request, pk):
                 styles["Normal"])
         else:
             hrqDate = TblAppealMaster.objects.get(caseNumber=prov.provMasterFromCase)
+            columnDataMAC = Paragraph('<para align=center>' + str(prov.get_ind_fi()) + '</para>', styles["Normal"])
             columnDataB = Paragraph(
                 '<para align=center>' + str(hrqDate.appealCreateDate.strftime("%m/%d/%Y")) + '</para>',
                 styles["Normal"])
