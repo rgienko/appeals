@@ -48,6 +48,7 @@ urlpatterns = [
     path(r'^search/$', views.searchCriticalDueDates, name='due-master'),
     path(r'search-two', views.searchCriticalDueDatesTwo, name='due-master-two'),
     path(r'provmaster-filter', views.providerAppealDetails, name='prov-appeal-details'),
-    path(r'provmaster-filter', FilterView.as_view(model=TblProviderMaster), name='prov-appeal-details')
+    path(r'provmaster-filter', FilterView.as_view(model=TblProviderMaster), name='prov-appeal-details'),
+    path(r'group-report/', views.groupReport, name='group-report')
 
 ]

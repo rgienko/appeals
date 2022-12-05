@@ -1,11 +1,125 @@
-.my-bg-dark {
-    background-color: #0000ff;
+.srg-bg-primary {
+    background-color: #02308C
 }
 
+.srg-bg-secondary {
+    background: #d9d9d9
+}
+
+
+.srg-bg-success {
+    background: #004000;
+}
+
+.srg-bg-danger {
+    background: #8B0000
+}
+
+.srg-color-primary {
+    color: #02308C
+}
+
+.srg-btn-primary {
+    background-color: #02308C;
+    border: 1px solid #02308C;
+    color: #ffffff;
+    padding: 8px 16px 8px 16px;
+    border-radius: 12px;
+    text-align: center
+}
+
+.srg-btn-primary:hover {
+    border: 1px solid #02308C;
+    background: white;
+    color: #02308C
+
+}
+
+.srg-btn-outline-primary {
+    background-color: #d9d9d9;
+    border: 1px solid #d9d9d9;
+    color: #02308C;
+    padding: 8px 16px 8px 16px;
+    border-radius: 12px;
+    text-decoration: none;
+}
+
+.srg-btn-outline-primary:hover {
+    text-decoration: underline;
+}
+
+
+
+.sidebar-heading {
+    color: #d9d9d9;
+}
 
 .nav-link {
-    color: aliceblue;
+    color: #ffffff;
 }
+
+.srg-border {
+    border: 1px solid #a9a9a9;
+    border-radius: 12px;
+}
+
+.srg-border-bottom {
+    border-bottom: 1px solid #a9a9a9;
+}
+
+
+.srg-danger-button {
+    background: #8B0000;
+    border: 1px solid #8B0000;
+    color: white;
+    padding:8px 10px 8px 10px;
+    border-radius: 8px
+}
+
+.srg-danger-button:hover {
+    background:#ffffff;
+    border: 1px solid #8B0000;
+    color: #8B0000;
+}
+
+.srg-transfer-button {
+    background: #E38035;
+    border: 1px solid #E38035;
+    color: white;
+    padding:8px 6px 8px 10px;
+    border-radius: 8px;
+    text-decoration:none
+}
+
+.srg-transfer-button:hover {
+    background: #ffffff;
+    border: 1px solid #E38035;
+    color: #E38035;
+    padding:8px 6px 8px 10px;
+    border-radius: 8px;
+    text-decoration:none
+}
+
+.srg-btn-secondary-sm {
+    background-color: #d9d9d9;
+    border: 1px solid #d9d9d9;
+    color: black;
+    padding: 8px 6px 8px 10px;
+    border-radius: 8px;
+    text-decoration:none
+}
+
+.srg-btn-secondary-sm:hover {
+    background-color: #ffffff;
+    border: 1px solid #d9d9d9;
+    color: black;
+    padding: 8px 6px 8px 10px;
+    border-radius: 8px;
+    text-decoration:none
+}
+
+
+
 
 #isItLoaded {
     display:none;

@@ -1,0 +1,35 @@
+{% extends 'main/layout.html' %}
+
+{% block content %}
+    {% load humanize %}
+    <div class="container-fluid">
+        <div class="srg-border px-2 mt-2">
+            <h5 class="text-start fs-2 py-2 fw-normal srg-border-bottom srg-color-primary mt-2">Group Appeal List</h5>
+            <table class="table" id="table" data-toggle="table"
+                           data-search="True"
+                           data-filter-control="true"
+                           data-show-search-clear-button="true"
+                           data-toolbar="#toolbar"
+                           data-mobile-responsive="true"
+                           data-show-export="true"
+                           data-show-columns="true">
+                <thead class="text-center text-light">
+                    <tr class="srg-bg-primary">
+                        <th class="p-1 border-0" data-field="caseNumber" data-filter-control="input">Case #</th>
+                        <th class="p-1 border-0" data-field="appealName" data-filter-control="input">Case Name</th>
+                        <th class="p-1 border-0" data-field="appealStructure" data-filter-control="select">Case Structure</th>
+                        <th class="p-1 border-0" data-field="statusID" data-filter-control="select">Status</th>
+                    </tr>
+                </thead>
+                {% for case in allGroups %}
+                    <tr>
+                        <td class="text-center" style="width:100px"><a href="{% url 'appeal-details' case.caseNumber %}">{{ case.caseNumber }}</a></td>
+                        <td>{{ case.appealName }}</td>
+                        <td>{{ case.appealStructure }}</td>
+                        <td>{{ case.statusID }}</td>
+                    </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+{% endblock %}

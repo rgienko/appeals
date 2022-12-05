@@ -813,6 +813,14 @@ def searchCriticalDueDatesTwo(request):
     return render(request, 'main/CriticalDatesMasterTwo.html', context)
 
 
+def groupReport(request):
+    context = initialize_context(request)
+    allGroups = TblAppealMaster.objects.exclude(appealStructure='Individual').order_by('-appealCreateDate')[:50]
+    context['allGroups'] = allGroups
+
+    return render(request, 'main/groupReport.html', context)
+
+
 def updateDueDateProgress(request, pk):
     context = initialize_context(request)
     dueDate_obj = get_object_or_404(TblCriticalDatesMaster, pk=pk)

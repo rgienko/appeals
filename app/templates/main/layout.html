@@ -6,19 +6,24 @@
     <!-- JavaScript Bundle with Popper -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="https://unpkg.com/bootstrap-table@1.21.1/dist/bootstrap-table.min.css">
+
     <script src="https://kit.fontawesome.com/69cb8fac06.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jquery/dist/jquery.min.js"></script>
+    <script src="https://unpkg.com/bootstrap-table@1.21.1/dist/bootstrap-table.min.js"></script>
+    <script src="https://unpkg.com/bootstrap-table@1.21.0/dist/extensions/filter-control/bootstrap-table-filter-control.min.js"></script>
+    <script src="https://unpkg.com/bootstrap-table@1.21.0/dist/extensions/export/bootstrap-table-export.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/tableexport.jquery.plugin@1.10.21/tableExport.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/tableexport.jquery.plugin@1.10.21/libs/jsPDF/jspdf.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/tableexport.jquery.plugin@1.10.21/libs/jsPDF-AutoTable/jspdf.plugin.autotable.js"></script>
+    <script type="text/javascript" src="libs/js-xlsx/xlsx.core.min.js"></script>
+    <script src="https://cdn.sheetjs.com/xlsx-0.19.0/package/dist/xlsx.full.min.js"></script>
     {% load static %}
 
-    <link rel="stylesheet" {% static 'site.css' %}>
+    <link rel="stylesheet" href="{% static 'css/site.css' %}">
 
     <meta charset="UTF-8">
 
-    <style>
-        .nav-link {
-            color: aliceblue;
-        }
-
-    </style>
     <title>Strategic Appeal Master</title>
 </head>
 <body>
@@ -38,8 +43,8 @@
     -->
 
     <div class="container-fluid">
-          <div class="row min-vh-100 border border-dark">
-                <nav id="sidebarMenu" class="my-bg-dark col-xl-1 col-lg-1 col-md-2 col-sm-2 col-1 d-md-block sidebar" style="background-color: #404552">
+          <div class="row min-vh-100">
+                <nav id="sidebarMenu" class="srg-bg-primary col-xl-1 col-lg-1 col-md-2 col-sm-2 col-1 d-md-block sidebar">
                     <div class="col-sm border-bottom">
                          <div class="dropdown border-bottom">
                             <a href="#" class="d-flex align-items-center justify-content-center p-3 link-light text-decoration-none dropdown-toggle" id="dropdownUser3" data-bs-toggle="dropdown" aria-expanded="false">
@@ -80,20 +85,20 @@
                             </li>
                         </ul>
 
-                        <h5 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-3 mb-1 text-muted">
-                            <span>Reports:</span>
+                        <h5 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-3 mb-1">
+                            Reports:
                         </h5>
 
                         <ul class="nav flex-column">
 
                             <li class="nav-item">
-                                <a class="nav-link" href="{% url 'prov-appeal-details' %}">
-                                    Provider Appeals
+                                <a class="nav-link" href="{% url 'group-report' %}">
+                                    Group Report
                                 </a>
                             </li>
                         </ul>
 
-                        <h5 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-3 mb-1 text-muted">
+                        <h5 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-3 mb-1">
                             <span>Master Tables:</span>
                         </h5>
 
@@ -136,7 +141,7 @@
 
                         </ul>
 
-                        <h5 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-3 mb-1 text-muted">
+                        <h5 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-3 mb-1">
                             <span>Tools</span>
                         </h5>
 
