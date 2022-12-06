@@ -147,15 +147,6 @@
     z-index:1
 }
 
-#sidebar.active {
-    min-width: 250px;
-    max-width: 250px;
-    min-height: 100vh;
-    background: #404552;
-    color: #fff;
-    transition: all 0.3s;
-}
-
 .submenu li a {
     font-size:10pt;
 }

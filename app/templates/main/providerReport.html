@@ -1,0 +1,41 @@
+{% extends 'main/layout.html' %}
+
+{% block content %}
+    {% load humanize %}
+    <div class="container-fluid">
+        <div class="srg-border px-2 mt-2">
+            <h5 class="text-start fs-2 py-2 fw-normal srg-border-bottom srg-color-primary mt-2">Provider Appeal List</h5>
+            <table class="table" id="table" data-toggle="table"
+                           data-search="True"
+                           data-filter-control="true"
+                           data-show-search-clear-button="true"
+                           data-toolbar="#toolbar"
+                           data-mobile-responsive="true"
+                           data-show-export="true"
+                           data-show-columns="true">
+                <thead class="text-center text-light">
+                    <tr class="srg-bg-primary" >
+                        <th class="p-1 border-0" data-field="caseNumber" data-filter-control="input">Case #</th>
+                        <th class="p-1 border-0" data-field="providerID" data-filter-control="input">Provider #</th>
+                        <th class="p-1 border-0" data-field="providerName" data-filter-control="input">Provider Name</th>
+                        <th class="p-1 border-0" data-field="parentFullName" data-filter-control="input">Parent</th>
+                        <th class="p-1 border-0" data-field="provMasterFiscalYear" data-filter-control="input">FYE</th>
+                        <th class="p-1 border-0" data-field="appealStructure" data-filter-control="select">Case Structure</th>
+                        <th class="p-1 border-0" data-field="statusID" data-filter-control="select">Issue</th>
+                    </tr>
+                </thead>
+                {% for prov in allProviders %}
+                    <tr>
+                        <td class="text-center border-0" style="width:100px"><a href="{% url 'appeal-details' prov.caseNumber %}">{{ prov.caseNumber }}</a></td>
+                        <td>{{ prov.providerID }}</td>
+                        <td>{{ prov.get_prov_name }}</td>
+                        <td>{{ prov.get_parent }}</td>
+                        <td>{{ prov.provMasterFiscalYear|date:'m/d/Y' }}</td>
+                        <td>{{ prov.get_appeal_structure }}</td>
+                        <td>{{ prov.get_issue_name }}</td>
+                    </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+{% endblock %}

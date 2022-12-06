@@ -9,51 +9,59 @@
                     <div class="text-white fw-normal fs-5 srg-bg-primary card-header" style="border-radius:12px;min-height:50px">
                         Case Details - CN: {{ caseObj.caseNumber }}
                     </div>
-                    <div class="card-body srg-border mt-2">
-                        <div class="row">
-                            <div class="col-lg-3 col-3 p-0">
-                                <ul class="list-group list-group-flush">
-                                    <li class="list-group-item fw-bolder">Representative</li>
-                                    <li class="list-group-item fw-bolder">Intermediary</li>
-                                    <li class="list-group-item fw-bolder">PRRB Contact</li>
-                                    <li class="list-group-item fw-bolder">Case Status</li>
-                                    <li class="list-group-item fw-bolder">Request Date<br> Acknowledged</li>
-                                    <li class="list-group-item fw-bolder">Case Name</li>
-                                </ul>
-                            </div>
-
-                            <div class="col-lg-9 col-9 p-0">
-                                <ul class="list-group list-group-flush">
-                                    <li class="list-group-item">{{ caseObj.staffID }}</li>
-                                    <li class="list-group-item">{{ caseObj.fiID }}</li>
-                                    <li class="list-group-item">{{ caseObj.prrbContactID }}</li>
-                                    <li class="list-group-item">{{ caseObj.statusID }}
+                    <div class="card-body srg-border mt-2 p-0">
+                        <table class="table">
+                            <tbody>
+                                <tr>
+                                    <th scope="row">Representative:</th>
+                                    <td>{{ caseObj.staffID }}</td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">Intermediary:</th>
+                                    <td>{{ caseObj.fiID }}</td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">PRRB Contact:</th>
+                                    <td>{{ caseObj.prrbContactID }}</td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">Request Date:</th>
+                                    <td>{{ caseObj.appealCreateDate|date:'m/d/Y' }}</td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">Acknowledged:</th>
+                                    <td>
+                                        {% if caseObj.appealAckDate is None %}
+                                            <a data-bs-toggle="modal" data-bs-target="#ack_modal" href="" class="">Acknowledge</a>
+                                        {% else %}
+                                            {{ caseObj.appealAckDate|date:'m/d/Y' }}
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">Case Status:</th>
+                                    <td>
+                                        {{ caseObj.statusID }}
                                         <a type="button" class=" w-25" data-bs-toggle="modal" data-bs-target="#case_status_modal" href="">
                                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="20" fill="currentColor" class="bi bi-pencil-square" viewBox="0 2 16 16">
                                                     <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
                                                     <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"/>
                                             </svg>
                                         </a>
-                                    </li>
-                                    <li class="list-group-item">
-                                        {{ caseObj.appealCreateDate|date:'m/d/Y' }}
-                                        <br>
-                                        {% if caseObj.appealAckDate is None %}
-                                            <a data-bs-toggle="modal" data-bs-target="#ack_modal" href="" class="">Acknowledge</a>
-                                        {% else %}
-                                            {{ caseObj.appealAckDate|date:'m/d/Y' }}
-                                        {% endif %}
-                                    </li>
-                                    <li class="list-group-item">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">Case Name:</th>
+                                    <td>
                                         {% if caseObj.appealStructure == 'Individual'%}
                                             {{ provInfo.providerID }} - {{ provInfo.get_prov_name|title }} ({{ provInfo.provMasterFiscalYear|date:'m/d/Y' }})
                                         {% else %}
                                             {{ caseObj.appealName }}
                                         {% endif %}
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
 
                 </div>
@@ -334,9 +342,9 @@
         <div class="modal" id="case_status_modal" tabindex="-1" role="dialog">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
-                    <div class="modal-header">
+                    <div class="modal-header srg-bg-primary text-white">
                         <h5 class="modal-title">Update Case Status</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close">
                           <span aria-hidden="true"></span>
                         </button>
                     </div>
@@ -352,7 +360,7 @@
                                 <span class="form-control border-0">{{ field }}</span>
                             {% endfor %}
 
-                            <input type="submit" name="case_status_button" value="Update Case Status" class="btn btn-primary mt-3"/>
+                            <input type="submit" name="case_status_button" value="Update Case Status" class="srg-btn-primary mt-3"/>
                         </form>
                     </div>
                 </div>
@@ -362,9 +370,9 @@
         <div class="modal" id="schedule_g_modal" tabindex="-1" role="dialog">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
-                    <div class="modal-header">
+                    <div class="modal-header srg-bg-primary text-white">
                         <h5 class="modal-title">Generate Form G Docs</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close">
                           <span aria-hidden="true"></span>
                         </button>
                     </div>

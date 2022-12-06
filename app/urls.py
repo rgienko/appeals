@@ -35,7 +35,7 @@ urlpatterns = [
     path(r'edit/prov/<pk>', views.providerNameUpdateView, name='update-provider'),
     path(r'issue-master/', views.issueMasterView, name='issue-master'),
     path(r'issue-master/detail/<pk>', views.issueDetailView, name='issue-detail'),
-    path(r'new/issue/', views.NewIssueView.as_view(), name='new-issue'),
+    path(r'new-issue/', views.NewIssueView.as_view(), name='new-issue'),
     path(r'edit/issue/<pk>/', views.issueEditView, name='edit-issue'),
     path(r'staff-master/', views.staffMasterView, name='staff-master'),
     path(r'new/staff/', views.NewStaffView.as_view(), name='new-staff'),
@@ -49,6 +49,7 @@ urlpatterns = [
     path(r'search-two', views.searchCriticalDueDatesTwo, name='due-master-two'),
     path(r'provmaster-filter', views.providerAppealDetails, name='prov-appeal-details'),
     path(r'provmaster-filter', FilterView.as_view(model=TblProviderMaster), name='prov-appeal-details'),
-    path(r'group-report/', views.groupReport, name='group-report')
+    path(r'group-report/', views.groupReport, name='group-report'),
+    path(r'provider-report/', views.providerReport, name='provider-report')
 
 ]

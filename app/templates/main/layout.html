@@ -74,106 +74,108 @@
                         </div>
                         <ul class="nav flex-column mt-4">
                             <li class="nav-item">
-                                <a class="nav-link" href="{% url 'main' %}">
+                                <a class="nav-link p-2" href="{% url 'main' %}">
                                     Dashboard
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="{% url 'new-appeal' %}">
+                                <a class="nav-link p-2" href="{% url 'new-appeal' %}">
                                     New Appeal
                                 </a>
                             </li>
                         </ul>
 
-                        <h5 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-3 mb-1">
+                        <h5 class="sidebar-heading d-flex justify-content-between align-items-center px-2 mt-3 mb-1">
                             Reports:
                         </h5>
 
                         <ul class="nav flex-column">
-
                             <li class="nav-item">
-                                <a class="nav-link" href="{% url 'group-report' %}">
+                                <a class="nav-link p-2" href="{% url 'group-report' %}">
                                     Group Report
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link p-2" href="{% url 'provider-report' %}">
+                                    Provider Report
                                 </a>
                             </li>
                         </ul>
 
-                        <h5 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-3 mb-1">
+                        <h5 class="sidebar-heading d-flex justify-content-between align-items-start px-2 mt-3 mb-1 text-nowrap">
                             <span>Master Tables:</span>
                         </h5>
 
                         <ul class="nav flex-column">
                             <li class="nav-item">
-                                <a class="nav-link" href="{% url 'issue-master' %}">
+                                <a class="nav-link p-2" href="{% url 'issue-master' %}">
                                     Issue Master
                                 </a>
                             </li>
 
                             <li class="nav-item">
-                                <a class="nav-link" href="{% url 'provider-master' %}">
+                                <a class="nav-link p-2" href="{% url 'provider-master' %}">
                                     Provider Master
                                 </a>
                             </li>
 
                             <li class="nav-item">
-                                <a class="nav-link" href="{% url 'parent-master' %}">
+                                <a class="nav-link p-2" href="{% url 'parent-master' %}">
                                     Parent Master
                                 </a>
                             </li>
 
                             <li class="nav-item">
-                                <a class="nav-link" href="{%  url 'staff-master' %}">
+                                <a class="nav-link p-2" href="{%  url 'staff-master' %}">
                                     Staff Master
                                 </a>
                             </li>
 
                             <li class="nav-item">
-                                <a class="nav-link" href="{%  url 'mac-master' %}">
+                                <a class="nav-link p-2" href="{%  url 'mac-master' %}">
                                     MAC Master
                                 </a>
                             </li>
 
                             <li class="nav-item">
-                                <a class="nav-link" href="{%  url 'prrb-master' %}">
+                                <a class="nav-link p-2" href="{%  url 'prrb-master' %}">
                                     PRRB Master
                                 </a>
                             </li>
 
                         </ul>
 
-                        <h5 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-3 mb-1">
+                        <h5 class="sidebar-heading d-flex justify-content-between align-items-start px-2 mt-3 mb-1">
                             <span>Tools</span>
                         </h5>
 
                         <ul class="nav flex-column">
                             <li class="nav-item">
-                                <a class="nav-link" data-bs-toggle="modal" href="#add_npr_due_modal">
-                                    Add NPR Due Date
+                                <a class="nav-link p-2" data-bs-toggle="modal" href="#add_npr_due_modal">
+                                    Add NPR Due
                                 </a>
                             </li>
-                        </ul>
 
-                        <ul class="nav flex-column">
                             <li class="nav-item">
-                                <a class="nav-link" href="">
-                                    New Issue
+                                <a class="nav-link p-2" href="{% url 'new-issue' %}">
+                                    Add Issue
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a id="medpar" class="nav-link" href="{% url 'new-provider' %}">
-                                    Register Provider
+                                <a id="medpar" class="nav-link p-2" href="{% url 'new-provider' %}">
+                                    Add Provider
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="{% url 'new-parent' %}">
-                                    Register System
+                                <a class="nav-link p-2" href="{% url 'new-parent' %}">
+                                    Add System
                                 </a>
                             </li>
                         </ul>
 
                   </div>
                 </nav>
-                <main role="main" class="col-xl-11 col-lg-11 col-md-10 col-sm-10 col-11 ml-sm-auto px-md-4 bg-light">
+                <main role="main" class="col-xl-11 col-lg-11 col-md-10 col-sm-10 col-11 bg-light">
                     {% block content %}
 
 
@@ -181,9 +183,9 @@
                     <div class="modal fade mx-5" id="add_npr_due_modal" tabindex="-1" role="dialog">
                         <div class="modal-dialog modal-lg" role="document">
                             <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title">Add NPR Due Date</h5>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                                <div class="modal-header srg-bg-primary text-white">
+                                    <h5 class="">Add NPR Due Date</h5>
+                                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close">
                                     </button>
                                 </div>
                                 <div class="modal-body">
@@ -195,18 +197,12 @@
                                         {% endfor %}
 
                                         {% for field in form.visible_fields %}
-                                            <div class="form-group">
-                                              <ul class="list-group">
-                                                  <li class="list-group-item p-0 border-0">
-                                                      <ul class="list-group list-group-horizontal-sm">
-                                                          <li class="list-group-item w-25">{{ field.label_tag }}</li>
-                                                          <li class="list-group-item w-75">{{ field }}</li>
-                                                      </ul>
-                                                  </li>
-                                              </ul>
+                                            <div class="mx-2 my-3 bg-transparent">
+                                                  <label class="form-control border-0 p-0 bg-transparent">{{ field.label_tag }}</label>
+                                                  <span class="form-control border-0 p-0 bg-transparent">{{ field }}</span>
                                             </div>
                                         {% endfor %}
-                                        <input type="submit" name="add_npr_due_button" class="btn btn-primary"/>
+                                        <input type="submit" name="add_npr_due_button" class="srg-btn-primary"/>
                                     </form>
                                 </div>
                             </div>
@@ -214,6 +210,27 @@
                     </div>
                 </main>
           </div>
+
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+
+
+
+        <script type="text/javascript">
+           $(function() {
+               const current = location.pathname;
+               console.log(current)
+               $('.nav-link').each(function () {
+                   const $this = $(this);
+                   console.log($this)
+                   if($this.attr('href').indexOf(current) !== -1){
+                       $this.css("background", "#d9d9d9")
+                       $this.css("color", "#02308C")
+                       $this.css("border-radius", "12px")
+                   }
+               })
+           })
+        </script>
     </div>
 </body>
 </html>

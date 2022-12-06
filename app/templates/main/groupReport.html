@@ -14,7 +14,7 @@
                            data-show-export="true"
                            data-show-columns="true">
                 <thead class="text-center text-light">
-                    <tr class="srg-bg-primary">
+                    <tr class="srg-bg-primary" >
                         <th class="p-1 border-0" data-field="caseNumber" data-filter-control="input">Case #</th>
                         <th class="p-1 border-0" data-field="appealName" data-filter-control="input">Case Name</th>
                         <th class="p-1 border-0" data-field="appealStructure" data-filter-control="select">Case Structure</th>
@@ -23,7 +23,7 @@
                 </thead>
                 {% for case in allGroups %}
                     <tr>
-                        <td class="text-center" style="width:100px"><a href="{% url 'appeal-details' case.caseNumber %}">{{ case.caseNumber }}</a></td>
+                        <td class="text-center border-0" style="width:100px"><a href="{% url 'appeal-details' case.caseNumber %}">{{ case.caseNumber }}</a></td>
                         <td>{{ case.appealName }}</td>
                         <td>{{ case.appealStructure }}</td>
                         <td>{{ case.statusID }}</td>

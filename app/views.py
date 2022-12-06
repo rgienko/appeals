@@ -821,6 +821,14 @@ def groupReport(request):
     return render(request, 'main/groupReport.html', context)
 
 
+def providerReport(request):
+    context = initialize_context(request)
+    allProviders = TblProviderMaster.objects.filter(provMasterIsActive=1)[:50]
+    context['allProviders'] = allProviders
+
+    return render(request, 'main/providerReport.html', context)
+
+
 def updateDueDateProgress(request, pk):
     context = initialize_context(request)
     dueDate_obj = get_object_or_404(TblCriticalDatesMaster, pk=pk)
