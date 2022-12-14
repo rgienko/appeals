@@ -86,7 +86,7 @@
     background: #E38035;
     border: 1px solid #E38035;
     color: white;
-    padding:8px 6px 8px 10px;
+    padding: 8px 4px 8px 10px;
     border-radius: 8px;
     text-decoration:none
 }
@@ -95,7 +95,6 @@
     background: #ffffff;
     border: 1px solid #E38035;
     color: #E38035;
-    padding:8px 6px 8px 10px;
     border-radius: 8px;
     text-decoration:none
 }
