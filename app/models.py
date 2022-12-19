@@ -338,7 +338,8 @@ class TblProviderMaster(models.Model):
     determinationTypes = {
         ('FR', 'FR'),
         ('NPR', 'NPR'),
-        ('RNPR', 'RNPR')
+        ('RNPR', 'RNPR'),
+        ('Other', 'Other')
     }
     provMasterDeterminationType = models.CharField(max_length=4, choices=determinationTypes, blank=True, null=True)
     provMasterFiscalYear = models.DateField(blank=True, null=True)
