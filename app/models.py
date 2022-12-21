@@ -341,7 +341,7 @@ class TblProviderMaster(models.Model):
         ('RNPR', 'RNPR'),
         ('Other', 'Other')
     }
-    provMasterDeterminationType = models.CharField(max_length=4, choices=determinationTypes, blank=True, null=True)
+    provMasterDeterminationType = models.CharField(max_length=5, choices=determinationTypes, blank=True, null=True)
     provMasterFiscalYear = models.DateField(blank=True, null=True)
     issueID = models.ForeignKey(
         'TblIssueMaster', on_delete=models.CASCADE, db_column='issueID', blank=True, null=True)
