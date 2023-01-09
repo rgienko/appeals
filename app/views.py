@@ -636,10 +636,10 @@ def addIssueView(request, pk):
                                                    provMasterFiscalYear=added_provider.provMasterFiscalYear,
                                                    issueID=added_provider.issueID,
                                                    provMasterAuditAdjs=added_provider.provMasterAuditAdjs,
-                                                   provMasterWasAdded=True,
+                                                   provMasterWasAdded=added_provider.provMasterWasAdded,
                                                    provMasterImpact=added_provider.provMasterImpact,
                                                    provMasterToCase='NULL',
-                                                   provMasterTransferDate=today,
+                                                   provMasterTransferDate=added_provider.provMasterTransferDate,
                                                    provMasterFromCase='NULL',
                                                    provMasterNote=added_provider.provMasterNote,
                                                    provMasterDateStamp=today,
@@ -655,7 +655,7 @@ def addIssueView(request, pk):
                                                      })
         else:
             form = ProviderMasterCreateForm(initial={'caseNumber': cur_case,
-                                                     'provMasterWasAdded': True,
+                                                     'provMasterWasAdded': False,
                                                      'provMasterDateStamp': today
                                                      })
 

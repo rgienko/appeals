@@ -194,7 +194,7 @@
                 <h5 class="text-start fs-2 py-2 fw-normal srg-border-bottom d-flex align-items-middle">
                     {% if caseObj.appealStructure == 'Individual' %}
                         Case Issues <a class="ms-2" data-toggle="tooltip" data-placement="bottom" title="Add Issue" href="{% url 'add-issue' caseObj.caseNumber %}">
-                        <i class="bi bi-plus-square" style="font-size:22px;"></i></a>
+                        <i class="bi bi-plus-square"></i></a>
                     {% else %}
                         Group Providers
                         <a class="ms-2" data-toggle="tooltip" data-placement="bottom" title="Add Provider" href="{% url 'add-issue' caseObj.caseNumber %}">
@@ -202,8 +202,8 @@
                         </a>
                     {% endif %}
                 </h5>
-
-                <div class="table-responsive">
+                <div class="overflow-auto" style="max-height: 500px; min-height:100px">
+                    <div class="table-responsive">
                     <table class="table table-striped table-hover">
                         <thead class="text-center text-light fw-light srg-bg-primary">
                             <tr>
@@ -303,6 +303,7 @@
                                 </tr>
                             {% endfor %}
                     </table>
+                </div>
                 </div>
             </div>
         </div>
