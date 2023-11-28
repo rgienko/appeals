@@ -82,16 +82,19 @@ WSGI_APPLICATION = 'appeals.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'sql_server.pyodbc',
-        'NAME': 'appealMasterv4',
-        'USER': 'randall.gienko',
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'appealsV2',
+        'USER': 'dbadmin',
+        # 'ENGINE': 'sql_server.pyodbc',
+        # 'NAME': 'appealMasterv4',
+        # 'USER': 'randall.gienko',
         'PASSWORD': 'R@nd@ll22',
-        'HOST': 'srgsqlserver.database.windows.net',
-        'PORT': '',
-        'OPTIONS': {
-            'driver': 'ODBC Driver 17 for SQL Server',
-            'MARS_Connection': 'True',
-        }
+        'HOST': 'srgpostgresql.postgres.database.azure.com',
+        # 'HOST': 'srgsqlserver.database.windows.net',
+        'PORT': '5432',
+        # 'OPTIONS': {
+        #    'driver': 'ODBC Driver 17 for SQL Server',
+        # }
     }
 }
 
@@ -126,7 +129,7 @@ USE_I18N = True
 
 USE_L10N = True
 
-USE_TZ = True
+# USE_TZ = True
 
 
 # Static files (CSS, JavaScript, Images)
