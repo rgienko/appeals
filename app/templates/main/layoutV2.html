@@ -1,28 +1,212 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <!-- CSS only -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
-    <!-- JavaScript Bundle with Popper -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
-    <script type="text/javascript" src="http://code.jquery.com/jquery-1.10.0.min.js"></script>
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <!-- CSS only -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <!-- JavaScript Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js'></script>
+
     {% load static %}
 
-    <link rel="stylesheet" href="{% static 'site.css' %}">
+    <link rel="stylesheet" href="{% static 'css/site.css' %}">
 
-    <meta charset="UTF-8">
+
 
     <style>
-        .nav-link {
-            color: aliceblue;
+        :root {
+            --fc-button-bg-color: #02308C;
+            --fc-button-hover-bg-color: #d9d9d9;
+            --fc-button-hover-border-color: #02308C;
+            --fc-button-active-bg-color: #004000;
+            --fc-border-color: #afc0df;
+            --bs-link-color: #02308C;
+            --bs-link-color-rgb:2,48,140;
+        }
+
+        .fc-col-header-cell a {
+            color: #02308C;
+            text-decoration: none;
+        }
+        .fc-day a {
+            color: #02308C;
+        }
+
+        .event-title {
+            white-space: normal;
+            overflow: hidden;
+            text-overflow: clip;
+        }
+
+        .bd-placeholder-img {
+        font-size: 1.125rem;
+        text-anchor: middle;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        user-select: none;
+        }
+
+        @media (min-width: 768px) {
+            .bd-placeholder-img-lg {
+              font-size: 3.5rem;
+            }
+        }
+
+        .b-example-divider {
+            width: 100%;
+            height: 3rem;
+            background-color: rgba(0, 0, 0, .1);
+            border: solid rgba(0, 0, 0, .15);
+            border-width: 1px 0;
+            box-shadow: inset 0 .5em 1.5em rgba(0, 0, 0, .1), inset 0 .125em .5em rgba(0, 0, 0, .15);
+          }
+
+        .b-example-vr {
+            flex-shrink: 0;
+            width: 1.5rem;
+            height: 100vh;
+        }
+
+        .bi {
+            vertical-align: -.125em;
+            fill: currentColor;
+        }
+
+        .nav-scroller {
+            position: relative;
+            z-index: 2;
+            height: 2.75rem;
+            overflow-y: hidden;
+        }
+
+        .nav-scroller .nav {
+            display: flex;
+            flex-wrap: nowrap;
+            padding-bottom: 1rem;
+            margin-top: -1px;
+            overflow-x: auto;
+            text-align: center;
+            white-space: nowrap;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .btn-bd-primary {
+            --bd-violet-bg: #02308C;
+            --bd-violet-rgb: 112.520718, 44.062154, 249.437846;
+
+            --bs-btn-font-weight: 600;
+            --bs-btn-color: var(--bs-white);
+            --bs-btn-bg: var(--bd-violet-bg);
+            --bs-btn-border-color: var(--bd-violet-bg);
+            --bs-btn-hover-color: var(--bs-white);
+            --bs-btn-hover-bg: #6528e0;
+            --bs-btn-hover-border-color: #6528e0;
+            --bs-btn-focus-shadow-rgb: var(--bd-violet-rgb);
+            --bs-btn-active-color: var(--bs-btn-hover-color);
+            --bs-btn-active-bg: #5a23c8;
+            --bs-btn-active-border-color: #5a23c8;
+        }
+
+        .bd-mode-toggle {
+            z-index: 1500;
+        }
+
+        .bd-mode-toggle .dropdown-menu .active .bi {
+            display: block !important;
+        }
+
+        .bi {
+            display: inline-block;
+            width: 1rem;
+            height: 1rem;
+        }
+
+        /*
+         * Sidebar
+         */
+
+        @media (min-width: 768px) {
+            .sidebar .offcanvas-lg {
+                position: -webkit-sticky;
+                position: sticky;
+                top: 48px;
+            }
+            .navbar-search {
+                display: block;
+            }
+        }
+
+        .sidebar .nav-link {
+            font-size: .875rem;
+            font-weight: 500;
+        }
+
+        .sidebar .nav-link.active {
+            text-decoration: underline;
+        }
+
+        .sidebar-heading {
+            font-size: .875rem;
+            font-weight:600;
+        }
+
+        /*
+         * Navbar
+         */
+
+        .navbar-brand {
+            padding-top: .75rem;
+            padding-bottom: .75rem;
+        }
+
+        .navbar .form-control {
+            padding: .75rem 1rem;
         }
 
     </style>
+
     <title>Strategic Appeal Master</title>
 </head>
 <body>
+    <svg xmlns="http://www.w3.org/2000/svg" class="d-none">
+        <symbol id="house-fill" viewBox="0 0 16 16">
+            <path d="M8.707 1.5a1 1 0 0 0-1.414 0L.646 8.146a.5.5 0 0 0 .708.708L8 2.207l6.646 6.647a.5.5 0 0 0 .708-.708L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293L8.707 1.5Z"></path>
+            <path d="m8 3.293 6 6V13.5a1.5 1.5 0 0 1-1.5 1.5h-9A1.5 1.5 0 0 1 2 13.5V9.293l6-6Z"></path>
+        </symbol>
+        <symbol id="plus-fill" viewBox="0 0 16 16">
+            <path d="M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zm6.5 4.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3a.5.5 0 0 1 1 0"/>
+        </symbol>
+        <symbol id="grid-fill" viewBox="0 0 16 16">
+            <path d="M1 2a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1zm5 0a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1zm5 0a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1h-2a1 1 0 0 1-1-1zM1 7a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1zm5 0a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1zm5 0a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1h-2a1 1 0 0 1-1-1zM1 12a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1zm5 0a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1zm5 0a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1h-2a1 1 0 0 1-1-1z"/>
+        </symbol>
+        <symbol id="square-fill" viewBox="0 0 16 16">
+              <path d="M14 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2z"/>
+        </symbol>
+        <symbol id="ordered-list" viewBox="0 0 16 16">
+            <path fill-rule="evenodd" d="M0 .5A.5.5 0 0 1 .5 0h2a.5.5 0 0 1 0 1h-2A.5.5 0 0 1 0 .5m4 0a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1h-10A.5.5 0 0 1 4 .5m-4 2A.5.5 0 0 1 .5 2h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5m4 0a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5m-4 2A.5.5 0 0 1 .5 4h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5m4 0a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11a.5.5 0 0 1-.5-.5m-4 2A.5.5 0 0 1 .5 6h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5m4 0a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 0 1h-8a.5.5 0 0 1-.5-.5m-4 2A.5.5 0 0 1 .5 8h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5m4 0a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 0 1h-8a.5.5 0 0 1-.5-.5m-4 2a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5m4 0a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1h-10a.5.5 0 0 1-.5-.5m-4 2a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5m4 0a.5.5 0 0 1 .5-.5h6a.5.5 0 0 1 0 1h-6a.5.5 0 0 1-.5-.5m-4 2a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5m4 0a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11a.5.5 0 0 1-.5-.5"/>
+        </symbol>
+        <symbol id="ui-list" viewBox="0 0 16 16">
+            <path fill-rule="evenodd" d="M5 11.5a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5m-3 1a1 1 0 1 0 0-2 1 1 0 0 0 0 2m0 4a1 1 0 1 0 0-2 1 1 0 0 0 0 2m0 4a1 1 0 1 0 0-2 1 1 0 0 0 0 2"/>
+        </symbol>
+        <symbol id="p-square" viewBox="0 0 16 16">
+            <path d="M5.5 4.002h2.962C10.045 4.002 11 5.104 11 6.586c0 1.494-.967 2.578-2.55 2.578H6.784V12H5.5zm2.77 4.072c.893 0 1.419-.545 1.419-1.488s-.526-1.482-1.42-1.482H6.778v2.97z"/>
+            <path d="M0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2zm15 0a1 1 0 0 0-1-1H2a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1z"/>
+        </symbol>
+        <symbol id="diagram" viewBox="0 0 16 16">
+            <path fill-rule="evenodd" d="M6 3.5A1.5 1.5 0 0 1 7.5 2h1A1.5 1.5 0 0 1 10 3.5v1A1.5 1.5 0 0 1 8.5 6v1H14a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-1 0V8h-5v.5a.5.5 0 0 1-1 0V8h-5v.5a.5.5 0 0 1-1 0v-1A.5.5 0 0 1 2 7h5.5V6A1.5 1.5 0 0 1 6 4.5zM8.5 5a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5zM0 11.5A1.5 1.5 0 0 1 1.5 10h1A1.5 1.5 0 0 1 4 11.5v1A1.5 1.5 0 0 1 2.5 14h-1A1.5 1.5 0 0 1 0 12.5zm1.5-.5a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5zm4.5.5A1.5 1.5 0 0 1 7.5 10h1a1.5 1.5 0 0 1 1.5 1.5v1A1.5 1.5 0 0 1 8.5 14h-1A1.5 1.5 0 0 1 6 12.5zm1.5-.5a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5zm4.5.5a1.5 1.5 0 0 1 1.5-1.5h1a1.5 1.5 0 0 1 1.5 1.5v1a1.5 1.5 0 0 1-1.5 1.5h-1a1.5 1.5 0 0 1-1.5-1.5zm1.5-.5a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5z"/>
+        </symbol>
+        <symbol id="mastadon" viewBox="0 0 16 16">
+            <path d="M11.19 12.195c2.016-.24 3.77-1.475 3.99-2.603.348-1.778.32-4.339.32-4.339 0-3.47-2.286-4.488-2.286-4.488C12.062.238 10.083.017 8.027 0h-.05C5.92.017 3.942.238 2.79.765c0 0-2.285 1.017-2.285 4.488l-.002.662c-.004.64-.007 1.35.011 2.091.083 3.394.626 6.74 3.78 7.57 1.454.383 2.703.463 3.709.408 1.823-.1 2.847-.647 2.847-.647l-.06-1.317s-1.303.41-2.767.36c-1.45-.05-2.98-.156-3.215-1.928a3.614 3.614 0 0 1-.033-.496s1.424.346 3.228.428c1.103.05 2.137-.064 3.188-.189zm1.613-2.47H11.13v-4.08c0-.859-.364-1.295-1.091-1.295-.804 0-1.207.517-1.207 1.541v2.233H7.168V5.89c0-1.024-.403-1.541-1.207-1.541-.727 0-1.091.436-1.091 1.296v4.079H3.197V5.522c0-.859.22-1.541.66-2.046.456-.505 1.052-.764 1.793-.764.856 0 1.504.328 1.933.983L8 4.39l.417-.695c.429-.655 1.077-.983 1.934-.983.74 0 1.336.259 1.791.764.442.505.661 1.187.661 2.046v4.203z"/>
+        </symbol>
+        <symbol id="close" viewBox="0 0 16 16">
+            <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z"/>
+        </symbol>
+    </svg>
     <!--
     <nav class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow d-print-none">
         <a class="navbar-brand col-md-3 col-lg-2 mr-0 px-3" href="#">Strategic Reimbursement Group</a>
@@ -46,118 +230,143 @@
         });
     </script>
 
-<div class="wrapper">
-    <!-- Sidebar -->
-    <nav id="sidebar" class="p-2 sidebar-sticky">
-        <div class="sidebar-header border-bottom">
-            <h3 class="text-light">
-                {% if user.is_authenticated %}
-                    Welcome, {{ user.firstName }} <br>
-                    <span class="text-muted fs-6">{{ user.email }} <br>
-                        <a class="text-light text-decoration-none" href="{% url 'signout' %}">Sign Out</a></span>
-                {% else %}
-                    Welcome, {{ user.firstName }} <br>
-                    <span class="text-muted fs-6">{{ user.email }} <br>
-                        <a class="text-light text-decoration-none" href="{% url 'signout' %}">Sign Out</a></span>
-                {% endif %}
-            </h3>
-            <strong>{{ user.firstName.0 }}{{ user.lastName.0 }}</strong>
-        </div>
-        <div class="search-bar mt-2">
-            <form method="POST" action="">
-                {% csrf_token %}
-                <input class="form-control" type="text" placeholder="Search Case" aria-label="Search" name="search">
-            </form>
-        </div>
-        <ul class="list-unstyled components mt-4">
-            <li class="active nav-item">
-                <a href="{% url 'main' %}" class="nav-link">
-                    Dashboard
-                </a>
-            </li>
-            <li class="nav-item">
-                <a href="{% url 'new-appeal' %}" class="nav-link">
-                    New Appeal
-                </a>
-            </li>
-            <li>
-                <a href="#pageSubmenu" data-bs-toggle="collapse" aria-expanded="false" class="nav-link">
-                    Reports <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-caret-down-fill" viewBox="0 0 16 16">
-                              <path d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"/>
-                            </svg>
-                </a>
-                <ul class="collapse list-unstyled submenu" id="pageSubmenu">
-                    <li>
-                        <a class="nav-link" href="{% url 'due-master' %}">Due Dates - By Date</a>
-                    </li>
-                    <li>
-                        <a class="nav-link" href="{% url 'due-master-two' %}">Due Dates - By Case</a>
-                    </li>
-                    <li>
-                        <a class="nav-link" href="{% url 'prov-appeal-details' %}">Provider Appeals</a>
-                    </li>
-                </ul>
-            </li>
-            <li>
-                <a href="#masterSubmenu" data-bs-toggle="collapse" aria-expanded="false" class="nav-link">
-                    Master Tables <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-caret-down-fill" viewBox="0 0 16 16">
-                              <path d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"/>
-                            </svg>
-                </a>
-                <ul class="collapse list-unstyled submenu" id="masterSubmenu">
-                    <li>
-                        <a class="nav-link" href="{% url 'issue-master' %}">Issues</a>
-                    </li>
-                    <li>
-                        <a class="nav-link" href="{% url 'provider-master' %}">Providers</a>
-                    </li>
-                    <li>
-                        <a class="nav-link" href="{% url 'parent-master' %}">Parent</a>
-                    </li>
-                    <li>
-                        <a class="nav-link" href="{% url 'staff-master' %}">Staff</a>
-                    </li>
-                    <li>
-                        <a class="nav-link" href="{% url 'mac-master' %}">MAC</a>
-                    </li>
-                    <li>
-                        <a class="nav-link" href="{% url 'prrb-master' %}">PRRB</a>
-                    </li>
-                </ul>
-            </li>
-            <li>
-                <a href="#toolSubmenu" data-bs-toggle="collapse" aria-expanded="false" class="nav-link">
-                    Tools <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-caret-down-fill" viewBox="0 0 16 16">
-                              <path d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"/>
-                            </svg>
-                </a>
-                <ul class="collapse list-unstyled submenu" id="toolSubmenu">
-                    <li>
-                        <a class="nav-link" data-bs-toggle="modal" href="#add_npr_due_modal">Add NPR</a>
-                    </li>
-                    <li>
-                        <a class="nav-link" href="{% url 'new-provider' %}">New Provider</a>
-                    </li>
-                    <li>
-                        <a class="nav-link" href="{% url 'new-parent' %}">New parent</a>
-                    </li>
-                </ul>
-            </li>
-        </ul>
+    <div class="container-fluid">
+        <div class="row vh-100">
+            <!-- Sidebar -->
+            <div id="sidebar" class="sidebar col-xl-1 col-lg-2 col-md-3 p-0 srg-bg-secondary">
+                <div class="srg-sidebar-header srg-bg-primary pb-2">
+                    <div class="ps-3">
+                        <span class="display-6 fs-2 srg-text-secondary">Hi, {{ user.firstName }} </span><br>
+                        <span class="display-6 fs-4 srg-text-secondary">{{ today|date:'D, N d, Y' }}</span><br>
+                    </div>
 
-        <div class="nav-footer">
-            <button type="button" id="sidebarCollapse" class="btn btn-info">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-justify" viewBox="0 2 16 16">
-                  <path fill-rule="evenodd" d="M2 12.5a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11a.5.5 0 0 1-.5-.5zm0-3a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11a.5.5 0 0 1-.5-.5zm0-3a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11a.5.5 0 0 1-.5-.5zm0-3a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11a.5.5 0 0 1-.5-.5z"/>
-                </svg>
-            </button>
-        </div>
-    </nav>
-    <div class="col-md-10 ml-sm-auto col-lg-10 px-md-4 bg-light" style="margin-left:100px">
-        {% block content %}
+                    <ul class="navbar-nav flex-row d-md-none">
+                        <li class="nav-item text-nowrap">
+                            <button class="nav-link px-3 text-white" type="button" data-bs-toggle="offcanvas" data-bs-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
+                                <svg class="bi"><use xlink:href="#list"></use></svg>
+                            </button>
+                        </li>
+                    </ul>
+                </div>
+                <div class="search-bar mt-2 px-md-3 px-sm-1">
+                    <form method="POST" action="">
+                        {% csrf_token %}
+                        <input class="form-control" type="text" placeholder="Search Case" aria-label="Search" name="search">
+                    </form>
+                </div>
+                <div class="offcanvas-md offcanvas-start srg-bg-secondary" tabindex="-1" id="sidebarMenu" aria-labelledby="sidebarMenuLabel">
+                    <div class="offcanvas-header">
+                        <h5 class="offcanvas-title" id="sidebarMenuLabel">Appeal Master</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#sidebarMenu" aria-label="Close"></button>
+                    </div>
+                    <div class="offcanvas-body d-md-flex flex-column p-0 pt-lg-3 overflow-y-auto">
+                        <ul class="nav flex-column">
+                            <li class="nav-item">
+                                <a class="nav-link d-flex align-items-center gap-2" href="{% url 'main' %}">
+                                    <svg class="bi"><use xlink:href="#house-fill"></use></svg>
+                                    Dashboard
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link d-flex align-items-center gap-2" href="{% url 'main' %}">
+                                    <svg class="bi"><use xlink:href="#plus-fill"></use></svg>
+                                    New Appeal
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link d-flex align-items-center gap-2" data-bs-toggle="modal" href="#add_npr_due_modal">
+                                    <svg class="bi"><use xlink:href="#plus-fill"></use></svg>
+                                    Add NPR
+                                </a>
+                            </li>
+                        </ul>
+                        <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-body-secondary text-uppercase">
+                            <span>Reports</span>
+                        </h6>
+                        <ul class="nav flex-column">
+                            <li class="nav-item">
+                                <a class="nav-link d-flex align-items-center gap-2" href="{% url 'group-report' %}">
+                                   <svg class="bi"><use xlink:href="#grid-fill"></use></svg>
+                                    Group Report
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link d-flex align-items-center gap-2" href="{% url 'provider-report' %}">
+                                   <svg class="bi"><use xlink:href="#square-fill"></use></svg>
+                                    Provider Report
+                                </a>
+                            </li>
+                        </ul>
+                        <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-body-secondary text-uppercase">
+                            <span>Master Tables</span>
+                        </h6>
+                        <ul class="nav flex-column">
+                            <li class="nav-item">
+                                <a class="nav-link d-flex align-items-center gap-2" href="{% url 'issue-master' %}">
+                                   <svg class="bi"><use xlink:href="#ordered-list"></use></svg>
+                                    Issue List
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link d-flex align-items-center gap-2" href="{% url 'provider-master' %}">
+                                   <svg class="bi"><use xlink:href="#p-square"></use></svg>
+                                    Provider List
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link d-flex align-items-center gap-2" href="{% url 'parent-master' %}">
+                                   <svg class="bi"><use xlink:href="#diagram"></use></svg>
+                                    Parent List
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link d-flex align-items-center gap-2" href="{% url 'mac-master' %}">
+                                   <svg class="bi"><use xlink:href="#mastadon"></use></svg>
+                                    MACs
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
 
-        {% endblock %}
+            </div>
+
+            <div class="col-xl-11 col-lg-10 col-md-9 bg-light">
+                {% block content %}
+
+                {% endblock %}
+                <div class="modal fade mx-5" id="add_npr_due_modal" tabindex="-1" role="dialog">
+                    <div class="modal-dialog modal-md" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header srg-bg-primary srg-text-secondary">
+                                <span class="fs-3 display-5">Add NPR Due Date</span>
+                                <a type="button" class="srg-text-secondary" data-bs-dismiss="modal" aria-label="Close"><svg class="bi"><use xlink:href="#close"></use></svg>
+                                </a>
+                            </div>
+                            <div class="modal-body">
+                                <form class="" action="" method="post">
+                                    {% csrf_token %}
+
+                                    {% for hidden_field in form.hidden_fields %}
+                                        {{ hidden_field }}
+                                    {% endfor %}
+
+                                    {% for field in form.visible_fields %}
+                                        <div class="mx-2 my-3 bg-transparent">
+                                              <label class="form-control border-0 p-0 bg-transparent">{{ field.label_tag }}</label>
+                                              <span class="form-control border-0 p-0 bg-transparent">{{ field }}</span>
+                                        </div>
+                                    {% endfor %}
+                                    <div class="modal-footer pb-0 pe-0">
+                                        <button type="submit" name="add_npr_due_button" class="srg-btn-primary">Add Due Date</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-</div>
 </body>
 </html>

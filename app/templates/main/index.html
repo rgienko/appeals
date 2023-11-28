@@ -1,104 +1,333 @@
-{% extends 'main/layout.html' %}
+{% extends 'main/layoutV2.html' %}
 
 {% block content %}
-    <div class="container-fluid mt-2">
-        <div class="row mt-2">
-            <div class="card srg-border">
-                <h4 class="fs-2 py-2 fw-normal srg-color-primary srg-border-bottom">
-                    Upcoming Appeal Deadlines:
-                </h4>
+    <div class="container-fluid vh-100">
+        <div class="row vh-100 overflow-auto">
+            <div class="card srg-border px-0 pb-2">
+                <div class="card-header srg-bg-primary border-0" style="border-top-left-radius: 12px; border-top-right-radius: 12px">
+                    <span class="fs-2 fw-normal srg-text-secondary">
+                        Upcoming Critical Due Dates:
+                    </span>
+                </div>
 
-                <table class="table table-hover mt-2">
-                    <thead class="srg-bg-primary text-white border-0">
-                        <tr class="border-0">
-                            <th scope="col" class="text-center border-0">Case</th>
-                            <th scope="col" class="text-center border-0">Structure</th>
-                            <th scope="col" class="text-center border-0">Case Name / Provider</th>
-                            <th scope="col" class="text-center border-0">Year</th>
-                            <th scope="col" class="text-center border-0">Item Due</th>
-                            <th scope="col" class="text-center border-0">Due Date</th>
-                            <th scope="col" class="text-center border-0">Progress</th>
-                        </tr>
-                    </thead>
-                        {% for date in allDueDates %}
-                        <tr>
-                            <td class="text-center" style="width:85px;"><a class="srg-color-primary" href="{% url 'appeal-details' date.caseNumber %}">{{ date.caseNumber }}</a></td>
-                            <td class="text-center">{{ date.get_case_structure }}</td>
-                            {% if date.get_case_structure == 'Individual' %}
-                                <td class="">{{ date.get_provider|title }}</td>
-                            {% else %}
-                                <td class="">{{ date.get_appeal_name }}</td>
-                            {% endif %}
-                            <td class="text-center" style="width:85px;">{{ date.get_fy|date:'Y'}}</td>
-                            <td class="">{{ date.get_action_note }}</td>
-                            <td class="text-center" style="width:85px;">{{ date.dueDate|date:'m/d/Y'}}</td>
-                            {% if date.progress == 'Not Started' %}
-                                <td class="text-center bg-warning"><a class="text-dark" href=""><i class="far fa-circle"></i> {{ date.progress }}</a></td>
-                            {% elif date.progress == 'In Progress' %}
-                                <td class="text-center srg-background text-white"><a class="text-white" href=""><i class="fas fa-spinner"></i> {{ date.progress }}</a></td>
-                            {% elif date.progress == 'Completed' %}
-                                <td class="text-center bg-success text-white"><a class="text-white" href=""><i class="far fa-check-circle"></i> {{ date.progress }}</a></td>
-                            {% else %}
-                                <td class="text-center bg-info"><a class="text-dark" href="{% url 'update-due-progress' date.id %}">{{ date.progress }}</a></td>
-                            {% endif %}
-                        </tr>
-                        {% endfor %}
-                </table>
+                <div class="card-body">
+                    <div class="row d-flex justify-content-between">
+                        <div class="col-6">
+                            <div class="card">
+                                <div class="card-header srg-bg-secondary">
+                                    <span class="fs-4 fw-normal srg-header">Due in 30 days</span>
+                                </div>
+                                <div class="card-body p-0">
+                                    <table class="srg-table">
+                                        <thead class="srg-bg-primary text-white border-0">
+                                            <tr class="border-0">
+                                                <th scope="col" class="text-center border-0">Case</th>
+                                                <th scope="col" class="text-center border-0">Structure</th>
+                                                <th scope="col" class="text-center border-0">Case Name / Provider</th>
+                                                <th scope="col" class="text-center border-0">Year</th>
+                                                <th scope="col" class="text-center border-0">Item Due</th>
+                                                <th scope="col" class="text-center border-0">Due Date</th>
+                                                <th scope="col" class="text-center border-0">Progress</th>
+                                            </tr>
+                                        </thead>
+                                        {% for date in dueDatesThirty %}
+                                        <tr>
+                                            <td class="text-center" style="width:85px;"><a class="srg-color-primary" href="{% url 'appeal-details' date.caseNumber %}">{{ date.caseNumber }}</a></td>
+                                            <td class="text-center">{{ date.get_case_structure }}</td>
+                                            {% if date.get_case_structure == 'Individual' %}
+                                                <td class="">{{ date.get_provider|title }}</td>
+                                            {% else %}
+                                                <td class="">{{ date.get_appeal_name }}</td>
+                                            {% endif %}
+                                            <td class="text-center" style="width:85px;">{{ date.get_fy|date:'Y'}}</td>
+                                            <td class="">{{ date.get_action_note }}</td>
+                                            <td class="text-center" style="width:85px;">{{ date.dueDate|date:'m/d/Y'}}</td>
+                                            {% if date.progress == 'Not Started' %}
+                                                <td class="text-center bg-warning"><a class="text-dark" href=""><i class="far fa-circle"></i> {{ date.progress }}</a></td>
+                                            {% elif date.progress == 'In Progress' %}
+                                                <td class="text-center srg-background text-white"><a class="text-white" href=""><i class="fas fa-spinner"></i> {{ date.progress }}</a></td>
+                                            {% elif date.progress == 'Completed' %}
+                                                <td class="text-center bg-success text-white"><a class="text-white" href=""><i class="far fa-check-circle"></i> {{ date.progress }}</a></td>
+                                            {% else %}
+                                                <td class="text-center bg-info"><a class="text-dark" href="{% url 'update-due-progress' date.id %}">{{ date.progress }}</a></td>
+                                            {% endif %}
+                                        </tr>
+                                        {% endfor %}
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="card">
+                                <div class="card-header srg-bg-secondary">
+                                    <span class="fs-4 fw-normal srg-header">Due in 60 days</span>
+                                </div>
+                                <div class="card-body p-0">
+                                    <table class="srg-table">
+                                        <thead class="srg-bg-primary text-white border-0">
+                                            <tr class="border-0">
+                                                <th scope="col" class="text-center border-0">Case</th>
+                                                <th scope="col" class="text-center border-0">Structure</th>
+                                                <th scope="col" class="text-center border-0">Case Name / Provider</th>
+                                                <th scope="col" class="text-center border-0">Year</th>
+                                                <th scope="col" class="text-center border-0">Item Due</th>
+                                                <th scope="col" class="text-center border-0">Due Date</th>
+                                                <th scope="col" class="text-center border-0">Progress</th>
+                                            </tr>
+                                        </thead>
+                                        {% for date in dueDatesSixty %}
+                                        <tr>
+                                            <td class="text-center" style="width:85px;"><a class="srg-color-primary" href="{% url 'appeal-details' date.caseNumber %}">{{ date.caseNumber }}</a></td>
+                                            <td class="text-center">{{ date.get_case_structure }}</td>
+                                            {% if date.get_case_structure == 'Individual' %}
+                                                <td class="">{{ date.get_provider|title }}</td>
+                                            {% else %}
+                                                <td class="">{{ date.get_appeal_name }}</td>
+                                            {% endif %}
+                                            <td class="text-center" style="width:85px;">{{ date.get_fy|date:'Y'}}</td>
+                                            <td class="">{{ date.get_action_note }}</td>
+                                            <td class="text-center" style="width:85px;">{{ date.dueDate|date:'m/d/Y'}}</td>
+                                            {% if date.progress == 'Not Started' %}
+                                                <td class="text-center bg-warning"><a class="text-dark" href=""><i class="far fa-circle"></i> {{ date.progress }}</a></td>
+                                            {% elif date.progress == 'In Progress' %}
+                                                <td class="text-center srg-background text-white"><a class="text-white" href=""><i class="fas fa-spinner"></i> {{ date.progress }}</a></td>
+                                            {% elif date.progress == 'Completed' %}
+                                                <td class="text-center bg-success text-white"><a class="text-white" href=""><i class="far fa-check-circle"></i> {{ date.progress }}</a></td>
+                                            {% else %}
+                                                <td class="text-center bg-info"><a class="text-dark" href="{% url 'update-due-progress' date.id %}">{{ date.progress }}</a></td>
+                                            {% endif %}
+                                        </tr>
+                                        {% endfor %}
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row d-flex justify-content-between mt-4">
+                        <div class="col-6">
+                            <div class="card">
+                                <div class="card-header srg-bg-secondary">
+                                    <span class="fs-4 fw-normal srg-header">Due in 90 days</span>
+                                </div>
+                                <div class="card-body p-0">
+                                    <table class="srg-table">
+                                        <thead class="srg-bg-primary text-white border-0">
+                                            <tr class="border-0">
+                                                <th scope="col" class="text-center border-0">Case</th>
+                                                <th scope="col" class="text-center border-0">Structure</th>
+                                                <th scope="col" class="text-center border-0">Case Name / Provider</th>
+                                                <th scope="col" class="text-center border-0">Year</th>
+                                                <th scope="col" class="text-center border-0">Item Due</th>
+                                                <th scope="col" class="text-center border-0">Due Date</th>
+                                                <th scope="col" class="text-center border-0">Progress</th>
+                                            </tr>
+                                        </thead>
+                                        {% for date in dueDatesNinety %}
+                                        <tr>
+                                            <td class="text-center" style="width:85px;"><a class="srg-color-primary" href="{% url 'appeal-details' date.caseNumber %}">{{ date.caseNumber }}</a></td>
+                                            <td class="text-center">{{ date.get_case_structure }}</td>
+                                            {% if date.get_case_structure == 'Individual' %}
+                                                <td class="">{{ date.get_provider|title }}</td>
+                                            {% else %}
+                                                <td class="">{{ date.get_appeal_name }}</td>
+                                            {% endif %}
+                                            <td class="text-center" style="width:85px;">{{ date.get_fy|date:'Y'}}</td>
+                                            <td class="">{{ date.get_action_note }}</td>
+                                            <td class="text-center" style="width:85px;">{{ date.dueDate|date:'m/d/Y'}}</td>
+                                            {% if date.progress == 'Not Started' %}
+                                                <td class="text-center bg-warning"><a class="text-dark" href=""><i class="far fa-circle"></i> {{ date.progress }}</a></td>
+                                            {% elif date.progress == 'In Progress' %}
+                                                <td class="text-center srg-background text-white"><a class="text-white" href=""><i class="fas fa-spinner"></i> {{ date.progress }}</a></td>
+                                            {% elif date.progress == 'Completed' %}
+                                                <td class="text-center bg-success text-white"><a class="text-white" href=""><i class="far fa-check-circle"></i> {{ date.progress }}</a></td>
+                                            {% else %}
+                                                <td class="text-center bg-info"><a class="text-dark" href="{% url 'update-due-progress' date.id %}">{{ date.progress }}</a></td>
+                                            {% endif %}
+                                        </tr>
+                                        {% endfor %}
+                                    </table>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="col-6">
+                            <div class="card">
+                                <div class="card-header srg-bg-secondary">
+                                    <span class="fs-4 fw-normal srg-header">Due in 120 days</span>
+                                </div>
+                                <div class="card-body p-0">
+                                    <table class="srg-table">
+                                        <thead class="srg-bg-primary text-white border-0">
+                                            <tr class="border-0">
+                                                <th scope="col" class="text-center border-0">Case</th>
+                                                <th scope="col" class="text-center border-0">Structure</th>
+                                                <th scope="col" class="text-center border-0">Case Name / Provider</th>
+                                                <th scope="col" class="text-center border-0">Year</th>
+                                                <th scope="col" class="text-center border-0">Item Due</th>
+                                                <th scope="col" class="text-center border-0">Due Date</th>
+                                                <th scope="col" class="text-center border-0">Progress</th>
+                                            </tr>
+                                        </thead>
+                                        {% for date in dueDatesOneTwenty %}
+                                        <tr>
+                                            <td class="text-center" style="width:85px;"><a class="srg-color-primary" href="{% url 'appeal-details' date.caseNumber %}">{{ date.caseNumber }}</a></td>
+                                            <td class="text-center">{{ date.get_case_structure }}</td>
+                                            {% if date.get_case_structure == 'Individual' %}
+                                                <td class="">{{ date.get_provider|title }}</td>
+                                            {% else %}
+                                                <td class="">{{ date.get_appeal_name }}</td>
+                                            {% endif %}
+                                            <td class="text-center" style="width:85px;">{{ date.get_fy|date:'Y'}}</td>
+                                            <td class="">{{ date.get_action_note }}</td>
+                                            <td class="text-center" style="width:85px;">{{ date.dueDate|date:'m/d/Y'}}</td>
+                                            {% if date.progress == 'Not Started' %}
+                                                <td class="text-center bg-warning"><a class="text-dark" href=""><i class="far fa-circle"></i> {{ date.progress }}</a></td>
+                                            {% elif date.progress == 'In Progress' %}
+                                                <td class="text-center srg-background text-white"><a class="text-white" href=""><i class="fas fa-spinner"></i> {{ date.progress }}</a></td>
+                                            {% elif date.progress == 'Completed' %}
+                                                <td class="text-center bg-success text-white"><a class="text-white" href=""><i class="far fa-check-circle"></i> {{ date.progress }}</a></td>
+                                            {% else %}
+                                                <td class="text-center bg-info"><a class="text-dark" href="{% url 'update-due-progress' date.id %}">{{ date.progress }}</a></td>
+                                            {% endif %}
+                                        </tr>
+                                        {% endfor %}
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
             </div>
+            <div class="card srg-border px-0 pb-2 my-4">
+                <div class="card-header srg-bg-primary border-0" style="border-top-left-radius: 12px; border-top-right-radius: 12px">
+                    <span class="fs-2 fw-normal srg-text-secondary">
+                        NPR Filing Deadlines:
+                    </span>
+                </div>
+                <div class="card-body">
+                    <div class="row d-flex justify-content-between">
+                        <div class="col-6">
+                            <div class="card">
+                                <div class="card-header srg-bg-secondary">
+                                    <span class="fs-4 fw-normal srg-header">Due in 30 days</span>
+                                </div>
+                                <div class="card-body p-0">
+                                    <table class="srg-table">
+                                        <thead class="text-light srg-bg-primary">
+                                            <tr>
+                                                <th scope="col" class="text-center">Prov #</th>
+                                                <th scope="col" class="text-center">Name</th>
+                                                <th scope="col" class="text-center">Parent</th>
+                                                <th scope="col" class="text-center">Year</th>
+                                                <th scope="col" class="text-center">NPR Date</th>
+                                                <th scope="col" class="text-center">Due Date</th>
+                                                <th scope="col" class="text-center">Status</th>
+                                            </tr>
+                                        </thead>
+                                        {% for npr in nprDueDatesThirty %}
+                                            {% if npr.calc_deadline < today %}
+                                            {% else %}
+                                                <tr>
+                                                    <td class="text-center" style="width:85px;">{{ npr.providerID }}</td>
+                                                    <td class="">{{ npr.get_prov_name|title }}</td>
+                                                    <td class="">{{ npr.get_prov_parent|title }}</td>
+                                                    <td class="text-center">{{ npr.nprFY }}</td>
+                                                    <td class="text-center" style="width:85px;">{{ npr.nprDate|date:'m/d/Y' }}</td>
+                                                    <td class="text-center" style="width:85px;">{{ npr.nprDueDate|date:'m/d/Y' }}</td>
+                                                    {% if npr.status == 'Completed' %}
+                                                        <td class="srg-bg-success text-center text-light" style="background-color: #004000">
+                                                            {{ npr.status}}
+                                                        </td>
+                                                    {% elif npr.status == 'Not Started' %}
+                                                        <td class="text-center srg-bg-secondary text-light" style="background: #02308C">
+                                                            <a class="text-light" href="{% url 'update-npr-progress' npr.nprID %}">
+                                                                {{ npr.status}}
+                                                            </a>
+                                                        </td>
+                                                    {% elif npr.status == 'Not Filed' %}
+                                                        <td class="text-center srg-bg-danger" style="background: #8B0000">
+                                                            <a class="text-white" href="{% url 'update-npr-progress' npr.nprID %}">
+                                                                {{ npr.status}}
+                                                            </a>
+                                                        </td>
+                                                    {% else %}
+                                                        <td class="text-center srg-bg-secondary" style="background: #d9d9d9">
+                                                            <a class="text-dark" href="{% url 'update-npr-progress' npr.nprID %}">
+                                                                {{ npr.status}}
+                                                            </a>
+                                                        </td>
+                                                    {% endif %}
+                                                </tr>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </table>
+                                </div>
 
-            <div class="card srg-border my-lg-5 mt-4">
-                <h4 class="fs-2 py-2 fw-normal srg-color-primary srg-border-bottom">
-                    NPR Filing Deadlines:
-                </h4>
-                <table class="table table-hover mt-2">
-                    <thead class="text-light srg-bg-primary">
-                        <tr>
-                            <th scope="col" class="text-center">Prov #</th>
-                            <th scope="col" class="text-center">Name</th>
-                            <th scope="col" class="text-center">Parent</th>
-                            <th scope="col" class="text-center">Year</th>
-                            <th scope="col" class="text-center">NPR Date</th>
-                            <th scope="col" class="text-center">Due Date</th>
-                            <th scope="col" class="text-center">Status</th>
-                        </tr>
-                    </thead>
-                        {% for npr in nprDueDates %}
-                            {% if npr.calc_deadline < today %}
-                            {% else %}
-                                <tr>
-                                    <td class="text-center" style="width:85px;">{{ npr.providerID }}</td>
-                                    <td class="">{{ npr.get_prov_name|title }}</td>
-                                    <td class="">{{ npr.get_prov_parent|title }}</td>
-                                    <td class="text-center">{{ npr.nprFY }}</td>
-                                    <td class="text-center" style="width:85px;">{{ npr.nprDate|date:'m/d/Y' }}</td>
-                                    <td class="text-center" style="width:85px;">{{ npr.calc_deadline|date:'m/d/Y' }}</td>
-                                    {% if npr.status == 'Completed' %}
-                                        <td class="srg-bg-success text-center text-light" style="background-color: #004000">
-                                            {{ npr.status}}
-                                        </td>
-                                    {% elif npr.status == 'Not Started' %}
-                                        <td class="text-center srg-bg-secondary text-light" style="background: #02308C">
-                                            <a class="text-light" href="{% url 'update-npr-progress' npr.nprID %}">
-                                                {{ npr.status}}
-                                            </a>
-                                        </td>
-                                    {% elif npr.status == 'Not Filed' %}
-                                        <td class="text-center srg-bg-danger" style="background: #8B0000">
-                                            <a class="text-white" href="{% url 'update-npr-progress' npr.nprID %}">
-                                                {{ npr.status}}
-                                            </a>
-                                        </td>
-                                    {% else %}
-                                        <td class="text-center srg-bg-secondary" style="background: #d9d9d9">
-                                            <a class="text-dark" href="{% url 'update-npr-progress' npr.nprID %}">
-                                                {{ npr.status}}
-                                            </a>
-                                        </td>
-                                    {% endif %}
-                                </tr>
-                            {% endif %}
-                        {% endfor %}
-                </table>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="card">
+                                <div class="card-header srg-bg-secondary">
+                                    <span class="fs-4 fw-normal srg-header">Due in 60 days</span>
+                                </div>
+                                <div class="card-body p-0">
+                                    <table class="srg-table">
+                                        <thead class="text-light srg-bg-primary">
+                                            <tr>
+                                                <th scope="col" class="text-center">Prov #</th>
+                                                <th scope="col" class="text-center">Name</th>
+                                                <th scope="col" class="text-center">Parent</th>
+                                                <th scope="col" class="text-center">Year</th>
+                                                <th scope="col" class="text-center">NPR Date</th>
+                                                <th scope="col" class="text-center">Due Date</th>
+                                                <th scope="col" class="text-center">Status</th>
+                                            </tr>
+                                        </thead>
+                                        {% for npr in nprDueDatesSixty %}
+                                            {% if npr.calc_deadline < today %}
+                                            {% else %}
+                                                <tr>
+                                                    <td class="text-center" style="width:85px;">{{ npr.providerID }}</td>
+                                                    <td class="">{{ npr.get_prov_name|title }}</td>
+                                                    <td class="">{{ npr.get_prov_parent|title }}</td>
+                                                    <td class="text-center">{{ npr.nprFY }}</td>
+                                                    <td class="text-center" style="width:85px;">{{ npr.nprDate|date:'m/d/Y' }}</td>
+                                                    <td class="text-center" style="width:85px;">{{ npr.nprDueDate|date:'m/d/Y' }}</td>
+                                                    {% if npr.status == 'Completed' %}
+                                                        <td class="srg-bg-success text-center text-light" style="background-color: #004000">
+                                                            {{ npr.status}}
+                                                        </td>
+                                                    {% elif npr.status == 'Not Started' %}
+                                                        <td class="text-center srg-bg-secondary text-light" style="background: #02308C">
+                                                            <a class="text-light" href="{% url 'update-npr-progress' npr.nprID %}">
+                                                                {{ npr.status}}
+                                                            </a>
+                                                        </td>
+                                                    {% elif npr.status == 'Not Filed' %}
+                                                        <td class="text-center srg-bg-danger" style="background: #8B0000">
+                                                            <a class="text-white" href="{% url 'update-npr-progress' npr.nprID %}">
+                                                                {{ npr.status}}
+                                                            </a>
+                                                        </td>
+                                                    {% else %}
+                                                        <td class="text-center srg-bg-secondary" style="background: #d9d9d9">
+                                                            <a class="text-dark" href="{% url 'update-npr-progress' npr.nprID %}">
+                                                                {{ npr.status}}
+                                                            </a>
+                                                        </td>
+                                                    {% endif %}
+                                                </tr>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </div>
     </div>

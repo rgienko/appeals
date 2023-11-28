@@ -101,9 +101,18 @@ def sign_out(request):
 def main(request):
     context = initialize_context(request)
 
-    allDueDates = TblCriticalDatesMaster.objects.all().filter(progress='Not Started').order_by('dueDate')[:10]
-    nprDueDates = NPRDueDatesMaster.objects.all().order_by('nprDate')
+    allDueDates = TblCriticalDatesMaster.objects.all().filter(progress='Not Started').order_by('dueDate')[:20]
+    nprDueDates = NPRDueDatesMaster.objects.all().order_by('nprDueDate')
     today = datetime.date.today()
+
+    dueDates = TblCriticalDatesMaster.objects.all().filter(progress='Not Started').order_by('dueDate')
+    dueDatesThirty = dueDates.filter(dueDate__lte=today + datetime.timedelta(days=30))
+    dueDatesSixty = dueDates.filter(dueDate__range=(today + datetime.timedelta(days=30), today + datetime.timedelta(days=60)))
+    dueDatesNinety = dueDates.filter(dueDate__range=(today + datetime.timedelta(days=60), today + datetime.timedelta(days=90)))
+    dueDatesOneTwenty = dueDates.filter(dueDate__range=(today + datetime.timedelta(days=90), today + datetime.timedelta(days=120)))
+
+    nprDueDatesThirty = nprDueDates.filter(nprDueDate__lte=today + datetime.timedelta(days=30))
+    nprDueDatesSixty = nprDueDates.filter(nprDueDate__range=(today + datetime.timedelta(days=30), today + datetime.timedelta(days=60)))
 
     if request.method == 'POST' and 'add_npr_due_button' not in request.POST:
         search_case = request.POST.get('search')
@@ -111,9 +120,11 @@ def main(request):
 
     elif request.method == 'POST' and 'add_npr_due_button' in request.POST:
         form = NPRDueDatesMasterCreateForm(request.POST)
+        # due_date = request.POST.get('nprDate') + datetime.timedelta(days=180)
 
         if form.is_valid():
             new_npr_due_date = form.save(commit=False)
+            new_npr_due_date.nprDueDate = new_npr_due_date.nprDate + timedelta(days=180)
             new_npr_due_date.save()
 
             # Create the data for outlook event
@@ -136,7 +147,7 @@ def main(request):
                                            random.randint(1, 12), random.randint(0, 59), 0)
             end_time = start_time + timedelta(minutes=30)
 
-            body = 'Request for Hearing DUe'
+            body = 'Request for Hearing Due'
 
             lead_time = 4 * 10080
 
@@ -154,7 +165,13 @@ def main(request):
 
     context['form'] = form
     context['allDueDates'] = allDueDates
+    context['dueDatesThirty'] = dueDatesThirty
+    context['dueDatesSixty'] = dueDatesSixty
+    context['dueDatesNinety'] = dueDatesNinety
+    context['dueDatesOneTwenty'] = dueDatesOneTwenty
     context['nprDueDates'] = nprDueDates
+    context['nprDueDatesThirty'] = nprDueDatesThirty
+    context['nprDueDatesSixty'] = nprDueDatesSixty
     context['today'] = today
 
     return render(request, 'main/index.html', context)

@@ -426,6 +426,7 @@ class NPRDueDatesMaster(models.Model):
     providerID = models.ForeignKey('TblProviderNameMaster', on_delete=models.CASCADE, blank=True, null=True)
     nprFY = models.IntegerField()
     nprDate = models.DateField()
+    nprDueDate = models.DateField(blank=True, null=True)
     statuses = [
         ('Not Filed', 'Not Filed'),
         ('Not Started', 'Not Started'),
