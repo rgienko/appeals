@@ -833,17 +833,39 @@ def searchCriticalDueDatesTwo(request):
 
 def groupReport(request):
     context = initialize_context(request)
-    allGroups = TblAppealMaster.objects.exclude(appealStructure='Individual').order_by('-appealCreateDate')[:50]
-    context['allGroups'] = allGroups
+    today = date.today()
+    # allGroups = TblAppealMaster.objects.exclude(appealStructure='Individual').order_by('-appealCreateDate')[:50]
 
+    queryset = TblProviderMaster.objects.values('provMasterID', 'providerID', 'providerID__providerName', 'caseNumber__statusID__statusName',
+                                                'issueID__issueName', 'caseNumber', 'caseNumber__appealName', 'provMasterFiscalYear',
+                                                'caseNumber__appealStructure').order_by('-provMasterFiscalYear', '-caseNumber', '-issueID__issueSRGID')
+
+    f = ProviderMasterFilter(request.GET, queryset=queryset)
+
+    # context['allGroups'] = allGroups
+    context['today'] = today
+    context['filter'] = f
     return render(request, 'main/groupReport.html', context)
 
 
 def providerReport(request):
     context = initialize_context(request)
-    allProviders = TblProviderMaster.objects.filter(provMasterIsActive=1)[:50]
-    context['allProviders'] = allProviders
+    today = date.today()
+    # allGroups = TblAppealMaster.objects.exclude(appealStructure='Individual').order_by('-appealCreateDate')[:50]
 
+    queryset = TblProviderMaster.objects.values('provMasterID', 'providerID', 'providerID__providerName',
+                                                'caseNumber__statusID__statusName',
+                                                'issueID__issueName', 'caseNumber', 'caseNumber__appealName',
+                                                'provMasterFiscalYear',
+                                                'caseNumber__appealStructure').order_by('-provMasterFiscalYear',
+                                                                                        '-caseNumber',
+                                                                                        '-issueID__issueSRGID')
+
+    f = ProviderMasterFilter(request.GET, queryset=queryset)
+
+    # context['allGroups'] = allGroups
+    context['today'] = today
+    context['filter'] = f
     return render(request, 'main/providerReport.html', context)
 
 

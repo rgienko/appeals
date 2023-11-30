@@ -71,6 +71,7 @@ class TblIssueMaster(models.Model):
 
     class Meta:
         db_table = 'tblIssueMaster'
+        ordering = ['issueSRGID']
 
     def __str__(self):
         return '{0}-{1}'.format(str(self.issueSRGID), self.issueName)
