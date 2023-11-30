@@ -1,39 +1,64 @@
-{% extends "main/layout.html" %}
+{% extends "main/layoutV2.html" %}
 
 {% block content %}
 {% load humanize %}
 
 <div class="container-fluid">
-    <div class="row mt-5 mb-0">
-        <h4 class="font-weight-bold ml-5 pt-1">
-            Issue Detail
-            <a class="mx-1" data-toggle="tooltip" data-placement="bottom" title="Edit Issue" href="{% url 'edit-issue' issue.issueID %}"><i class="bi bi-pencil-square" style="font-size:24px;"></i></a>
-        </h4>
-    </div>
-    <hr class="mt-0"/>
-    <div class="row">
-        <table class="table table-bordered">
-            <tr class="table-header">
-                <th scope="col" class="text-center">Issue #</th>
-                <th scope="col" class="text-center">Issue Name:</th>
-                <th scope="col" class="text-center">Issue Description:</th>
-            </tr>
-            <tr>
-                <td class="text-center px-0" style="width:75px">
-                    <a type="button" class="" href="">{{ issue.issueSRGID }}</a>
-                </td>
-                <td style="width:350px">{{ issue.issueName }}</td>
-                <td>{{ issue.issueShortDescription }}</td>
-            </tr>
-        </table>
-    </div>
-    <div class="row mt-4">
-        <div>
-            <h4>Issue Long Description</h4>
-            <hr class="mt-0"/>
-            <p>
-                {{ issue.issueLongDescription|linebreaksbr }}
-            </p>
+    <div class="row mt-4 mb-0 d-flex justify-content-center">
+        <div class="col-xxl-10 col-xl-10 col-lg-12 col-md-12">
+            <div class="card">
+                <div class="card-header srg-bg-primary srg-text-secondary d-flex align-items-center">
+                    <span class="fs-3 display-6">Issue Detail</span>
+
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-4 col-sm-12">
+                            <div class="card">
+                                <div class="card-header d-flex align-items-center srg-bg-secondary">
+                                    <span class="fs-4 display-6 fw-normal srg-header">Issue Information</span>
+
+                                </div>
+                                <div class="card-body">
+                                    <table class="srg-table" style="font-size:11pt">
+                                        <tr class="table-header">
+                                            <th scope="col" >Issue #</th>
+                                            <td>
+                                                <a type="button" class="" href="">{{ issue.issueSRGID }}</a>
+                                            </td>
+
+                                        </tr>
+                                        <tr>
+                                            <th scope="col">Issue Name:</th>
+                                            <td>{{ issue.issueName }}</td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="col">Issue Description:</th>
+                                            <td>{{ issue.issueShortDescription }}</td>
+                                        </tr>
+                                    </table>
+                                </div>
+                                <div class="card-footer bg-transparent d-flex justify-content-end">
+                                    <a class="text-decoration-none" data-toggle="tooltip" data-placement="bottom" title="Edit Issue" href="{% url 'edit-issue' issue.issueID %}">
+                                        <svg class="bi"><use xlink:href="#edit"></use></svg> Edit Issue
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-8 col-sm-12">
+                            <div class="card" style="height:750px;">
+                                <div class="card-header srg-bg-secondary">
+                                    <span class="fs-4 display-6 fw-normal srg-header">Issue Long Description</span>
+                                </div>
+                                <div class="card-body overflow-auto">
+                                    {{ issue.issueLongDescription|safe }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>

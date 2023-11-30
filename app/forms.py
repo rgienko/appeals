@@ -78,22 +78,22 @@ class IssueMasterCreateForm(forms.ModelForm):
 
         fields = [
             'issueSRGID',
+            'staffID',
             'issueName',
             'issueAbbreviation',
+            'categoryID',
             'issueShortDescription',
             'issueLongDescription',
-            'categoryID',
-            'staffID'
         ]
 
         labels = {
             'issueSRGID': _('Issue #:'),
+            'staffID': _('Staff:'),
             'issueName': _('Issue Name:'),
             'issueAbbreviation': _('Abbreviation'),
+            'categoryID': _('Category:'),
             'issueShortDescription': _('Short Description:'),
             'issueLongDescription': _('Long Description:'),
-            'categoryID': _('Category:'),
-            'staffID': _('Staff:')
 
         }
 

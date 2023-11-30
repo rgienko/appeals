@@ -295,6 +295,7 @@ def issueMasterView(request):
     context = initialize_context(request)
     all_issues = TblIssueMaster.objects.order_by('issueSRGID')
     context['all_issues'] = all_issues
+    context['today'] = date.today()
     return render(request, 'main/issueMaster.html', context)
 
 
@@ -303,6 +304,7 @@ def issueDetailView(request, pk):
     issue = TblIssueMaster.objects.get(pk=pk)
 
     context['issue'] = issue
+    context['today'] = date.today()
     return render(request, 'main/issueDetail.html', context)
 
 
@@ -323,7 +325,7 @@ def issueEditView(request, pk):
 
     context['form'] = form
     context['formName'] = 'Edit Issue Form'
-    return render(request, 'create/create_form.html', context)
+    return render(request, 'create/issue_create_form.html', context)
 
 
 class NewIssueView(CreateView):

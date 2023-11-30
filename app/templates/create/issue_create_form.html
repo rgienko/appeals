@@ -1,31 +1,35 @@
-{% extends 'main/layout.html' %}
+{% extends 'main/layoutV2.html' %}
 
 {% block content %}
 
-    <div class="container w-75 border shadow mt-lg-5">
-    <h4 class="mt-4">New Issue</h4>
-    <div class="card my-4">
-        <form method="post">
-            {% csrf_token %}
-            {% for hidden_field in form.hidden_fields %}
-                {{ hidden_field }}
-            {% endfor %}
+    <div class="container-fluid">
+        <div class="row d-flex justify-content-center mt-2">
+            <div class="col-xl-4 col-lg-6 col-md-12 col-sm-12 col-12">
+                <div class="card shadow-0 bg-transparent srg-border ">
+                    <div class="card-header fs-3 display-6 srg-bg-primary srg-text-secondary">
+                        {{ formName }}
+                    </div>
+                    <div class="card-body d-flex justify-content-center p-1 px-0">
+                        <form method="post" class="">
+                            {% csrf_token %}
+                            {% for hidden_field in form.hidden_fields %}
+                                {{ hidden_field }}
+                            {% endfor %}
+                            {% for field in form.visible_fields %}
+                                <div class="mx-2 my-3 bg-transparent">
+                                    <label class="form-control border-0 p-0 bg-transparent">{{ field.label_tag }}</label>
+                                    <span class="form-control border-0 p-0 bg-transparent">{{ field }}</span>
+                                </div>
 
-            {% for field in form.visible_fields %}
-            <ul class="list-group p-0">
-                <li class="list-group-item p-0 border-0">
-                    <ul class="list-group list-group-horizontal-sm p-0 mt-4">
-                        <li class="list-group-item w-25 font-weight-bold">{{ field.label_tag }}</li>
-                        <li class="list-group-item w-75">{{ field }}</li>
-                    </ul>
-                </li>
-            </ul>
-            {% endfor %}
-            <div class="d-grid gap-2 d-md-flex justify-content-md-end my-2">
-                <input type="submit" class="btn btn-primary w-25" value="Submit" />
+                            {% endfor %}
+                            <div class="card-footer bg-transparent d-flex justify-content-end p-1 border-0">
+                                <input type="submit" class="srg-btn-primary" value="Save Issue"/>
+                            </div>
+                        </form>
+                    </div>
+                </div>
             </div>
-        </form>
-
+        </div>
     </div>
 
 

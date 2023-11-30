@@ -1,33 +1,37 @@
-{% extends "main/layout.html" %}
+{% extends "main/layoutV2.html" %}
 
 {% block content %}
 {% load humanize %}
 
 <div class="container-fluid">
-    <div class="row mt-5 mb-0">
-        <h5 class="font-weight-bold text-uppercase ml-5 pt-1">
-            Issue Master
-            <a class="mx-1" data-toggle="tooltip" data-placement="bottom" title="New Issue" href="{% url 'new-issue' %}"><i class="bi bi-plus-square" style="font-size:24px;"></i></a>
-        </h5>
-    </div>
-    <hr class="mt-0"/>
-    <div class="row">
-        <table class="table table-bordered">
-            <tr class="table-header">
-                <th scope="col" class="text-center">Issue #</th>
-                <th scope="col" class="text-center">Issue Name:</th>
-                <th scope="col" class="text-center">Issue Description:</th>
-            </tr>
-            {% for issue in all_issues %}
-            <tr>
-                <td class="text-center px-0" style="width:75px">
-                    <a type="button" class="" href="{% url 'issue-detail' issue.issueID %}">{{ issue.issueSRGID }}</a>
-                </td>
-                <td style="width:350px">{{ issue.issueName }}</td>
-                <td>{{ issue.issueShortDescription }}</td>
-            </tr>
-            {% endfor %}
-        </table>
+    <div class="row mb-0 d-flex justify-content-center vh-100">
+        <div class="col-10 vh-100 overflow-auto">
+            <div class="card">
+                <div class="card-header srg-bg-primary sticky-top d-flex justify-content-between ">
+                    <span class="fs-3 display-6 srg-text-secondary">Issue Master</span>
+                    <a class="fs-6 d-flex srg-text-secondary align-items-center gap-1" href="{% url 'new-issue' %}">
+                        <svg class="bi"><use xlink:href="#plus-fill"></use></svg>New Issue</a>
+                </div>
+                <div class="card-body ">
+                    <table class="srg-table" style="font-size:11pt">
+                        <tr class="table-header">
+                            <th scope="col" class="text-center">Issue #</th>
+                            <th scope="col" class="text-center">Issue Name:</th>
+                            <th scope="col" class="text-center">Issue Description:</th>
+                        </tr>
+                        {% for issue in all_issues %}
+                        <tr>
+                            <td class="text-center px-0" style="width:75px">
+                                <a type="button" class="" href="{% url 'issue-detail' issue.issueID %}">{{ issue.issueSRGID }}</a>
+                            </td>
+                            <td style="width:350px">{{ issue.issueName }}</td>
+                            <td>{{ issue.issueShortDescription }}</td>
+                        </tr>
+                        {% endfor %}
+                    </table>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 
