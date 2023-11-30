@@ -1,29 +1,30 @@
-{% extends 'main/layout.html' %}
+{% extends 'main/layoutV2.html' %}
 
 {% block content %}
 
     <div class="container-fluid">
-        <div class="row d-flex justify-content-center mt-4">
-            <div class="col-xl-6 col-lg-12 col-md-12 col-sm-12 col-12 srg-border">
-                <div class="card border-0 shadow-0 mt-2 bg-transparent ">
-                    <div class="text-white fw-normal fs-4 srg-bg-primary card-header" style="border-radius:12px;min-height:50px">
+        <div class="row d-flex justify-content-center mt-2">
+            <div class="col-xl-4 col-lg-12 col-md-12 col-sm-12 col-12">
+                <div class="card shadow-0 mt-2 bg-transparent srg-border ">
+                    <div class="card-header fs-4 srg-bg-primary srg-text-secondary" style="border-radius:12px;min-height:50px">
                         {{ formName }}
                     </div>
-                    <form method="post" class="mt-2 bg-transparent">
-                        {% csrf_token %}
-                        {% for hidden_field in form.hidden_fields %}
-                            {{ hidden_field }}
-                        {% endfor %}
-                        {% for field in form.visible_fields %}
-                            <div class="mx-2 my-3 bg-transparent">
-                                <label class="form-control border-0 p-0 bg-transparent">{{ field.label_tag }}</label>
-                                <span class="form-control border-0 p-0 bg-transparent">{{ field }}</span>
-                            </div>
+                    <div class="card-body">
+                        <form method="post" class="">
+                            {% csrf_token %}
+                            {% for hidden_field in form.hidden_fields %}
+                                {{ hidden_field }}
+                            {% endfor %}
+                            {% for field in form.visible_fields %}
+                                <div class="mx-2 my-3 bg-transparent">
+                                    <label class="form-control border-0 p-0 bg-transparent">{{ field.label_tag }}</label>
+                                    <span class="form-control border-0 p-0 bg-transparent">{{ field }}</span>
+                                </div>
 
-                        {% endfor %}
-                        <input type="submit" class="srg-btn-primary my-2 mx-2 px-4" value="Submit" />
-
-                    </form>
+                            {% endfor %}
+                            <input type="submit" class="srg-btn-primary my-2 mx-2 px-4" value="Create Appeal"/>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>

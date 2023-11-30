@@ -85,16 +85,9 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'appealsV2',
         'USER': 'dbadmin',
-        # 'ENGINE': 'sql_server.pyodbc',
-        # 'NAME': 'appealMasterv4',
-        # 'USER': 'randall.gienko',
         'PASSWORD': 'R@nd@ll22',
         'HOST': 'srgpostgresql.postgres.database.azure.com',
-        # 'HOST': 'srgsqlserver.database.windows.net',
-        'PORT': '5432',
-        # 'OPTIONS': {
-        #    'driver': 'ODBC Driver 17 for SQL Server',
-        # }
+        'PORT': '5432'
     }
 }
 

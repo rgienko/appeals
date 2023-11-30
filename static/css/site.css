@@ -105,7 +105,8 @@
     background: #E38035;
     border: 1px solid #E38035;
     color: white;
-    padding: 8px 4px 8px 10px;
+    padding-left: 10px;
+    padding-right: 10px;
     border-radius: 8px;
     text-decoration:none
 }
@@ -114,6 +115,40 @@
     background: #ffffff;
     border: 1px solid #E38035;
     color: #E38035;
+    border-radius: 8px;
+    text-decoration:none
+}
+
+.srg-edit-button {
+    background: #d9d9d9;
+    border: 1px solid #d9d9d9;
+    color: #02308C;
+    padding-left: 10px;
+    padding-right: 10px;
+    border-radius: 8px;
+    text-decoration:none
+}
+
+.srg-edit-button:hover {
+    background: #02308C;
+    border: 1px solid #02308C;
+    color: #d9d9d9;
+    border-radius: 8px;
+    text-decoration:none
+}
+.srg-delete-button {
+    background: #8B0000;
+    border: 1px solid #8B0000;
+    color: white;
+    padding: 10px;
+    border-radius: 8px;
+    text-decoration:none
+}
+
+.srg-delete-button:hover {
+    background: white;
+    border: 1px solid #8B0000;
+    color: #8B0000;
     border-radius: 8px;
     text-decoration:none
 }
