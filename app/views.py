@@ -220,7 +220,9 @@ def providerMasterView(request):
     context = initialize_context(request)
     # all_providers = TblProviderNameMaster.objects.all()
     all_clients = TblProviderNameMaster.objects.filter(providerIsClient=1).order_by('parentID', 'providerID')
-    context['all_providers'] = all_clients
+    allProviders = TblProviderMaster.objects.values('providerID', 'providerID__providerName')
+    context['allProviders'] = allProviders
+    context['today'] = date.today()
     return render(request, 'main/providerMaster.html', context)
 
 
