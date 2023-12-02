@@ -5,7 +5,7 @@ import django.db.models.functions.math
 from io import BytesIO
 
 from django.contrib import auth, messages
-from django.db.models import Sum, Q
+from django.db.models import Sum, Q, Count
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
@@ -193,6 +193,7 @@ class NewProviderView(CreateView):
         form = self.form_class(request.POST)
         context['form'] = form
         context['formName'] = 'Add Provider'
+        context['today'] = datetime.datetime.now() - datetime.timedelta(hours=6)
         return render(request, self.template_name, context)
 
 
@@ -213,14 +214,18 @@ def providerNameUpdateView(request, pk):
 
     context['form'] = form
     context['formName'] = 'Update Provider'
+    context['today'] = date.today()
     return render(request, 'create/create_form.html', context)
 
 
 def providerMasterView(request):
     context = initialize_context(request)
     # all_providers = TblProviderNameMaster.objects.all()
-    all_clients = TblProviderNameMaster.objects.filter(providerIsClient=1).order_by('parentID', 'providerID')
-    allProviders = TblProviderMaster.objects.values('providerID', 'providerID__providerName')
+    # all_clients = TblProviderNameMaster.objects.filter(providerIsClient=1).order_by('parentID', 'providerID')
+    allProviders = (TblProviderMaster.objects.values('providerID', 'providerID__providerName',
+                                                     'providerID__fiID__fiName', 'providerID__fiID__fiJurisdiction',
+                                                     'providerID__parentID__parentFullName')
+                    .annotate(pcount=Count('providerID')).order_by('providerID__parentID__parentFullName', 'providerID'))
     context['allProviders'] = allProviders
     context['today'] = date.today()
     return render(request, 'main/providerMaster.html', context)

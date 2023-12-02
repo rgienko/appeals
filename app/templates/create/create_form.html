@@ -4,12 +4,12 @@
 
     <div class="container-fluid">
         <div class="row d-flex justify-content-center mt-2">
-            <div class="col-xl-4 col-lg-12 col-md-12 col-sm-12 col-12">
+            <div class="col-xl-auto col-lg-12 col-md-12 col-sm-12 col-12">
                 <div class="card shadow-0 mt-2 bg-transparent srg-border ">
-                    <div class="card-header fs-4 srg-bg-primary srg-text-secondary" style="border-radius:12px;min-height:50px">
-                        {{ formName }}
+                    <div class="card-header srg-bg-primary srg-text-secondary" style="border-top-left-radius: 12px; border-top-right-radius: 12px">
+                        <span class="fs-3 display-6">{{ formName }}</span>
                     </div>
-                    <div class="card-body">
+                    <div class="card-body d-flex justify-content-center">
                         <form method="post" class="">
                             {% csrf_token %}
                             {% for hidden_field in form.hidden_fields %}
@@ -22,7 +22,9 @@
                                 </div>
 
                             {% endfor %}
-                            <input type="submit" class="srg-btn-primary my-2 mx-2 px-4" value="Create Appeal"/>
+                            <div class="card-footer bg-transparent d-flex justify-content-end">
+                                <input type="submit" class="srg-btn-primary px-6" value="Create"/>
+                            </div>
                         </form>
                     </div>
                 </div>

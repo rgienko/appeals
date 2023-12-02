@@ -4,32 +4,36 @@
 {% load humanize %}
 
 <div class="container-fluid">
-    <div class="row mt-5 mb-0">
-        <h5 class="font-weight-bold text-uppercase ml-5 pt-1">
-            Provider Master
-            <a class="mx-1" data-toggle="tooltip" data-placement="bottom" title="New Provider" href="{% url 'new-provider' %}"><i class="bi bi-plus-square" style="font-size:24px;"></i></a>
-        </h5>
-    </div>
-    <hr class="mt-0"/>
-    <div class="row">
-        <table class="table table-bordered">
-            <tr class="table-header">
-                <th scope="col" class="text-center px-0">Provider #</th>
-                <th scope="col" class="text-center">Provider Name</th>
-                <th scope="col" class="text-center">Parent / System</th>
-                <th scope="col" class="text-center">MAC</th>
-                <th scope="col" class="text-center">Edit</th>
-            </tr>
-            {% for provider in allProviders %}
-            <tr>
-                <td class="text-center px-0"><a href="">{{ provider.providerID }}</a></td>
-                <td>{{ provider.providerID__providerName|title }}</td>
-                <td>{{ provider.getParentName }}</td>
-                <td class="text-center">{% if provider.fiID %}{{ provider.fiID }}{% else %}{% endif %}</td>
-                <td class="text-center"><a href="{% url 'update-provider' provider.providerID %}">Edit</a></td>
-            </tr>
-            {% endfor %}
-        </table>
+    <div class="row mb-0 d-flex justify-content-center">
+        <div class="col-lg-10 col-md-12">
+            <div class="card vh-100">
+                <div class="card-header srg-bg-primary sticky-top d-flex justify-content-between">
+                    <span class="fs-3 display-4 srg-text-secondary">Provider Master</span>
+                    <a class="fs-6 d-flex srg-text-secondary align-items-center gap-1" href="{% url 'new-provider' %}">
+                        <svg class="bi"><use xlink:href="#plus-fill"></use></svg>New Provider</a>
+                </div>
+                <div class="card-body vh-100 overflow-auto">
+                    <table class="srg-table" style="font-size:11pt;">
+                        <tr class="">
+                            <th scope="col" class="text-center px-0">Provider #</th>
+                            <th scope="col" class="text-center">Provider Name</th>
+                            <th scope="col" class="text-center">Parent / System</th>
+                            <th scope="col" class="text-center">MAC</th>
+                            <th scope="col" class="text-center">Edit</th>
+                        </tr>
+                        {% for provider in allProviders %}
+                        <tr>
+                            <td class="text-center px-0"><a href="">{{ provider.providerID }}</a></td>
+                            <td>{{ provider.providerID__providerName|title }}</td>
+                            <td>{{ provider.providerID__parentID__parentFullName }}</td>
+                            <td class="text-center">{{ provider.providerID__fiID__fiName }} ({{ provider.providerID__fiID__fiJurisdiction }})</td>
+                            <td class="text-center"><a href="{% url 'update-provider' provider.providerID %}">Edit</a></td>
+                        </tr>
+                        {% endfor %}
+                    </table>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 
