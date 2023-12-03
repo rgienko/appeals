@@ -254,6 +254,7 @@ def parentMasterView(request):
     context = initialize_context(request)
     all_parents = TblParentMaster.objects.all().order_by('parentID')
     context['all_parents'] = all_parents
+    context['today'] = date.today()
     return render(request, 'main/parentMaster.html', context)
 
 

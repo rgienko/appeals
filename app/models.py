@@ -93,6 +93,14 @@ class TblStateMaster(models.Model):
         return self.stateID
 
 
+class TblHospContactMaster(models.Model):
+    hospContactID = models.AutoField(primary_key=True)
+    hospContactFirstName = models.CharField(max_length=45, blank=True, null=True)
+    hospContactLastName = models.CharField(max_length=45, blank=True, null=True)
+    hospContactEmail = models.EmailField(blank=True, null=True)
+    parentID = models.ForeignKey('TblParentMaster', on_delete=models.CASCADE, blank=True, null=True)
+
+
 class TblParentMaster(models.Model):
     parentID = models.CharField(
         db_column='parentID', primary_key=True, max_length=50)
@@ -433,7 +441,7 @@ class NPRDueDatesMaster(models.Model):
         ('Not Started', 'Not Started'),
         ('Completed', 'Completed')
     ]
-    status = models.CharField(max_length=20, choices=statuses, default= 'Not Started', blank=True, null=True)
+    status = models.CharField(max_length=20, choices=statuses, default='Not Started', blank=True, null=True)
 
     def get_prov_name(self):
         return self.providerID.providerName
@@ -474,13 +482,13 @@ class TblCriticalDatesMaster(models.Model):
         today = datetime.datetime.strptime(
             str(datetime.date.today()), "%Y-%m-%d")
         due = datetime.datetime.strptime(str(self.dueDate), "%Y-%m-%d")
-        if (due-today).days < 90:
+        if (due - today).days < 90:
             return "Low"
-        elif (due-today).days < 60:
+        elif (due - today).days < 60:
             return "Medium"
-        elif (due-today).days < 30:
+        elif (due - today).days < 30:
             return "Important"
-        elif (due-today).days < 7:
+        elif (due - today).days < 7:
             return "URGENT"
         else:
             return ""
@@ -546,13 +554,13 @@ class CriticalDatesMaster(models.Model):
         today = datetime.datetime.strptime(
             str(datetime.date.today()), "%Y-%m-%d")
         due = datetime.datetime.strptime(str(self.dueDate), "%Y-%m-%d")
-        if (due-today).days < 90:
+        if (due - today).days < 90:
             return "Low"
-        elif (due-today).days < 60:
+        elif (due - today).days < 60:
             return "Medium"
-        elif (due-today).days < 30:
+        elif (due - today).days < 30:
             return "Important"
-        elif (due-today).days < 7:
+        elif (due - today).days < 7:
             return "URGENT"
         else:
             return ""
@@ -580,4 +588,3 @@ class CriticalDatesMaster(models.Model):
         provName = TblProviderNameMaster.objects.get(providerID=provNum)
         provName = provName.providerName
         return '{0} - {1}'.format(provNum, provName)
-

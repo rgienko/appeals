@@ -35,6 +35,22 @@
 
 }
 
+.srg-btn-secondary {
+    background-color: #d9d9d9;
+    border: 1px solid #d9d9d9;
+    color: #02308C;
+    padding: 8px 16px 8px 16px;
+    border-radius: 12px;
+    text-align: center
+}
+
+.srg-btn-secondary:hover {
+    border: 1px solid #02308C;
+    background: white;
+    color: #02308C
+
+}
+
 .srg-btn-outline-primary {
     background-color: #d9d9d9;
     border: 1px solid #d9d9d9;

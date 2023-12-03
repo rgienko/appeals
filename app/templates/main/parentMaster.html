@@ -1,10 +1,58 @@
-{% extends "main/layout.html" %}
+{% extends "main/layoutV2.html" %}
 
 {% block content %}
 {% load humanize %}
 
 <div class="container-fluid">
-    <div class="row mt-5 mb-0">
+    <div class="row mb-0">
+        <div class="card p-0">
+            <div class="card-header srg-bg-primary">
+                <span class="fs-3 display-6 srg-text-secondary">
+                    Parent Master
+                </span>
+            </div>
+            <div class="card-body">
+                <div class="row d-flex justify-content-between">
+                    {% for parent in all_parents %}
+                        <div class="col-4 my-2">
+                            <div class="card">
+                                <div class="card-header srg-bg-secondary srg-header">
+                                    <span class="fs-5 display-6">{{ parent.parentFullName }}</span>
+                                </div>
+                                <div class="card-body">
+                                    <p class="srg-header fw-bold mb-0">Address:</p>
+                                    <address>
+                                        {{ parent.parentAddress }} <br/>
+                                        {{ parent.parentCity }}, {{ parent.stateID }} {{ parent.parentZIP }}
+                                    </address>
+                                    <p class="srg-header fw-bold">Contacts:</p>
+                                    <table class="srg-table">
+                                        <tr>
+                                            <th>Name</th>
+                                            <th>Title</th>
+                                            <th>Email</th>
+                                        </tr>
+                                        <tr>
+                                            <td>Paal Braathen</td>
+                                            <td>Executive Vice President Finance</td>
+                                            <td>Paal.Braathen@nm.org</td>
+                                        </tr>
+                                    </table>
+                                </div>
+                                <div class="card-footer d-flex justify-content-end py-2 bg-transparent gap-2">
+                                    <a class="srg-btn-primary" data-toggle="tooltip" data-placement="top" title="Edit Parent" href="{% url 'update-parent' parent.parentID %}">
+                                        Edit Parent
+                                    </a>
+                                    <a class="srg-btn-secondary" data-toggle="tooltip" data-placement="top" title="Edit Parent" href="">
+                                        Add Contact
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
         <h5 class="font-weight-bold text-uppercase ml-5 pt-1">
             Parent Master
             <a class="mx-1" data-toggle="tooltip" data-placement="bottom" title="New Parent" href="{% url 'new-parent' %}"><i class="bi bi-plus-square" style="font-size:24px;"></i></a>
@@ -19,16 +67,14 @@
                       <h5>{{ parent.parentFullName }}</h5>
                     </div>
                     <div class="card-body">
-                        <p class="text-dark fw-bold mb-0">Address:</p>
+
                         <address>
                             {{ parent.parentAddress }} <br/>
                             {{ parent.parentCity }}, {{ parent.stateID }} {{ parent.parentZIP }}
                         </address>
                     </div>
                     <div class="card-footer text-end bg-transparent">
-                        <a class="btn btn-primary w-25" data-toggle="tooltip" data-placement="top" title="Edit Parent" href="{% url 'update-parent' parent.parentID %}">
-                            Edit
-                        </a>
+
                     </div>
                 </div>
             </div>
