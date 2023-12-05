@@ -97,6 +97,7 @@ class TblHospContactMaster(models.Model):
     hospContactID = models.AutoField(primary_key=True)
     hospContactFirstName = models.CharField(max_length=45, blank=True, null=True)
     hospContactLastName = models.CharField(max_length=45, blank=True, null=True)
+    hospContactTitle = models.CharField(max_length=75, blank=True, null=True)
     hospContactEmail = models.EmailField(blank=True, null=True)
     parentID = models.ForeignKey('TblParentMaster', on_delete=models.CASCADE, blank=True, null=True)
 

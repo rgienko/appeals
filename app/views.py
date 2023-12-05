@@ -107,12 +107,16 @@ def main(request):
 
     dueDates = TblCriticalDatesMaster.objects.all().filter(progress='Not Started').order_by('dueDate')
     dueDatesThirty = dueDates.filter(dueDate__lte=today + datetime.timedelta(days=30))
-    dueDatesSixty = dueDates.filter(dueDate__range=(today + datetime.timedelta(days=30), today + datetime.timedelta(days=60)))
-    dueDatesNinety = dueDates.filter(dueDate__range=(today + datetime.timedelta(days=60), today + datetime.timedelta(days=90)))
-    dueDatesOneTwenty = dueDates.filter(dueDate__range=(today + datetime.timedelta(days=90), today + datetime.timedelta(days=120)))
+    dueDatesSixty = dueDates.filter(
+        dueDate__range=(today + datetime.timedelta(days=30), today + datetime.timedelta(days=60)))
+    dueDatesNinety = dueDates.filter(
+        dueDate__range=(today + datetime.timedelta(days=60), today + datetime.timedelta(days=90)))
+    dueDatesOneTwenty = dueDates.filter(
+        dueDate__range=(today + datetime.timedelta(days=90), today + datetime.timedelta(days=120)))
 
     nprDueDatesThirty = nprDueDates.filter(nprDueDate__lte=today + datetime.timedelta(days=30))
-    nprDueDatesSixty = nprDueDates.filter(nprDueDate__range=(today + datetime.timedelta(days=30), today + datetime.timedelta(days=60)))
+    nprDueDatesSixty = nprDueDates.filter(
+        nprDueDate__range=(today + datetime.timedelta(days=30), today + datetime.timedelta(days=60)))
 
     if request.method == 'POST' and 'add_npr_due_button' not in request.POST:
         search_case = request.POST.get('search')
@@ -225,10 +229,32 @@ def providerMasterView(request):
     allProviders = (TblProviderMaster.objects.values('providerID', 'providerID__providerName',
                                                      'providerID__fiID__fiName', 'providerID__fiID__fiJurisdiction',
                                                      'providerID__parentID__parentFullName')
-                    .annotate(pcount=Count('providerID')).order_by('providerID__parentID__parentFullName', 'providerID'))
+                    .annotate(pcount=Count('providerID')).order_by('providerID__parentID__parentFullName',
+                                                                   'providerID'))
     context['allProviders'] = allProviders
     context['today'] = date.today()
     return render(request, 'main/providerMaster.html', context)
+
+
+def NewHospContactView(request, pk):
+    parent = get_object_or_404(TblParentMaster, pk=pk)
+
+    if request.method == 'POST':
+        form = HospContactCreateForm(request.POST, initial={'parentID': parent.parentID})
+
+        if form.is_valid():
+            new_hosp_contact = form.save(commit=False)
+            new_hosp_contact.save()
+            return redirect('parent-master')
+
+    else:
+        form = HospContactCreateForm(request.POST, initial={'parentID': parent.parentID})
+
+    context = initialize_context(request)
+    context['form'] = form
+    context['formName'] = 'Add Hospital Contact'
+    context['today'] = date.today()
+    return render(request, 'create/create_form.html', context)
 
 
 class NewSystemView(CreateView):
@@ -252,7 +278,8 @@ class NewSystemView(CreateView):
 
 def parentMasterView(request):
     context = initialize_context(request)
-    all_parents = TblParentMaster.objects.all().order_by('parentID')
+    all_parents = TblParentMaster.objects.all().prefetch_related('tblhospcontactmaster_set')
+    print(all_parents)
     context['all_parents'] = all_parents
     context['today'] = date.today()
     return render(request, 'main/parentMaster.html', context)
@@ -397,6 +424,7 @@ def fiMasterView(request):
     all_fis = TblFIMaster.objects.all().order_by('fiName').exclude(fiID=14)
 
     context['all_fis'] = all_fis
+    context['today'] = date.today()
     return render(request, 'main/fiMaster.html', context)
 
 
@@ -846,9 +874,13 @@ def groupReport(request):
     today = date.today()
     # allGroups = TblAppealMaster.objects.exclude(appealStructure='Individual').order_by('-appealCreateDate')[:50]
 
-    queryset = TblProviderMaster.objects.values('provMasterID', 'providerID', 'providerID__providerName', 'caseNumber__statusID__statusName',
-                                                'issueID__issueName', 'caseNumber', 'caseNumber__appealName', 'provMasterFiscalYear',
-                                                'caseNumber__appealStructure').order_by('-provMasterFiscalYear', '-caseNumber', '-issueID__issueSRGID')
+    queryset = TblProviderMaster.objects.values('provMasterID', 'providerID', 'providerID__providerName',
+                                                'caseNumber__statusID__statusName',
+                                                'issueID__issueName', 'caseNumber', 'caseNumber__appealName',
+                                                'provMasterFiscalYear',
+                                                'caseNumber__appealStructure').order_by('-provMasterFiscalYear',
+                                                                                        '-caseNumber',
+                                                                                        '-issueID__issueSRGID')
 
     f = ProviderMasterFilter(request.GET, queryset=queryset)
 

@@ -30,6 +30,7 @@ urlpatterns = [
     path(r'parent-master/', views.parentMasterView, name='parent-master'),
     path(r'new/parent/', views.NewSystemView.as_view(), name='new-parent'),
     path(r'edit/parent/<pk>/', views.parentUpdateView, name='update-parent'),
+    path(r'new/hosp-contact/<pk>', views.NewHospContactView, name='new-hosp-contact'),
     path(r'provider-master/', views.providerMasterView, name='provider-master'),
     path(r'new/provider/', views.NewProviderView.as_view(), name='new-provider'),
     path(r'edit/prov/<pk>', views.providerNameUpdateView, name='update-provider'),

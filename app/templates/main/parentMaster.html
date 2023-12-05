@@ -32,18 +32,20 @@
                                             <th>Title</th>
                                             <th>Email</th>
                                         </tr>
-                                        <tr>
-                                            <td>Paal Braathen</td>
-                                            <td>Executive Vice President Finance</td>
-                                            <td>Paal.Braathen@nm.org</td>
-                                        </tr>
+                                        {% for contact in parent.tblhospcontactmaster_set.all %}
+                                            <tr>
+                                                <td>{{ contact.hospContactFirstName }} {{ contact.hospContactLastName }}</td>
+                                                <td>{{ contact.hospContactTitle }}</td>
+                                                <td>{{ contact.hospContactEmail }}</td>
+                                            </tr>
+                                        {% endfor %}
                                     </table>
                                 </div>
                                 <div class="card-footer d-flex justify-content-end py-2 bg-transparent gap-2">
                                     <a class="srg-btn-primary" data-toggle="tooltip" data-placement="top" title="Edit Parent" href="{% url 'update-parent' parent.parentID %}">
                                         Edit Parent
                                     </a>
-                                    <a class="srg-btn-secondary" data-toggle="tooltip" data-placement="top" title="Edit Parent" href="">
+                                    <a class="srg-btn-secondary" data-toggle="tooltip" data-placement="top" title="Edit Parent" href="{% url 'new-hosp-contact' parent.parentID %}">
                                         Add Contact
                                     </a>
                                 </div>
@@ -53,32 +55,6 @@
                 </div>
             </div>
         </div>
-        <h5 class="font-weight-bold text-uppercase ml-5 pt-1">
-            Parent Master
-            <a class="mx-1" data-toggle="tooltip" data-placement="bottom" title="New Parent" href="{% url 'new-parent' %}"><i class="bi bi-plus-square" style="font-size:24px;"></i></a>
-        </h5>
-    </div>
-    <hr class="mt-0"/>
-    <div class="row d-flex justify-content-between">
-        {% for parent in all_parents %}
-            <div class="col-lg-3 col-md-6">
-                <div class="card mb-4">
-                    <div class="card-header bg-transparent p-2 pb-0">
-                      <h5>{{ parent.parentFullName }}</h5>
-                    </div>
-                    <div class="card-body">
-
-                        <address>
-                            {{ parent.parentAddress }} <br/>
-                            {{ parent.parentCity }}, {{ parent.stateID }} {{ parent.parentZIP }}
-                        </address>
-                    </div>
-                    <div class="card-footer text-end bg-transparent">
-
-                    </div>
-                </div>
-            </div>
-        {% endfor %}
     </div>
 </div>
 

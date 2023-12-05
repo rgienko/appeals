@@ -38,6 +38,28 @@ class ParentMasterCreateForm(forms.ModelForm):
         }
 
 
+class HospContactCreateForm(forms.ModelForm):
+    class Meta:
+        model = TblHospContactMaster
+
+        fields = [
+            'hospContactID',
+            'hospContactFirstName',
+            'hospContactLastName',
+            'hospContactTitle',
+            'hospContactEmail',
+            'parentID'
+        ]
+
+        labels = {
+            'parentID': _('Parent:'),
+            'hospContactFirstName': _('First Name:'),
+            'hospContactLastName': _('Last Name:'),
+            'hospContactTitle': _('Title:'),
+            'hospContactEmail': _('Email:')
+        }
+
+
 class ProviderNameMasterCreateForm(forms.ModelForm):
     class Meta:
         model = TblProviderNameMaster
