@@ -279,7 +279,6 @@ class NewSystemView(CreateView):
 def parentMasterView(request):
     context = initialize_context(request)
     all_parents = TblParentMaster.objects.all().prefetch_related('tblhospcontactmaster_set')
-    print(all_parents)
     context['all_parents'] = all_parents
     context['today'] = date.today()
     return render(request, 'main/parentMaster.html', context)
@@ -831,6 +830,7 @@ def transferIssueView(request, pk):
     context['caseDeterType'] = caseDeterType
     context['form'] = form
     context['formName'] = 'Transfer Issue Form'
+    context['today'] = date.today()
     context['poss_groups'] = poss_groups
 
     return render(request, 'main/transferIssue.html', context)

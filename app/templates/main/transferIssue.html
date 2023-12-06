@@ -1,82 +1,96 @@
-{% extends "main/layout.html" %}
+{% extends "main/layoutV2.html" %}
 
 {% block content %}
 {% load humanize %}
 <div class="container-fluid mt-5">
-    <h4 class="font-weight-bold pl-1 pt-1">Transfer Issue</h4>
-    <hr class="mt-0"/>
-
-    <table class="table table table-hover table-bordered">
-        <thead class="thead-light text-center">
-            <tr>
-                <th scope="col">Provider</th>
-                {% if caseDeterType  == 'FR' %}
-                    <th scope="col">FFY</th>
-                {% else %}
-                    <th scope="col">FY</th>
-                {% endif %}
-                <th scope="col">Issue</th>
-                <th scope="col">Audit Adjustments</th>
-                <th scope="col">Amount</th>
-            </tr>
-        </thead>
-            <tr>
-                <td class="text-center" style="width: 85px">{{ issue_trans.providerID }}</td>
-                <td class="text-center" style="width: 65px">{{ caseFiscalYear }}</td>
-                <td>{{ issue_trans.issueID}}</td>
-                <td>{{ issue_trans.provMasterAuditAdjs }}</td>
-                <td class="px-2 text-center">
-                    ${{ issue_trans.provMasterImpact|intcomma }}
-                </td>
-            </tr>
-    </table>
-
-    <hr class="mt-0"/>
-
     <div class="row">
-        <div class="col-4">
+        <div class="col-xxl-10">
             <div class="card">
-                <h5 class="font-weight-bold px-2 pt-1">Transfer Form</h5>
-                <form class="" action="" method="post">
-                    {% csrf_token %}
-                    {% for hidden_field in form.hidden_fields %}
-                        {{ hidden_field }}
-                    {% endfor %}
-
-                    {% for field in form.visible_fields %}
-                            <ul class="list-group border-0 p-0">
-                                <li class="list-group-item p-0 border-0">
-                                    <ul class="list-group list-group-horizontal border-0 p-0 mt-1">
-                                        <li class="list-group-item p-0 px-2 border-0">{{ field.label_tag }}</li>
-                                        <li class="list-group-item p-0 px-2 border-0">{{ field }}</li>
-                                    </ul>
-                                </li>
-                            </ul>
-                    {% endfor %}
-
-                    <input type="submit" name="trans_button" value="Transfer Issue" class="btn btn-primary mt-3 m-2"/>
-                </form>
-            </div>
-        </div>
-        <div class="col">
-            <div class="card">
-                <h5 class="font-weight-bold px-2 pt-1">Possible Groups</h5>
-                <table class="table table-sm table-hover table-bordered">
-                    <thead class="text-center">
+                <div class="card-header srg-bg-primary">
+                    <span class="fs-3 display-6 srg-text-secondary">
+                        Transfer Issue
+                    </span>
+                </div>
+                <div class="card-body">
+                    <table class="srg-table">
                         <tr>
-                            <th scope="col">Case #</th>
-                            <th scope="col">Case Name</th>
-                            <th scope="col">Structure</th>
+                            <th scope="col">Provider</th>
+                            {% if caseDeterType  == 'FR' %}
+                                <th scope="col">FFY</th>
+                            {% else %}
+                                <th scope="col">FY</th>
+                            {% endif %}
+                            <th scope="col">Issue</th>
+                            <th scope="col">Audit Adjustments</th>
+                            <th scope="col">Amount</th>
                         </tr>
-                    </thead>
-                    {% for group in poss_groups %}
                         <tr>
-                            <td class="text-center" style="width: 80px">{{ group.caseNumber }}</td>
-                            <td>{{ group.appealName }}</td>
-                            <td class="text-center" style="width: 80px">{{ group.appealStructure }}</td>
+                            <td class="text-center" style="width: 85px">{{ issue_trans.providerID }}</td>
+                            <td class="text-center" style="width: 65px">{{ caseFiscalYear }}</td>
+                            <td>{{ issue_trans.issueID}}</td>
+                            <td>{{ issue_trans.provMasterAuditAdjs }}</td>
+                            <td class="px-2 text-center">
+                                ${{ issue_trans.provMasterImpact|intcomma }}
+                            </td>
                         </tr>
-                    {% endfor %}
-                </table>
+                    </table>
+                    <div class="row mt-4">
+                        <div class="col-4">
+                            <div class="card">
+                                <div class="card-header srg-bg-secondary">
+                                    <span class="fs-4 display-5 srg-header">
+                                        Transfer Form
+                                    </span>
+                                </div>
+                                <div class="card-body">
+                                    <form class="" action="" method="post">
+                                        {% csrf_token %}
+                                        {% for hidden_field in form.hidden_fields %}
+                                            {{ hidden_field }}
+                                        {% endfor %}
+
+                                        {% for field in form.visible_fields %}
+                                                <ul class="list-group border-0 p-0">
+                                                    <li class="list-group-item p-0 border-0">
+                                                        <ul class="list-group list-group-horizontal border-0 p-0 mt-1">
+                                                            <li class="list-group-item p-0 px-2 border-0">{{ field.label_tag }}</li>
+                                                            <li class="list-group-item p-0 px-2 border-0">{{ field }}</li>
+                                                        </ul>
+                                                    </li>
+                                                </ul>
+                                        {% endfor %}
+
+                                        <div class="card-footer bg-transparent d-flex justify-content-end pb-0 mb-0">
+                                            <input type="submit" name="trans_button" value="Transfer Issue" class="srg-btn-primary"/>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="card">
+                                <h5 class="font-weight-bold px-2 pt-1">Possible Groups</h5>
+                                <table class="table table-sm table-hover table-bordered">
+                                    <thead class="text-center">
+                                        <tr>
+                                            <th scope="col">Case #</th>
+                                            <th scope="col">Case Name</th>
+                                            <th scope="col">Structure</th>
+                                        </tr>
+                                    </thead>
+                                    {% for group in poss_groups %}
+                                        <tr>
+                                            <td class="text-center" style="width: 80px">{{ group.caseNumber }}</td>
+                                            <td>{{ group.appealName }}</td>
+                                            <td class="text-center" style="width: 80px">{{ group.appealStructure }}</td>
+                                        </tr>
+                                    {% endfor %}
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
             </div>
         </div>
     </div>
