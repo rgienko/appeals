@@ -934,6 +934,7 @@ def updateDueDateProgress(request, pk):
     context['dueDate_obj'] = dueDate_obj
     context['form'] = form
     context['provMasterObj'] = provMasterObj
+    context['today'] = date.today()
     return render(request, 'create/due_date_edit.html', context)
 
 
@@ -956,6 +957,7 @@ def updateNPRDueDateProgress(request, pk):
     context['NPRDate_obj'] = NPRDate_obj
     context['form'] = form
     context['provNameMasterObj'] = provNameMasterObj
+    context['today'] = date.today()
     return render(request, 'create/npr_date_edit.html', context)
 
 
