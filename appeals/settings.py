@@ -30,6 +30,7 @@ DEBUG = True
 ALLOWED_HOSTS = ['localhost', 'myappeals.azurewebsites.net', '127.0.0.1:8000', '127.0.0.1',
                  '65.119.155.98']
 
+CSRF_TRUSTED_ORIGINS = ['https://myappeals.azurewebsites.net']
 
 # Application definition
 
