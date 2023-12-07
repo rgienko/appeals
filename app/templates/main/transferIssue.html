@@ -2,9 +2,9 @@
 
 {% block content %}
 {% load humanize %}
-<div class="container-fluid mt-5">
-    <div class="row">
-        <div class="col-xxl-10">
+<div class="container mt-5">
+    <div class="row d-flex justify-content-center">
+        <div class="col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
             <div class="card">
                 <div class="card-header srg-bg-primary">
                     <span class="fs-3 display-6 srg-text-secondary">
@@ -35,7 +35,7 @@
                         </tr>
                     </table>
                     <div class="row mt-4">
-                        <div class="col-4">
+                        <div class="col-3">
                             <div class="card">
                                 <div class="card-header srg-bg-secondary">
                                     <span class="fs-4 display-5 srg-header">
@@ -50,14 +50,12 @@
                                         {% endfor %}
 
                                         {% for field in form.visible_fields %}
-                                                <ul class="list-group border-0 p-0">
-                                                    <li class="list-group-item p-0 border-0">
-                                                        <ul class="list-group list-group-horizontal border-0 p-0 mt-1">
-                                                            <li class="list-group-item p-0 px-2 border-0">{{ field.label_tag }}</li>
-                                                            <li class="list-group-item p-0 px-2 border-0">{{ field }}</li>
-                                                        </ul>
-                                                    </li>
-                                                </ul>
+                                            <div class="fieldWrapper mb-3">
+                                                <p>{{ field.label_tag }} <br> {{ field }}
+                                                {% if field.help_text %}
+                                                <p class="help">{{ field.help_text|safe }}</p>
+                                                {% endif %}
+                                            </div>
                                         {% endfor %}
 
                                         <div class="card-footer bg-transparent d-flex justify-content-end pb-0 mb-0">
@@ -67,25 +65,30 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col">
+                        <div class="col-9">
                             <div class="card">
-                                <h5 class="font-weight-bold px-2 pt-1">Possible Groups</h5>
-                                <table class="table table-sm table-hover table-bordered">
-                                    <thead class="text-center">
-                                        <tr>
-                                            <th scope="col">Case #</th>
-                                            <th scope="col">Case Name</th>
-                                            <th scope="col">Structure</th>
-                                        </tr>
-                                    </thead>
-                                    {% for group in poss_groups %}
-                                        <tr>
-                                            <td class="text-center" style="width: 80px">{{ group.caseNumber }}</td>
-                                            <td>{{ group.appealName }}</td>
-                                            <td class="text-center" style="width: 80px">{{ group.appealStructure }}</td>
-                                        </tr>
-                                    {% endfor %}
-                                </table>
+                                <div class="card-header srg-bg-secondary">
+                                    <span class="fs-4 display-5 srg-header">Possible Groups</span>
+                                </div>
+                                <div class="card-body">
+                                    <table class="srg-table">
+                                        <thead class="text-center">
+                                            <tr>
+                                                <th scope="col">Case #</th>
+                                                <th scope="col">Case Name</th>
+                                                <th scope="col">Structure</th>
+                                            </tr>
+                                        </thead>
+                                        {% for group in poss_groups %}
+                                            <tr>
+                                                <td class="text-center" style="width: 80px">{{ group.caseNumber }}</td>
+                                                <td>{{ group.appealName }}</td>
+                                                <td class="text-center" style="width: 80px">{{ group.appealStructure }}</td>
+                                            </tr>
+                                        {% endfor %}
+                                    </table>
+                                </div>
+
                             </div>
                         </div>
                     </div>

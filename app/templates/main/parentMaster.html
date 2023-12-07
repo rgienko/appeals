@@ -6,10 +6,12 @@
 <div class="container-fluid">
     <div class="row mb-0">
         <div class="card p-0">
-            <div class="card-header srg-bg-primary">
+            <div class="card-header srg-bg-primary d-flex justify-content-between">
                 <span class="fs-3 display-6 srg-text-secondary">
                     Parent Master
                 </span>
+                <a class="fs-6 d-flex srg-text-secondary align-items-center gap-1" href="{% url 'new-parent' %}">
+                        <svg class="bi"><use xlink:href="#plus-fill"></use></svg>New Parent</a>
             </div>
             <div class="card-body">
                 <div class="row d-flex justify-content-between">

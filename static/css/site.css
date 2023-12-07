@@ -51,6 +51,22 @@
 
 }
 
+.srg-btn-danger {
+    background: #8B0000;
+    border: 1px solid #8B0000;
+    color: white;
+    padding: 8px 16px 8px 16px;
+    border-radius: 16px;
+}
+
+.srg-btn-danger:hover {
+    background: white;
+    border: 1px solid #8B0000;
+    color: #02308C;
+    padding: 8px 16px 8px 16px;
+    border-radius: 16px;
+}
+
 .srg-btn-outline-primary {
     background-color: #d9d9d9;
     border: 1px solid #d9d9d9;

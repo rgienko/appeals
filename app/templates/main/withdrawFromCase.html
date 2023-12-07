@@ -1,46 +1,59 @@
-{% extends "main/layout.html" %}
+{% extends "main/layoutV2.html" %}
 
 {% block content %}
 {% load humanize %}
-<div class="container-fluid w-75 mt-5">
+<div class="container mt-5">
+    <div class="row d-flex justify-content-center">
+        <div class="col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+            <div class="card">
+                <div class="card-header srg-bg-primary">
+                    <span class="fs-3 display-6 srg-text-secondary">
+                        Confirm Withdraw Issue / Provider
+                    </span>
+                </div>
+                <div class="card-body">
+                    <table class="srg-table">
+                        <tr>
+                            <th scope="col">Case #</th>
+                            <th scope="col">Provider</th>
+                            {% if provMasterInstance.provMasterDeterminationType  == 'FR' %}
+                                <th scope="col">FFY</th>
+                            {% else %}
+                                <th scope="col">FY</th>
+                            {% endif %}
+                            <th scope="col">Issue</th>
+                            <th scope="col">Audit Adjustments</th>
+                            <th scope="col">Amount</th>
+                        </tr>
+                        <tr>
+                            <td class="text-center" style="width: 100px">{{ provMasterInstance.caseNumber }}</td>
+                            <td class="text-center" style="width: 100px">{{ provMasterInstance.providerID }}</td>
+                            <td class="text-center" style="width: 75px">{{ provMasterInstance.provMasterFiscalYear|date:'Y' }}</td>
+                            <td>{{ provMasterInstance.issueID}}</td>
+                            <td style="width:215px;">{{ provMasterInstance.provMasterAuditAdjs }}</td>
+                            <td class="px-2 text-center">
+                                ${{ provMasterInstance.provMasterImpact|intcomma }}
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="card-footer bg-transparent d-flex justify-content-end">
+                    <form class="" action="" method="post">
+                        {% csrf_token %}
+                        <input type="submit" name="withdraw" value="Withdraw" class="srg-btn-danger"/>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
     <h4 class="font-weight-bold pl-1 pt-1">Confirm Withdraw Issue / Provider from Case</h4>
     <hr class="mt-0"/>
 
     <p>Are you sure you want to withdraw the following issue / provider?</p>
 
-    <table class="table table table-hover table-bordered">
-        <thead class="thead-light text-center">
-            <tr>
-                <th scope="col">Case #</th>
-                <th scope="col">Provider</th>
-                {% if provMasterInstance.provMasterDeterminationType  == 'FR' %}
-                    <th scope="col">FFY</th>
-                {% else %}
-                    <th scope="col">FY</th>
-                {% endif %}
-                <th scope="col">Issue</th>
-                <th scope="col">Audit Adjustments</th>
-                <th scope="col">Amount</th>
-            </tr>
-        </thead>
-            <tr>
-                <td class="text-center" style="width: 100px">{{ provMasterInstance.caseNumber }}</td>
-                <td class="text-center" style="width: 100px">{{ provMasterInstance.providerID }}</td>
-                <td class="text-center" style="width: 75px">{{ provMasterInstance.provMasterFiscalYear|date:'Y' }}</td>
-                <td>{{ provMasterInstance.issueID}}</td>
-                <td style="width:215px;">{{ provMasterInstance.provMasterAuditAdjs }}</td>
-                <td class="px-2 text-center">
-                    ${{ provMasterInstance.provMasterImpact|intcomma }}
-                </td>
-            </tr>
-    </table>
+
     <div class="row">
-        <div class="">
-            <form class="" action="" method="post">
-                {% csrf_token %}
-                <input type="submit" name="withdraw" value="Withdraw" class="btn btn-danger w-25"/>
-            </form>
-        </div>
+
 
     </div>
 

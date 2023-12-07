@@ -248,7 +248,7 @@ def NewHospContactView(request, pk):
             return redirect('parent-master')
 
     else:
-        form = HospContactCreateForm(request.POST, initial={'parentID': parent.parentID})
+        form = HospContactCreateForm(initial={'parentID': parent.parentID})
 
     context = initialize_context(request)
     context['form'] = form
@@ -273,6 +273,7 @@ class NewSystemView(CreateView):
         form = self.form_class(request.POST)
         context['form'] = form
         context['formName'] = 'New System'
+        context['today'] = date.today()
         return render(request, self.template_name, context)
 
 
@@ -301,6 +302,7 @@ def parentUpdateView(request, pk):
 
     context['form'] = form
     context['formName'] = 'Update System'
+    context['today'] = date.today()
     return render(request, 'create/create_form.html', context)
 
 
@@ -545,6 +547,7 @@ class NewAppealMasterView(CreateView):
         form = self.form_class(request.POST)
         context['form'] = form
         context['formName'] = 'Create New Appeal'
+        context['today'] = date.today()
         return render(request, self.template_name, context)
 
 
@@ -627,6 +630,7 @@ def appealDetailsView(request, pk):
     context['caseDueDates'] = caseDueDates
     context['ack_form'] = ack_form
     context['update_status_form'] = update_status_form
+    context['today'] = date.today()
 
     return render(request, 'main/appealDetails.html', context)
 
