@@ -663,7 +663,8 @@ def addProviderToGroup(request, pk):
     return render(request, 'create/create_form.html',
                   {
                       'form': form,
-                      'formName': 'Add Provider to Group (Direct Add)'
+                      'formName': 'Add Provider to Group (Direct Add)',
+                      'today': date.today()
                   })
 
 
@@ -720,6 +721,7 @@ def addIssueView(request, pk):
 
     context['form'] = form
     context['formName'] = 'Add Issue / Provider (DA) to Appeal'
+    context['today'] = date.today()
     return render(request, 'create/add_to_case_form.html', context)
 
 
